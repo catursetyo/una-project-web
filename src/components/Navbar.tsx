@@ -5,6 +5,7 @@ const navigationItems = [
   { label: "Produk", href: "/products" },
   { label: "Transaksi", href: "/order" },
   { label: "Tutorial", href: "/tutorial" },
+  { label: "Tentang", href: "/about" },
 ];
 
 export function Navbar() {

@@ -27,6 +27,9 @@ export function Footer() {
           <Link href="/tutorial" className="underline-offset-4 hover:underline">
             Tutorial
           </Link>
+          <Link href="/about" className="underline-offset-4 hover:underline">
+            Tentang
+          </Link>
           <Link href="/contact" className="underline-offset-4 hover:underline">
             Kontak
           </Link>
