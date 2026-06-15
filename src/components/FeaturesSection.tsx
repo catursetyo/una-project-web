@@ -38,11 +38,7 @@ export function FeaturesSection() {
           <h2 className="mt-3 text-3xl font-bold text-zinc-950">
             Dibuat untuk kebutuhan nyata di lapangan
           </h2>
-          <p className="mt-4 text-base leading-7 text-zinc-600">
-            Lanjut konsultasi lewat WhatsApp.
-          </p>
         </div>
-
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature) => (
             <FeatureCard
