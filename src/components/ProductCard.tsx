@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { formatPrice } from "@/src/lib/formatPrice";
 import type { Product } from "@/src/types/product";
 
@@ -45,6 +46,12 @@ export function ProductCard({ product }: ProductCardProps) {
         <p className="mt-2 text-3xl font-black text-primary">
           {formatPrice(product.priceStartFrom)}
         </p>
+        <Link
+          href={`/products/${product.slug}`}
+          className="mt-5 inline-flex w-full items-center justify-center rounded-xl border-2 border-primary px-5 py-3 text-sm font-bold tracking-[0.12em] text-primary transition-colors hover:bg-primary hover:text-white"
+        >
+          Lihat Detail
+        </Link>
       </div>
     </article>
   );
