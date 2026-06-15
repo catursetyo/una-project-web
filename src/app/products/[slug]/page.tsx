@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { WhatsAppButton } from "@/src/components/WhatsAppButton";
 import { products } from "@/src/data/products";
 import { formatPrice } from "@/src/lib/formatPrice";
-import { createWhatsAppLink } from "@/src/lib/whatsapp";
 
 type ProductDetailPageProps = {
   params: Promise<{
@@ -113,14 +113,9 @@ export default async function ProductDetailPage({
               akurat.
             </p>
 
-            <a
-              href={createWhatsAppLink(product.name)}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-primary px-6 py-4 text-sm font-bold tracking-[0.12em] text-white transition-colors hover:bg-tertiary"
-            >
-              Konsultasi via WhatsApp
-            </a>
+            <div className="mt-8">
+              <WhatsAppButton productName={product.name} fullWidth />
+            </div>
           </aside>
         </div>
       </div>
