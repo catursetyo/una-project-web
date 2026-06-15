@@ -1,3 +1,9 @@
+export type ProductVariant = {
+  name: string;
+  price: number;
+  description?: string;
+};
+
 export type Product = {
   slug: string;
   name: string;
@@ -7,6 +13,7 @@ export type Product = {
   dimensions?: string;
   features: string[];
   priceStartFrom: number;
+  variants?: ProductVariant[];
   image?: string;
   isFeatured?: boolean;
 };

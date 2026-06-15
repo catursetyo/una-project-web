@@ -98,6 +98,38 @@ export default async function ProductDetailPage({
                 ))}
               </ul>
             </div>
+
+            {product.variants?.length ? (
+              <div className="mt-8">
+                <h2 className="text-xl font-black text-zinc-950">
+                  Opsi Varian
+                </h2>
+                <div className="mt-5 grid gap-4">
+                  {product.variants.map((variant) => (
+                    <article
+                      key={variant.name}
+                      className="rounded-xl border border-zinc-200 bg-background p-5"
+                    >
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                          <h3 className="font-bold text-zinc-950">
+                            {variant.name}
+                          </h3>
+                          {variant.description ? (
+                            <p className="mt-2 text-sm leading-6 text-zinc-600">
+                              {variant.description}
+                            </p>
+                          ) : null}
+                        </div>
+                        <p className="shrink-0 text-lg font-black text-primary">
+                          {formatPrice(variant.price)}
+                        </p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           <aside className="h-fit rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8">
