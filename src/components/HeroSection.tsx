@@ -2,66 +2,63 @@ import Link from "next/link";
 
 export function HeroSection() {
   return (
-    <section className="bg-zinc-50">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-8 lg:py-20">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
-            Solusi jam digital dan LED display
-          </p>
-          <h1 className="mt-4 max-w-3xl text-4xl font-bold leading-tight text-zinc-950 sm:text-5xl">
-            UNA Project
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-zinc-700">
-            Membantu masjid, mushola, sekolah, kantor, dan instansi membuat jam
-            waktu sholat, running text LED, serta produk digital custom yang
-            rapi dan mudah digunakan.
-          </p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/products"
-              className="inline-flex items-center justify-center rounded-md bg-emerald-700 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-800"
-            >
-              Lihat Produk
-            </Link>
-            <Link
-              href="/order"
-              className="inline-flex items-center justify-center rounded-md border border-zinc-300 px-5 py-3 text-sm font-semibold text-zinc-900 transition-colors hover:border-emerald-700 hover:text-emerald-700"
-            >
-              Cara Pesan
-            </Link>
-          </div>
+    <section className="relative overflow-hidden border-b border-zinc-200 bg-white">
+      <div className="mx-auto flex min-h-[620px] max-w-6xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6 lg:px-8">
+        <div className="rounded-full bg-primary/10 px-5 py-2 text-xs font-bold tracking-[0.22em] text-primary">
+          Katalog Produk
         </div>
 
-        <div className="rounded-lg border border-zinc-200 bg-zinc-950 p-5 shadow-sm">
-          <div className="rounded-md border border-emerald-500/30 bg-black p-4">
-            <div className="mb-4 flex items-center justify-between text-xs text-zinc-400">
-              <span>Jadwal Waktu Sholat</span>
-              <span>UNA Project</span>
-            </div>
-            <div className="grid grid-cols-3 gap-3 text-center">
-              {["Subuh", "Dzuhur", "Ashar", "Maghrib", "Isya", "Jumat"].map(
-                (label) => (
-                  <div
-                    key={label}
-                    className="rounded border border-zinc-800 bg-zinc-900 px-3 py-4"
-                  >
-                    <p className="text-xs text-zinc-400">{label}</p>
-                    <p className="mt-2 font-mono text-xl font-semibold text-emerald-400">
-                      04:32
-                    </p>
-                  </div>
-                ),
-              )}
-            </div>
-            <div className="mt-4 overflow-hidden rounded border border-amber-500/30 bg-amber-950/40 px-3 py-2">
-              <p className="truncate font-mono text-sm font-semibold text-amber-300">
-                Selamat datang di Masjid - Running text siap custom
+        <h1 className="mt-8 max-w-4xl text-5xl font-black leading-none text-zinc-950 sm:text-6xl lg:text-7xl">
+          UNA Project
+        </h1>
+        <p className="mt-7 max-w-3xl text-lg leading-8 text-zinc-600">
+          Menghadirkan solusi jam waktu sholat digital, running text LED, dan
+          produk custom modern untuk masjid, mushola, sekolah, kantor, serta
+          instansi Anda.
+        </p>
+
+        <div className="mt-10 flex w-full max-w-md flex-col gap-4 sm:flex-row sm:justify-center">
+          <Link
+            href="/products"
+            className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-4 text-sm font-bold tracking-[0.14em] text-white shadow-xl shadow-primary/20 transition-colors hover:bg-tertiary"
+          >
+            Eksplorasi Katalog
+          </Link>
+          <Link
+            href="/order"
+            className="inline-flex items-center justify-center rounded-xl border-2 border-primary px-6 py-4 text-sm font-bold tracking-[0.14em] text-primary transition-colors hover:bg-primary hover:text-white"
+          >
+            Konsultasi Pemasangan
+          </Link>
+        </div>
+
+        <div className="mt-16 grid w-full max-w-4xl gap-4 text-left sm:grid-cols-3">
+          {[
+            ["Jam Waktu Sholat", "Display jadwal sholat digital untuk masjid."],
+            ["Running Text LED", "Informasi berjalan untuk pengumuman harian."],
+            ["Produk Custom", "Ukuran dan kebutuhan bisa dikonsultasikan."],
+          ].map(([title, description]) => (
+            <div
+              key={title}
+              className="rounded-2xl border border-white/70 bg-white/75 p-5 shadow-xl shadow-primary/5 backdrop-blur"
+            >
+              <p className="text-sm font-bold text-zinc-950">{title}</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-600">
+                {description}
               </p>
             </div>
-          </div>
+          ))}
         </div>
       </div>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-48 right-[-160px] size-[420px] rounded-full bg-secondary/10 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-44 left-[-150px] size-[420px] rounded-full bg-primary/20 blur-3xl"
+      />
     </section>
   );
 }

@@ -32,16 +32,14 @@ export function FeaturesSection() {
     <section className="bg-white">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+          <p className="text-sm font-semibold uppercase tracking-wide text-primary">
             Keunggulan
           </p>
           <h2 className="mt-3 text-3xl font-bold text-zinc-950">
             Dibuat untuk kebutuhan nyata di lapangan
           </h2>
           <p className="mt-4 text-base leading-7 text-zinc-600">
-            Website baru ini menampilkan UNA Project dengan alur yang lebih
-            jelas: calon customer bisa memahami layanan, melihat produk, lalu
-            lanjut konsultasi lewat WhatsApp.
+            Lanjut konsultasi lewat WhatsApp.
           </p>
         </div>
 
