@@ -40,6 +40,11 @@ export function ProductCard({ product }: ProductCardProps) {
       </ul>
 
       <div className="mt-auto border-t border-zinc-200 pt-6">
+        {product.variants?.length ? (
+          <p className="mb-3 text-xs font-semibold tracking-[0.14em] text-zinc-500">
+            {product.variants.length} opsi varian
+          </p>
+        ) : null}
         <p className="text-xs font-bold tracking-[0.18em] text-zinc-500">
           Mulai Dari
         </p>
