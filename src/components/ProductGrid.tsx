@@ -8,8 +8,12 @@ type ProductGridProps = {
 export function ProductGrid({ products }: ProductGridProps) {
   return (
     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {products.map((product) => (
-        <ProductCard key={product.slug} product={product} />
+      {products.map((product, index) => (
+        <ProductCard
+          key={product.slug}
+          product={product}
+          revealDelay={(index % 5) * 80}
+        />
       ))}
     </div>
   );

@@ -30,22 +30,23 @@ const features = [
 export function FeaturesSection() {
   return (
     <section className="bg-white">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-wide text-primary">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div className="scroll-reveal max-w-2xl" data-scroll-reveal>
+          <p className="text-sm font-black uppercase tracking-[0.14em] text-primary">
             Keunggulan
           </p>
-          <h2 className="mt-3 text-3xl font-bold text-zinc-950">
+          <h2 className="mt-3 text-3xl font-black leading-tight text-zinc-950 sm:text-4xl">
             Dibuat untuk kebutuhan nyata di lapangan
           </h2>
         </div>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature) => (
+          {features.map((feature, index) => (
             <FeatureCard
               key={feature.title}
               label={feature.label}
               title={feature.title}
               description={feature.description}
+              revealDelay={(index + 1) * 80}
             />
           ))}
         </div>
