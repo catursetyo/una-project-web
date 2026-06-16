@@ -7,20 +7,21 @@ export const metadata: Metadata = {
     "Panduan setting jam waktu sholat dan running text digital UNA Project.",
 };
 
-const tutorialDelayClasses = ["animate-delay-100", "animate-delay-200"];
-
 export default function TutorialPage() {
   return (
     <section className="bg-background">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="animate-fade-up mx-auto max-w-3xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div
+          className="scroll-reveal mx-auto max-w-3xl text-center"
+          data-scroll-reveal
+        >
+          <p className="text-sm font-black uppercase tracking-[0.14em] text-primary">
             Panduan Resmi
           </p>
           <h1 className="mt-4 text-4xl font-black leading-tight text-zinc-950 sm:text-5xl">
             Tutorial Setting JWS
           </h1>
-          <p className="mt-5 text-base leading-7 text-zinc-600">
+          <p className="mt-5 text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
             Pelajari cara mengatur jam waktu sholat dan running text digital
             dari UNA Project dengan langkah sederhana berikut.
           </p>
@@ -30,17 +31,17 @@ export default function TutorialPage() {
           {tutorials.map((tutorial, tutorialIndex) => (
             <article
               key={tutorial.slug}
-              className={`motion-card animate-fade-up rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8 ${
-                tutorialDelayClasses[tutorialIndex]
-              }`}
+              data-scroll-reveal="scale"
+              data-scroll-delay={tutorialIndex * 120}
+              className="scroll-reveal motion-card rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl shadow-primary/5 sm:p-8"
             >
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+              <p className="text-sm font-black uppercase tracking-[0.14em] text-primary">
                 {tutorial.category}
               </p>
-              <h2 className="mt-4 text-3xl font-black leading-tight text-zinc-950">
+              <h2 className="mt-4 text-3xl font-black leading-tight text-zinc-950 sm:text-4xl">
                 {tutorial.title}
               </h2>
-              <p className="mt-4 text-sm leading-6 text-zinc-600">
+              <p className="mt-4 text-sm leading-6 text-zinc-600 sm:text-base sm:leading-7">
                 {tutorial.shortDescription}
               </p>
 
@@ -55,15 +56,15 @@ export default function TutorialPage() {
                         {index + 1}
                       </span>
                       <div>
-                        <h3 className="font-bold text-zinc-950">
+                        <h3 className="text-base font-black text-zinc-950 sm:text-lg">
                           {step.title}
                         </h3>
-                        <p className="mt-1 text-sm leading-6 text-zinc-600">
+                        <p className="mt-1 text-sm leading-6 text-zinc-600 sm:text-base sm:leading-7">
                           {step.description}
                           {step.highlight ? (
                             <>
                               {" "}
-                              <code className="rounded bg-primary/10 px-2 py-1 font-mono text-primary">
+                              <code className="rounded bg-primary/10 px-2 py-1 font-mono text-sm font-bold text-primary">
                                 {step.highlight}
                               </code>
                             </>

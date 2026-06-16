@@ -24,7 +24,7 @@ export function Footer() {
               </span>
             </Link>
 
-            <p className="mt-5 max-w-md text-base leading-7 text-zinc-600">
+            <p className="mt-5 max-w-xl text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
               Website katalog untuk jam waktu sholat digital, running text LED,
               dan produk display custom yang mudah dikonsultasikan.
             </p>
@@ -46,20 +46,20 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="motion-card rounded-2xl border border-primary/15 bg-background p-6 shadow-xl shadow-primary/5">
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-primary">
+          <div className="motion-card rounded-2xl border border-primary/15 bg-background p-5 shadow-xl shadow-primary/5 sm:p-6">
+            <p className="text-sm font-black uppercase tracking-[0.14em] text-primary">
               Konsultasi
             </p>
-            <h2 className="mt-3 text-2xl font-black text-zinc-950">
+            <h2 className="mt-3 text-2xl font-black text-zinc-950 sm:text-3xl">
               Butuh konsultasi?
             </h2>
-            <p className="mt-3 text-base leading-7 text-zinc-600">
+            <p className="mt-3 text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
               Ceritakan ukuran, lokasi pemasangan, dan jenis display yang
               dibutuhkan agar estimasi lebih jelas.
             </p>
             <Link
               href="/contact"
-              className="motion-button mt-6 inline-flex min-h-12 items-center justify-center rounded-xl bg-primary px-6 text-sm font-black tracking-[0.12em] text-white shadow-lg shadow-primary/20 hover:bg-tertiary"
+              className="motion-button mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-black tracking-[0.08em] text-white shadow-lg shadow-primary/20 hover:bg-tertiary sm:min-h-12 sm:px-6 sm:text-base"
             >
               Konsultasi
             </Link>

@@ -33,25 +33,19 @@ const principles = [
   },
 ];
 
-const principleDelayClasses = [
-  "animate-delay-100",
-  "animate-delay-200",
-  "animate-delay-300",
-];
-
 export default function AboutPage() {
   return (
     <section className="bg-background">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-start">
-          <div className="animate-fade-up">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+          <div className="scroll-reveal" data-scroll-reveal="left">
+            <p className="text-sm font-black uppercase tracking-[0.14em] text-primary">
               Tentang UNA Project
             </p>
             <h1 className="mt-4 text-4xl font-black leading-tight text-zinc-950 sm:text-5xl">
               Solusi display digital untuk kebutuhan informasi harian
             </h1>
-            <p className="mt-5 text-base leading-8 text-zinc-600">
+            <p className="mt-5 text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
               UNA Project membantu membuat produk jam digital, jam waktu sholat,
               running text LED, dan display custom untuk tempat ibadah,
               sekolah, kantor, toko, serta instansi yang membutuhkan tampilan
@@ -62,20 +56,27 @@ export default function AboutPage() {
               <WhatsAppButton />
               <Link
                 href="/products"
-                className="motion-button inline-flex items-center justify-center rounded-xl border-2 border-primary px-6 py-4 text-sm font-bold tracking-[0.12em] text-primary hover:bg-primary hover:text-white"
+                className="motion-button inline-flex items-center justify-center rounded-xl border-2 border-primary px-5 py-3.5 text-sm font-black tracking-[0.08em] text-primary hover:bg-primary hover:text-white sm:text-base"
               >
                 Lihat Produk
               </Link>
             </div>
           </div>
 
-          <div className="motion-card animate-fade-up animate-delay-200 rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8">
-            <h2 className="text-2xl font-black text-zinc-950">
+          <div
+            className="scroll-reveal motion-card rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl shadow-primary/5 sm:p-8"
+            data-scroll-reveal="right"
+            data-scroll-delay={160}
+          >
+            <h2 className="text-2xl font-black text-zinc-950 sm:text-3xl">
               Layanan Utama
             </h2>
             <ul className="mt-6 space-y-4">
               {services.map((service) => (
-                <li key={service} className="flex gap-3 text-sm text-zinc-700">
+                <li
+                  key={service}
+                  className="flex gap-3 text-sm text-zinc-700 sm:text-base"
+                >
                   <span
                     aria-hidden="true"
                     className="mt-1.5 size-2 rounded-full bg-primary"
@@ -91,14 +92,14 @@ export default function AboutPage() {
           {principles.map((principle, index) => (
             <article
               key={principle.title}
-              className={`motion-card animate-fade-up rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 ${
-                principleDelayClasses[index]
-              }`}
+              data-scroll-reveal="scale"
+              data-scroll-delay={(index + 1) * 90}
+              className="scroll-reveal motion-card rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl shadow-primary/5 sm:p-6"
             >
-              <h2 className="text-xl font-black text-zinc-950">
+              <h2 className="text-xl font-black text-zinc-950 sm:text-2xl">
                 {principle.title}
               </h2>
-              <p className="mt-3 text-sm leading-6 text-zinc-600">
+              <p className="mt-3 text-sm leading-6 text-zinc-600 sm:text-base sm:leading-7">
                 {principle.description}
               </p>
             </article>

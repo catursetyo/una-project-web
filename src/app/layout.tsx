@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/src/components/Navbar";
 import { Footer } from "@/src/components/Footer";
+import { ScrollReveal } from "@/src/components/ScrollReveal";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -35,6 +36,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
+        <ScrollReveal />
         <Analytics />
         <SpeedInsights />
       </body>
