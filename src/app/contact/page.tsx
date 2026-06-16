@@ -3,9 +3,9 @@ import Link from "next/link";
 import { WhatsAppButton } from "@/src/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "Kontak | UNA Project",
+  title: "Konsultasi | UNA Project",
   description:
-    "Hubungi UNA Project untuk konsultasi jam digital, jam waktu sholat, running text LED, dan produk custom.",
+    "Konsultasikan kebutuhan jam digital, jam waktu sholat, running text LED, dan produk custom UNA Project.",
 };
 
 const contactTopics = [
@@ -39,7 +39,7 @@ export default function ContactPage() {
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div className="animate-fade-up">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
-              Kontak
+              Konsultasi
             </p>
             <h1 className="mt-4 text-4xl font-black leading-tight text-zinc-950 sm:text-5xl">
               Konsultasikan kebutuhan produk UNA Project

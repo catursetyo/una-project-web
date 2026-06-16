@@ -31,7 +31,7 @@ export function Footer() {
             Tentang
           </Link>
           <Link href="/contact" className="underline-offset-4 hover:underline">
-            Kontak
+            Konsultasi
           </Link>
         </div>
 

@@ -45,12 +45,6 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/contact"
-            className="hidden text-xs font-semibold tracking-[0.2em] text-zinc-700 transition-colors hover:text-primary sm:inline"
-          >
-            Kontak
-          </Link>
-          <Link
-            href="/order"
             className="motion-button rounded-full bg-primary px-5 py-3 text-xs font-bold tracking-[0.16em] text-white shadow-lg shadow-primary/25 hover:bg-tertiary"
           >
             Konsultasi
