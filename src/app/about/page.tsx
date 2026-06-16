@@ -33,12 +33,18 @@ const principles = [
   },
 ];
 
+const principleDelayClasses = [
+  "animate-delay-100",
+  "animate-delay-200",
+  "animate-delay-300",
+];
+
 export default function AboutPage() {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-start">
-          <div>
+          <div className="animate-fade-up">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
               Tentang UNA Project
             </p>
@@ -56,14 +62,14 @@ export default function AboutPage() {
               <WhatsAppButton />
               <Link
                 href="/products"
-                className="inline-flex items-center justify-center rounded-xl border-2 border-primary px-6 py-4 text-sm font-bold tracking-[0.12em] text-primary transition-colors hover:bg-primary hover:text-white"
+                className="motion-button inline-flex items-center justify-center rounded-xl border-2 border-primary px-6 py-4 text-sm font-bold tracking-[0.12em] text-primary hover:bg-primary hover:text-white"
               >
                 Lihat Produk
               </Link>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8">
+          <div className="motion-card animate-fade-up animate-delay-200 rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8">
             <h2 className="text-2xl font-black text-zinc-950">
               Layanan Utama
             </h2>
@@ -82,10 +88,12 @@ export default function AboutPage() {
         </div>
 
         <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {principles.map((principle) => (
+          {principles.map((principle, index) => (
             <article
               key={principle.title}
-              className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5"
+              className={`motion-card animate-fade-up rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 ${
+                principleDelayClasses[index]
+              }`}
             >
               <h2 className="text-xl font-black text-zinc-950">
                 {principle.title}

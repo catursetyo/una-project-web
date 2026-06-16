@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="border-t border-zinc-200 bg-background">
+    <footer className="animate-fade-in border-t border-zinc-200 bg-background">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 text-sm text-zinc-700 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
         <Link href="/" className="flex items-center gap-3 font-semibold text-zinc-950">
           <span

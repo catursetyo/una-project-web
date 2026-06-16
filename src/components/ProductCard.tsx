@@ -4,11 +4,14 @@ import type { Product } from "@/src/types/product";
 
 type ProductCardProps = {
   product: Product;
+  className?: string;
 };
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, className = "" }: ProductCardProps) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5">
+    <article
+      className={`motion-card animate-fade-up flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 ${className}`}
+    >
       <div className="mb-6 flex items-center justify-between gap-4">
         <span className="rounded-full bg-primary/10 px-4 py-2 text-xs font-bold tracking-[0.16em] text-primary">
           {product.category}
@@ -53,7 +56,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </p>
         <Link
           href={`/products/${product.slug}`}
-          className="mt-5 inline-flex w-full items-center justify-center rounded-xl border-2 border-primary px-5 py-3 text-sm font-bold tracking-[0.12em] text-primary transition-colors hover:bg-primary hover:text-white"
+          className="motion-button mt-5 inline-flex w-full items-center justify-center rounded-xl border-2 border-primary px-5 py-3 text-sm font-bold tracking-[0.12em] text-primary hover:bg-primary hover:text-white"
         >
           Lihat Detail
         </Link>

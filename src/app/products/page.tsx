@@ -16,7 +16,7 @@ export default function ProductsPage() {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="max-w-3xl">
+        <div className="animate-fade-up max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
             Katalog Produk
           </p>
@@ -30,11 +30,11 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="animate-fade-up animate-delay-100 mt-8 flex flex-wrap gap-3">
           {categories.map((category) => (
             <span
               key={category}
-              className="rounded-full border border-primary/20 bg-white px-4 py-2 text-xs font-bold tracking-[0.14em] text-primary"
+              className="motion-card rounded-full border border-primary/20 bg-white px-4 py-2 text-xs font-bold tracking-[0.14em] text-primary"
             >
               {category}
             </span>

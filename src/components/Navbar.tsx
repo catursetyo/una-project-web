@@ -10,7 +10,7 @@ const navigationItems = [
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-40 border-b border-zinc-200/80 bg-white/90 backdrop-blur">
+    <header className="animate-slide-down sticky top-0 z-40 border-b border-zinc-200/80 bg-white/90 backdrop-blur">
       <nav
         aria-label="Navigasi utama"
         className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8"
@@ -51,7 +51,7 @@ export function Navbar() {
           </Link>
           <Link
             href="/order"
-            className="rounded-full bg-primary px-5 py-3 text-xs font-bold tracking-[0.16em] text-white shadow-lg shadow-primary/25 transition-colors hover:bg-tertiary"
+            className="motion-button rounded-full bg-primary px-5 py-3 text-xs font-bold tracking-[0.16em] text-white shadow-lg shadow-primary/25 hover:bg-tertiary"
           >
             Konsultasi
           </Link>

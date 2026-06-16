@@ -7,7 +7,7 @@ export function FeaturedProductsSection() {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="animate-fade-up mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
               Produk Unggulan

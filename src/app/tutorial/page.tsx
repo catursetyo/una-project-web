@@ -7,11 +7,13 @@ export const metadata: Metadata = {
     "Panduan setting jam waktu sholat dan running text digital UNA Project.",
 };
 
+const tutorialDelayClasses = ["animate-delay-100", "animate-delay-200"];
+
 export default function TutorialPage() {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="animate-fade-up mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
             Panduan Resmi
           </p>
@@ -25,10 +27,12 @@ export default function TutorialPage() {
         </div>
 
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
-          {tutorials.map((tutorial) => (
+          {tutorials.map((tutorial, tutorialIndex) => (
             <article
               key={tutorial.slug}
-              className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8"
+              className={`motion-card animate-fade-up rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8 ${
+                tutorialDelayClasses[tutorialIndex]
+              }`}
             >
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
                 {tutorial.category}
@@ -44,7 +48,7 @@ export default function TutorialPage() {
                 {tutorial.steps.map((step, index) => (
                   <li
                     key={step.title}
-                    className="rounded-xl border border-zinc-100 bg-background p-4"
+                    className="motion-card rounded-xl border border-zinc-100 bg-background p-4"
                   >
                     <div className="flex gap-4">
                       <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-black text-primary">

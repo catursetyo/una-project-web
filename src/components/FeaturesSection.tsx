@@ -27,11 +27,18 @@ const features = [
   },
 ];
 
+const featureDelayClasses = [
+  "animate-delay-100",
+  "animate-delay-200",
+  "animate-delay-300",
+  "animate-delay-400",
+];
+
 export function FeaturesSection() {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="max-w-2xl">
+        <div className="animate-fade-up max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-wide text-primary">
             Keunggulan
           </p>
@@ -40,12 +47,13 @@ export function FeaturesSection() {
           </h2>
         </div>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature) => (
+          {features.map((feature, index) => (
             <FeatureCard
               key={feature.title}
               label={feature.label}
               title={feature.title}
               description={feature.description}
+              className={featureDelayClasses[index]}
             />
           ))}
         </div>

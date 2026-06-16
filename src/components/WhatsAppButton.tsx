@@ -15,7 +15,7 @@ export function WhatsAppButton({
   variant = "primary",
 }: WhatsAppButtonProps) {
   const baseClassName =
-    "inline-flex items-center justify-center rounded-xl px-6 py-4 text-sm font-bold tracking-[0.12em] transition-colors";
+    "motion-button inline-flex items-center justify-center rounded-xl px-6 py-4 text-sm font-bold tracking-[0.12em]";
   const widthClassName = fullWidth ? "w-full" : "";
   const variantClassName =
     variant === "outline"

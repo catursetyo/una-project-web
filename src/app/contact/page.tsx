@@ -26,12 +26,18 @@ const contactTopics = [
   },
 ];
 
+const topicDelayClasses = [
+  "animate-delay-100",
+  "animate-delay-200",
+  "animate-delay-300",
+];
+
 export default function ContactPage() {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-          <div>
+          <div className="animate-fade-up">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
               Kontak
             </p>
@@ -48,7 +54,7 @@ export default function ContactPage() {
               <WhatsAppButton />
               <Link
                 href="/products"
-                className="inline-flex items-center justify-center rounded-xl border-2 border-primary px-6 py-4 text-sm font-bold tracking-[0.12em] text-primary transition-colors hover:bg-primary hover:text-white"
+                className="motion-button inline-flex items-center justify-center rounded-xl border-2 border-primary px-6 py-4 text-sm font-bold tracking-[0.12em] text-primary hover:bg-primary hover:text-white"
               >
                 Lihat Katalog
               </Link>
@@ -56,10 +62,12 @@ export default function ContactPage() {
           </div>
 
           <div className="grid gap-4">
-            {contactTopics.map((topic) => (
+            {contactTopics.map((topic, index) => (
               <article
                 key={topic.title}
-                className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5"
+                className={`motion-card animate-fade-up rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 ${
+                  topicDelayClasses[index]
+                }`}
               >
                 <h2 className="text-xl font-black text-zinc-950">
                   {topic.title}

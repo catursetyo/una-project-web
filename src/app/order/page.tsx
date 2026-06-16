@@ -46,11 +46,19 @@ const orderSteps = [
   },
 ];
 
+const orderDelayClasses = [
+  "animate-delay-100",
+  "animate-delay-200",
+  "animate-delay-300",
+  "animate-delay-400",
+  "animate-delay-500",
+];
+
 export default function OrderPage() {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="animate-fade-up mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
             Transaksi
           </p>
@@ -68,7 +76,9 @@ export default function OrderPage() {
           {orderSteps.map((step, index) => (
             <article
               key={step.title}
-              className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5"
+              className={`motion-card animate-fade-up rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 ${
+                orderDelayClasses[index % orderDelayClasses.length]
+              }`}
             >
               <div className="flex items-start gap-4">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-black text-white">
@@ -87,7 +97,7 @@ export default function OrderPage() {
           ))}
         </div>
 
-        <div className="mt-12 rounded-2xl border border-primary/20 bg-white p-6 text-center shadow-xl shadow-primary/5 sm:p-8">
+        <div className="motion-card animate-scale-in mt-12 rounded-2xl border border-primary/20 bg-white p-6 text-center shadow-xl shadow-primary/5 sm:p-8">
           <h2 className="text-2xl font-black text-zinc-950">
             Sudah tahu kebutuhan produk?
           </h2>
@@ -101,7 +111,7 @@ export default function OrderPage() {
             <WhatsAppButton />
             <Link
               href="/products"
-              className="inline-flex items-center justify-center rounded-xl border-2 border-primary px-6 py-4 text-sm font-bold tracking-[0.12em] text-primary transition-colors hover:bg-primary hover:text-white"
+              className="motion-button inline-flex items-center justify-center rounded-xl border-2 border-primary px-6 py-4 text-sm font-bold tracking-[0.12em] text-primary hover:bg-primary hover:text-white"
             >
               Lihat Katalog
             </Link>

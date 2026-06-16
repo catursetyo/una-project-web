@@ -60,7 +60,7 @@ export default async function ProductDetailPage({
         </Link>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8">
+          <div className="animate-fade-up rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
               {product.category}
             </p>
@@ -108,7 +108,7 @@ export default async function ProductDetailPage({
                   {product.variants.map((variant) => (
                     <article
                       key={variant.name}
-                      className="rounded-xl border border-zinc-200 bg-background p-5"
+                      className="motion-card rounded-xl border border-zinc-200 bg-background p-5"
                     >
                       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                         <div>
@@ -132,7 +132,7 @@ export default async function ProductDetailPage({
             ) : null}
           </div>
 
-          <aside className="h-fit rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8">
+          <aside className="animate-fade-up animate-delay-200 h-fit rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">
               Mulai Dari
             </p>
