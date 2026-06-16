@@ -137,6 +137,46 @@ body {
     transform: translateY(0) scale(0.98);
   }
 
+  .nav-link-motion {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    overflow: hidden;
+    border-radius: 999px;
+    padding: 0 14px;
+    transition:
+      color 180ms ease,
+      transform 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .nav-link-motion::before {
+    position: absolute;
+    inset: auto 14px 9px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--primary);
+    content: "";
+    opacity: 0;
+    transform: translateX(-12px) scaleX(0.4);
+    transform-origin: left;
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  .nav-link-motion:hover {
+    background-color: rgb(112 0 255 / 8%);
+    color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .nav-link-motion:hover::before {
+    opacity: 1;
+    transform: translateX(0) scaleX(1);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .animate-fade-up,
     .animate-fade-in,
@@ -146,14 +186,20 @@ body {
     }
 
     .motion-card,
-    .motion-button {
+    .motion-button,
+    .nav-link-motion {
       transition: none;
     }
 
     .motion-card:hover,
     .motion-button:hover,
-    .motion-button:active {
+    .motion-button:active,
+    .nav-link-motion:hover {
       transform: none;
+    }
+
+    .nav-link-motion::before {
+      transition: none;
     }
   }
 }
