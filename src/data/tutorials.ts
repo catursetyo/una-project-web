@@ -7,6 +7,7 @@ export const tutorials: Tutorial[] = [
     category: "Jam Waktu Sholat",
     shortDescription:
       "Langkah dasar untuk menghubungkan perangkat dan membuka menu setting jam waktu sholat digital.",
+    videoUrl: "https://youtu.be/Z7R_cdpNdpQ?si=RjrdDJPy3dKollhf",
     steps: [
       {
         title: "Hidupkan WiFi",
@@ -41,6 +42,7 @@ export const tutorials: Tutorial[] = [
     category: "Running Text LED",
     shortDescription:
       "Panduan dasar untuk menghubungkan running text dan mengatur teks yang akan ditampilkan.",
+    videoUrl: "https://youtu.be/muEazVfsELg?si=4kfd_nNxw4vKHiMs",
     steps: [
       {
         title: "Download Aplikasi",
