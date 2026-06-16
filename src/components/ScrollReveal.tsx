@@ -7,30 +7,31 @@ export function ScrollReveal() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const revealItems = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-scroll-reveal]"),
-    );
-
-    if (!revealItems.length) {
-      return;
-    }
-
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    if (!("IntersectionObserver" in window) || prefersReducedMotion) {
-      revealItems.forEach((item) => item.classList.add("is-visible"));
-      return;
-    }
+    const getHiddenRevealItems = () =>
+      Array.from(
+        document.querySelectorAll<HTMLElement>(
+          "[data-scroll-reveal]:not(.is-visible)",
+        ),
+      );
 
-    revealItems.forEach((item) => {
+    const applyDelay = (item: HTMLElement) => {
       const delay = item.dataset.scrollDelay;
 
       if (delay) {
         item.style.setProperty("--reveal-delay", `${delay}ms`);
       }
-    });
+    };
+
+    if (!("IntersectionObserver" in window) || prefersReducedMotion) {
+      getHiddenRevealItems().forEach((item) =>
+        item.classList.add("is-visible"),
+      );
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -49,9 +50,20 @@ export function ScrollReveal() {
       },
     );
 
-    revealItems.forEach((item) => observer.observe(item));
+    const observeHiddenItems = () => {
+      getHiddenRevealItems().forEach((item) => {
+        applyDelay(item);
+        observer.observe(item);
+      });
+    };
 
-    return () => observer.disconnect();
+    observeHiddenItems();
+    window.addEventListener("scroll-reveal:refresh", observeHiddenItems);
+
+    return () => {
+      window.removeEventListener("scroll-reveal:refresh", observeHiddenItems);
+      observer.disconnect();
+    };
   }, [pathname]);
 
   return null;

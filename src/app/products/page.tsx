@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ProductGrid } from "@/src/components/ProductGrid";
+import { ProductCatalog } from "@/src/components/ProductCatalog";
 import { products } from "@/src/data/products";
 
 export const metadata: Metadata = {
@@ -30,24 +30,7 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        <div
-          className="scroll-reveal mt-8 flex flex-wrap gap-3"
-          data-scroll-reveal
-          data-scroll-delay={100}
-        >
-          {categories.map((category) => (
-            <span
-              key={category}
-              className="motion-card rounded-full border border-primary/20 bg-white px-3 py-1.5 text-xs font-black tracking-[0.1em] text-primary sm:px-4 sm:py-2 sm:text-sm"
-            >
-              {category}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-10">
-          <ProductGrid products={products} />
-        </div>
+        <ProductCatalog products={products} categories={categories} />
       </div>
     </section>
   );
