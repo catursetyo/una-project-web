@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ProductMediaPlaceholder } from "@/src/components/ProductMediaPlaceholder";
 import { WhatsAppButton } from "@/src/components/WhatsAppButton";
 import { products } from "@/src/data/products";
 import { formatPrice } from "@/src/lib/formatPrice";
@@ -140,20 +141,24 @@ export default async function ProductDetailPage({
             data-scroll-reveal="right"
             data-scroll-delay={160}
           >
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-zinc-500 sm:text-sm">
-              Mulai Dari
-            </p>
-            <p className="mt-3 text-4xl font-black text-primary sm:text-5xl">
-              {formatPrice(product.priceStartFrom)}
-            </p>
-            <p className="mt-4 text-sm leading-6 text-zinc-600 sm:text-base sm:leading-7">
-              Harga dapat berubah sesuai ukuran, bahan, fitur tambahan, dan
-              kebutuhan pemasangan. Konsultasikan dulu agar estimasi lebih
-              akurat.
-            </p>
+            <ProductMediaPlaceholder product={product} />
 
-            <div className="mt-8">
-              <WhatsAppButton productName={product.name} fullWidth />
+            <div className="mt-8 border-t border-zinc-200 pt-6">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-zinc-500 sm:text-sm">
+                Mulai Dari
+              </p>
+              <p className="mt-3 text-4xl font-black text-primary sm:text-5xl">
+                {formatPrice(product.priceStartFrom)}
+              </p>
+              <p className="mt-4 text-sm leading-6 text-zinc-600 sm:text-base sm:leading-7">
+                Harga dapat berubah sesuai ukuran, bahan, fitur tambahan, dan
+                kebutuhan pemasangan. Konsultasikan dulu agar estimasi lebih
+                akurat.
+              </p>
+
+              <div className="mt-8">
+                <WhatsAppButton productName={product.name} fullWidth />
+              </div>
             </div>
           </aside>
         </div>

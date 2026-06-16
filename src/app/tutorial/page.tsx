@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { TutorialMediaPlaceholder } from "@/src/components/TutorialMediaPlaceholder";
 import { tutorials } from "@/src/data/tutorials";
 
 export const metadata: Metadata = {
@@ -44,6 +45,8 @@ export default function TutorialPage() {
               <p className="mt-4 text-sm leading-6 text-zinc-600 sm:text-base sm:leading-7">
                 {tutorial.shortDescription}
               </p>
+
+              <TutorialMediaPlaceholder tutorial={tutorial} />
 
               <ol className="mt-8 space-y-4">
                 {tutorial.steps.map((step, index) => (

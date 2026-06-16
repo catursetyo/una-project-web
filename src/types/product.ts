@@ -15,5 +15,6 @@ export type Product = {
   priceStartFrom: number;
   variants?: ProductVariant[];
   image?: string;
+  videoUrl?: string;
   isFeatured?: boolean;
 };

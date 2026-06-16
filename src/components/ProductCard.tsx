@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatPrice } from "@/src/lib/formatPrice";
+import { ProductMediaPlaceholder } from "@/src/components/ProductMediaPlaceholder";
 import type { Product } from "@/src/types/product";
 
 type ProductCardProps = {
@@ -19,6 +20,8 @@ export function ProductCard({
       data-scroll-delay={revealDelay}
       className={`scroll-reveal motion-card flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl shadow-primary/5 sm:p-6 ${className}`}
     >
+      <ProductMediaPlaceholder product={product} compact />
+
       <div className="mb-5 flex items-center justify-between gap-3">
         <span className="max-w-[70%] rounded-full bg-primary/10 px-2.5 py-1 text-[0.68rem] font-black leading-4 tracking-[0.08em] text-primary sm:px-3 sm:py-1.5 sm:text-xs">
           {product.category}
