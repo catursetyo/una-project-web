@@ -10,6 +10,7 @@ export const products: Product[] = [
     description:
       "JWS LED TV 32 Inch menampilkan jam, kalender, jadwal sholat, poster dakwah, video, dan informasi masjid melalui Android TV atau Google TV.",
     dimensions: '32"',
+    videoUrl: "https://youtu.be/m-ehFCc5G2g?si=O53EY5djuT2HssSs",
     features: [
       "Android TV atau Google TV 32 inch",
       "Lisensi aplikasi bergaransi",
@@ -69,6 +70,7 @@ export const products: Product[] = [
     description:
       "Produk JWS RGB 2 panel dengan frame figura dan poster masjid, cocok untuk masjid atau mushola yang membutuhkan tampilan jadwal sholat berwarna.",
     dimensions: "100 x 50 cm",
+    videoUrl: "https://youtu.be/gUXKX-79ysM?si=ERmTtl4WXUdGdZb3",
     features: [
       "Frame figura ketebalan 4 cm",
       "Terdapat poster masjid",
@@ -99,6 +101,7 @@ export const products: Product[] = [
     description:
       "JWS 2 panel RGB frame aluminium cocok untuk kebutuhan display jadwal sholat berwarna dengan ukuran lebih ringkas.",
     dimensions: "70 x 20 cm",
+    videoUrl: "https://youtu.be/DCAdNNyZtwE?si=k_Mh2dey1xET9JPh",
     features: [
       "Frame aluminium hollow 2 x 1 inch",
       "2 panel P5 RGB full color",
@@ -127,6 +130,7 @@ export const products: Product[] = [
     description:
       "Produk JWS 1 warna 2 panel menggunakan panel P10 single color, frame figura, dan poster masjid untuk tampilan yang rapi.",
     dimensions: "100 x 50 cm",
+    videoUrl: "https://youtu.be/ZqU8wKnDF8E?si=RFN6kqsbH4MLcEq8",
     features: [
       "Frame figura ketebalan 4 cm",
       "Terdapat poster masjid",
@@ -156,6 +160,7 @@ export const products: Product[] = [
     description:
       "JWS P10 3 panel satu warna menggunakan frame aluminium hollow dan cocok untuk tampilan jadwal sholat sederhana.",
     dimensions: "100 x 20 cm",
+    videoUrl: "https://youtu.be/HnENfj7EnPI?si=ditWTb_-AZd8a3Vu",
     features: [
       "Frame aluminium hollow 2 x 1 inch",
       "3 panel P10 single color",
@@ -184,6 +189,7 @@ export const products: Product[] = [
     description:
       "Jam Digital 2 Panel menampilkan jam dan tanggal saja, cocok untuk kebutuhan display waktu sederhana tanpa jadwal sholat.",
     dimensions: "70 x 20 cm",
+    videoUrl: "https://youtu.be/bBZa7e-95KE?si=MCVVI-wz6Q7N0zbb",
     features: [
       "2 panel P10 single color",
       "Frame aluminium hollow 2 x 1 inch",
@@ -209,6 +215,7 @@ export const products: Product[] = [
     description:
       "JWS P10 RGB 3 Panel Frame Aluminium menampilkan jam, tanggal, jadwal sholat, dan teks berjalan dengan panel RGB.",
     dimensions: "100 x 20 cm",
+    videoUrl: "https://youtu.be/wikLYIN4B_8?si=t924sFD-km0oX0CJ",
     features: [
       "3 panel P10 1/8S RGB atau 3 panel P5 RGB",
       "Frame aluminium hollow 2 x 1 inch",
@@ -239,6 +246,7 @@ export const products: Product[] = [
     description:
       "JWS RGB 5 Panel Frame Aluminium cocok untuk masjid yang membutuhkan area teks berjalan lebih panjang.",
     dimensions: "165 x 20 cm",
+    videoUrl: "https://youtu.be/NTV0IuyhrS4?si=1DS7izCQy7-ASMmy",
     features: [
       "5 panel P10 1/8S RGB atau 3 panel P5 RGB",
       "Frame aluminium hollow 2 x 1 inch",
@@ -264,6 +272,7 @@ export const products: Product[] = [
     description:
       "JWS RGB 10 Panel 2 Baris menyediakan area display lebih besar untuk jam, tanggal, jadwal sholat, dan teks berjalan.",
     dimensions: "165 x 35 cm",
+    videoUrl: "https://youtu.be/hgs_jxV4ww8?si=_XUCTVqC6jyY6MjE",
     features: [
       "10 panel P10 1/8S RGB atau 3 panel P5 RGB",
       "Frame aluminium hollow 2 x 1 inch",
@@ -289,6 +298,7 @@ export const products: Product[] = [
     description:
       "JWS Seven Segment 1 inch dan 0,5 inch tanpa running text cocok untuk masjid atau mushola yang membutuhkan tampilan jadwal sholat klasik.",
     dimensions: "80 x 40 cm",
+    videoUrl: "https://youtu.be/8CT8CaSOIhs?si=VBCV96pAIpquB1-L",
     features: [
       "Frame figura ketebalan 4 cm",
       "Ukuran jam 1 inch",
@@ -316,6 +326,7 @@ export const products: Product[] = [
     description:
       "JWS Seven Segment 1 inch dan 0,8 inch dilengkapi running text, poster masjid, dan akurasi GPS.",
     dimensions: "100 x 50 cm",
+    videoUrl: "https://youtu.be/dFiEdeY_y7E?si=N8Y27wyYmsRW66DN",
     features: [
       "Frame figura ketebalan 4 cm",
       "Ukuran jam 1 inch",
@@ -348,6 +359,7 @@ export const products: Product[] = [
     description:
       "JWS Seven Segment 2,5 inch dan 1 inch tanpa running text dibuat untuk visibilitas lebih tinggi dengan frame figura.",
     dimensions: "120 x 60 cm",
+    videoUrl: "https://youtu.be/NdlzlH1CB6I?si=bflFiC_COo7M5jPU",
     features: [
       "Frame figura ketebalan 4 cm",
       "Ukuran jam 2,5 inch",
@@ -379,6 +391,7 @@ export const products: Product[] = [
     description:
       "JWS Seven Segment Jumbo dilengkapi running text 2 panel P4.75 single color, poster masjid, dan akurasi GPS.",
     dimensions: "120 x 60 cm",
+    videoUrl: "https://youtu.be/KqT8KIg_4hM?si=snUdf-ZjijpsWUv9",
     features: [
       "Frame figura ketebalan 4 cm lapis",
       "Ukuran jam 2,5 inch",
