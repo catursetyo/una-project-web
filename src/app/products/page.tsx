@@ -24,9 +24,7 @@ export default function ProductsPage() {
             Pilih produk sesuai kebutuhan tempat Anda
           </h1>
           <p className="mt-5 text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
-            Halaman ini menampilkan daftar produk awal UNA Project. Data produk
-            masih bisa kamu edit langsung dari file data sebelum nanti kita
-            lanjut ke halaman detail.
+            Test, ini masih placeholder text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor.
           </p>
         </div>
 
