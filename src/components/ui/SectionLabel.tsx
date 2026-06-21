@@ -18,7 +18,7 @@ export function SectionLabel({
 
   return (
     <p
-      className={`inline-flex w-fit items-center rounded-full border px-3 py-1.5 text-xs font-black uppercase tracking-[0.08em] ${toneClassName} ${className}`}
+      className={`inline-flex w-fit max-w-full items-center justify-center whitespace-normal rounded-full border px-3 py-1.5 text-center text-xs font-black uppercase leading-5 tracking-[0.08em] ${toneClassName} ${className}`}
     >
       {children}
     </p>

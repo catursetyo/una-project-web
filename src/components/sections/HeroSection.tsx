@@ -1,4 +1,3 @@
-import { heroTrustItems } from "@/src/data/landing";
 import { createWhatsAppLink } from "@/src/lib/whatsapp";
 import { Button } from "@/src/components/ui/Button";
 import { Icon } from "@/src/components/ui/Icon";
@@ -14,12 +13,12 @@ export function HeroSection() {
     >
       <div className="islamic-star-pattern absolute inset-0 opacity-[0.045]" />
       <Container className="relative z-10">
-        <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.95fr] lg:gap-14">
-          <div>
+        <div className="grid min-w-0 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:gap-14">
+          <div className="min-w-0">
             <SectionLabel tone="dark">
               Jam Waktu Sholat Digital - Akurasi GPS
             </SectionLabel>
-            <h1 className="mt-6 max-w-3xl font-heading text-[clamp(2.65rem,8vw,4.65rem)] font-extrabold leading-[0.98] tracking-[-0.025em] text-white">
+            <h1 className="mt-6 max-w-3xl font-heading text-[clamp(2.35rem,11vw,4.65rem)] font-extrabold leading-[1.02] tracking-[-0.025em] text-white sm:leading-[0.98]">
               Waktu sholat yang{" "}
               <span className="text-una-gold-light">menyala presisi</span> di
               masjid Anda
@@ -47,23 +46,12 @@ export function HeroSection() {
               </Button>
             </div>
 
-            <div className="mt-10 grid gap-4 border-t border-white/10 pt-8 sm:grid-cols-2 xl:grid-cols-4">
-              {heroTrustItems.map((item) => (
-                <div
-                  key={item.label}
-                  className="flex items-center gap-2 text-sm font-semibold text-white/70"
-                >
-                  <Icon
-                    name={item.icon}
-                    className="size-4 shrink-0 text-una-gold-light"
-                  />
-                  {item.label}
-                </div>
-              ))}
-            </div>
           </div>
 
-          <div data-scroll-reveal="scale" className="scroll-reveal">
+          <div
+            data-scroll-reveal="scale"
+            className="scroll-reveal min-w-0 overflow-hidden"
+          >
             <JwsDisplayMockup />
           </div>
         </div>
