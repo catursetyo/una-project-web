@@ -1,76 +1,141 @@
 import Link from "next/link";
+import { homeNavigationItems } from "@/src/data/navigation";
+import { createWhatsAppLink } from "@/src/lib/whatsapp";
+import { Container } from "@/src/components/layout/Container";
+import { Icon } from "@/src/components/ui/Icon";
+import { LogoMark } from "@/src/components/ui/LogoMark";
+
+const infoLinks = [
+  { label: "Cara Transaksi", href: "/order" },
+  { label: "Tutorial Penggunaan", href: "/tutorial" },
+  { label: "Katalog Lengkap", href: "/products" },
+  {
+    label: "Info Garansi",
+    href: createWhatsAppLink({
+      message: "Halo UNA Project, saya ingin tanya garansi produk.",
+    }),
+    external: true,
+  },
+];
 
 export function Footer() {
   return (
-    <footer className="animate-fade-in border-t border-zinc-200 bg-white">
-      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+    <footer id="kontak" className="bg-[#060f0d] py-16 text-white/62 sm:py-20">
+      <Container>
+        <div className="grid gap-10 border-b border-white/10 pb-12 lg:grid-cols-[1.3fr_1fr_0.8fr_0.9fr]">
           <div>
-            <Link
-              href="/"
-              className="group flex w-fit items-center gap-3 rounded-2xl transition-transform hover:-translate-y-0.5"
-            >
-              <span
-                aria-hidden="true"
-                className="grid size-11 grid-cols-2 gap-1 rounded-xl bg-primary p-1.5 shadow-lg shadow-primary/20 transition-transform group-hover:rotate-3"
-              >
-                <span className="rounded bg-white" />
-                <span className="rounded bg-white/70" />
-                <span className="rounded bg-white/70" />
-                <span className="rounded bg-white" />
-              </span>
-              <span className="text-2xl font-black tracking-tight text-zinc-950">
-                UNA Project
+            <Link href="/#home" className="flex w-fit items-center gap-3">
+              <LogoMark size="lg" />
+              <span className="leading-tight">
+                <span className="block font-heading text-xl font-bold text-white">
+                  UNA Project
+                </span>
+                <span className="block text-[0.66rem] font-bold uppercase tracking-[0.12em] text-una-gold-light">
+                  Jam Waktu Sholat Digital
+                </span>
               </span>
             </Link>
-
-            <p className="mt-5 max-w-xl text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
-              Website katalog untuk jam waktu sholat digital, running text LED,
-              dan produk display custom yang mudah dikonsultasikan.
+            <p className="mt-5 max-w-sm text-sm leading-7 text-white/48">
+              Produsen jam waktu sholat digital, running text LED, JWS RGB,
+              Android TV, dan display custom untuk masjid, mushola, kantor,
+              serta instansi.
             </p>
-
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-6 flex gap-3">
               {[
-                "Jam waktu sholat",
-                "Running text LED",
-                "Jam digital",
-                "Display custom",
-              ].map((service) => (
-                <span
-                  key={service}
-                  className="rounded-full border border-primary/15 bg-primary/5 px-4 py-2 text-sm font-bold text-primary"
+                { label: "Instagram", href: "#" },
+                { label: "YouTube", href: "#" },
+                {
+                  label: "WhatsApp",
+                  href: createWhatsAppLink({
+                    message:
+                      "Assalamualaikum, saya ingin tanya produk UNA Project.",
+                  }),
+                },
+              ].map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target={item.href === "#" ? undefined : "_blank"}
+                  rel={item.href === "#" ? undefined : "noreferrer"}
+                  aria-label={item.label}
+                  className="grid size-9 place-items-center rounded-full border border-white/12 text-white/72 transition-colors hover:border-white/25 hover:bg-white/10 hover:text-una-gold-light"
                 >
-                  {service}
-                </span>
+                  {item.label === "WhatsApp" ? (
+                    <Icon name="whatsapp" className="size-4" />
+                  ) : (
+                    <span className="text-xs font-black">
+                      {item.label.slice(0, 2)}
+                    </span>
+                  )}
+                </a>
               ))}
             </div>
           </div>
 
-          <div className="motion-card rounded-2xl border border-primary/15 bg-background p-5 shadow-xl shadow-primary/5 sm:p-6">
-            <p className="text-sm font-black uppercase tracking-[0.14em] text-primary">
-              Konsultasi
-            </p>
-            <h2 className="mt-3 text-2xl font-black text-zinc-950 sm:text-3xl">
-              Butuh konsultasi?
+          <div>
+            <h2 className="text-xs font-black uppercase tracking-[0.12em] text-una-gold-light">
+              Kontak
             </h2>
-            <p className="mt-3 text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
-              Ceritakan ukuran, lokasi pemasangan, dan jenis display yang
-              dibutuhkan agar estimasi lebih jelas.
-            </p>
-            <Link
-              href="/contact"
-              className="motion-button mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-black tracking-[0.08em] text-white shadow-lg shadow-primary/20 hover:bg-tertiary sm:min-h-12 sm:px-6 sm:text-base"
-            >
-              Konsultasi
-            </Link>
+            <div className="mt-5 space-y-3 text-sm leading-6">
+              <p>Surabaya, Jawa Timur</p>
+              <p>+62 812-3456-7890</p>
+              <p>unaprojectofficial@gmail.com</p>
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-xs font-black uppercase tracking-[0.12em] text-una-gold-light">
+              Navigasi
+            </h2>
+            <ul className="mt-5 space-y-3 text-sm">
+              {homeNavigationItems.slice(0, 5).map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="transition-colors hover:text-una-gold-light"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-xs font-black uppercase tracking-[0.12em] text-una-gold-light">
+              Informasi
+            </h2>
+            <ul className="mt-5 space-y-3 text-sm">
+              {infoLinks.map((item) => (
+                <li key={item.label}>
+                  {item.external ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="transition-colors hover:text-una-gold-light"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="transition-colors hover:text-una-gold-light"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-zinc-200 pt-6 text-sm font-semibold text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2024 UNA Project.</p>
-          <p>Katalog modern untuk kebutuhan display digital.</p>
+        <div className="flex flex-col gap-3 pt-6 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
+          <p>(c) 2026 UNA Project - Jam Waktu Sholat Digital.</p>
+          <p>Dibuat sebagai portfolio remake website UMKM Indonesia.</p>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 }
