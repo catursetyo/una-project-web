@@ -1262,7 +1262,7 @@ Info Garansi
 Footer bottom:
 
 ```txt
-© 2026 UNA Project — Jam Waktu Sholat Digital, Surabaya
+© 2026 UNA Project — Jam Waktu Sholat Digital, Temanggung
 Dibuat dengan ❤ untuk UMKM Indonesia
 ```
 

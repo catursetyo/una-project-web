@@ -77,7 +77,7 @@ export function Footer() {
               Kontak
             </h2>
             <div className="mt-5 space-y-3 text-sm leading-6">
-              <p>Surabaya, Jawa Timur</p>
+              <p>Temanggung, Jawa Tengah</p>
               <p>+62 812-3456-7890</p>
               <p>unaprojectofficial@gmail.com</p>
             </div>

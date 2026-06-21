@@ -80,26 +80,17 @@ export const orderSteps = [
   },
 ];
 
-export const testimonials = [
+export const testimonialPlaceholders = [
   {
-    quote:
-      "Sejak pasang JWS, jadwal sholat selalu terlihat jelas dan jamaah lebih mudah mengikuti waktu iqomah.",
-    name: "Ust. Hadi",
-    role: "Takmir Masjid Al-Ikhlas",
-    initials: "UH",
+    title: "Testimoni 01",
+    description: "Screenshot chat pelanggan",
   },
   {
-    quote:
-      "Settingnya gampang dari HP. Fitur auto-murotal juga membantu suasana mushola lebih siap menjelang azan.",
-    name: "Pak Joko",
-    role: "Pengurus Mushola Babussalam",
-    initials: "PJ",
+    title: "Testimoni 02",
+    description: "Foto produk terpasang",
   },
   {
-    quote:
-      "Pemasangan rapi, komunikasinya jelas, dan rekomendasi tipe produknya pas dengan anggaran masjid.",
-    name: "Bu Sari",
-    role: "Bendahara Masjid Nurul Iman",
-    initials: "BS",
+    title: "Testimoni 03",
+    description: "Bukti ulasan pelanggan",
   },
 ];
