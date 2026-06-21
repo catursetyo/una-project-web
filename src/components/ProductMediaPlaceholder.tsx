@@ -28,7 +28,7 @@ export function ProductMediaPlaceholder({
               Media Produk
             </p>
             <p className="mt-1 text-sm font-bold text-zinc-600">
-              Placeholder gambar
+              Ilustrasi tampilan produk
             </p>
           </div>
           <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-primary shadow-sm">

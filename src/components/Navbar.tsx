@@ -1,73 +1,105 @@
-import Link from "next/link";
+"use client";
 
-const navigationItems = [
-  { label: "Halaman", href: "/" },
-  { label: "Produk", href: "/products" },
-  { label: "Transaksi", href: "/order" },
-  { label: "Tutorial", href: "/tutorial" },
-  { label: "Tentang", href: "/about" },
-];
+import Link from "next/link";
+import { useState } from "react";
+import { homeNavigationItems } from "@/src/data/navigation";
+import { createWhatsAppLink } from "@/src/lib/whatsapp";
+import { Icon } from "@/src/components/ui/Icon";
+import { LogoMark } from "@/src/components/ui/LogoMark";
 
 export function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <header className="animate-slide-down sticky top-0 z-40 border-b border-zinc-200/80 bg-white/95 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-una-deep/95 text-white backdrop-blur-xl">
       <nav
         aria-label="Navigasi utama"
-        className="mx-auto max-w-6xl px-4 py-3 sm:px-6 lg:px-8"
+        className="mx-auto flex h-[68px] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
       >
-        <div className="flex items-center justify-between gap-3">
-          <Link
-            href="/"
-            className="group flex min-w-0 items-center gap-3 rounded-2xl pr-2 transition-transform hover:-translate-y-0.5"
-          >
-            <span
-              aria-hidden="true"
-              className="grid size-9 shrink-0 grid-cols-2 gap-1 rounded-xl bg-primary p-1.5 shadow-lg shadow-primary/25 transition-transform group-hover:rotate-3 sm:size-10"
-            >
-              <span className="rounded bg-white" />
-              <span className="rounded bg-white/70" />
-              <span className="rounded bg-white/70" />
-              <span className="rounded bg-white" />
-            </span>
-            <span className="truncate text-lg font-black tracking-tight text-zinc-950 sm:text-xl">
+        <Link
+          href="/#home"
+          className="group flex min-w-0 items-center gap-3"
+          onClick={() => setIsOpen(false)}
+        >
+          <LogoMark size="md" className="transition-transform group-hover:rotate-3" />
+          <span className="min-w-0 leading-tight">
+            <span className="block truncate font-heading text-lg font-bold tracking-[-0.01em]">
               UNA Project
             </span>
-          </Link>
+            <span className="block truncate text-[0.62rem] font-bold uppercase tracking-[0.12em] text-una-gold-light">
+              Jam Waktu Sholat Digital
+            </span>
+          </span>
+        </Link>
 
-          <div className="hidden items-center gap-1 rounded-2xl border border-zinc-200 bg-background/80 p-1.5 text-sm font-black tracking-[0.04em] text-zinc-700 shadow-sm shadow-primary/5 lg:flex">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="nav-link-motion"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-
-          <Link
-            href="/contact"
-            className="motion-button inline-flex min-h-11 shrink-0 items-center justify-center rounded-2xl bg-primary px-4 text-sm font-black tracking-[0.08em] text-white shadow-xl shadow-primary/20 hover:bg-tertiary sm:px-5"
-          >
-            Konsultasi
-          </Link>
+        <div className="hidden items-center gap-8 lg:flex">
+          {homeNavigationItems.slice(0, 5).map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm font-semibold text-white/72 transition-colors hover:text-white"
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
 
-        <div className="mt-3 overflow-x-auto pb-1 lg:hidden">
-          <div className="flex w-max min-w-full items-center gap-1 rounded-2xl border border-zinc-200 bg-background/80 p-1.5 text-sm font-black tracking-[0.04em] text-zinc-700 shadow-sm shadow-primary/5">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="nav-link-motion shrink-0"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
+        <div className="flex items-center gap-2">
+          <a
+            href={createWhatsAppLink({
+              message:
+                "Assalamualaikum, saya ingin tanya produk JWS Digital UNA Project.",
+            })}
+            target="_blank"
+            rel="noreferrer"
+            className="gold-cta motion-button hidden min-h-10 items-center justify-center gap-2 rounded-full px-4 text-sm font-black text-una-gold-ink shadow-[0_10px_22px_rgb(214_164_55_/_16%)] hover:brightness-105 sm:inline-flex"
+          >
+            <Icon name="whatsapp" className="size-4" />
+            Hubungi Kami
+          </a>
+
+          <button
+            type="button"
+            aria-label={isOpen ? "Tutup menu" : "Buka menu"}
+            aria-expanded={isOpen}
+            onClick={() => setIsOpen((value) => !value)}
+            className="motion-button grid size-11 place-items-center rounded-full border border-white/15 text-white lg:hidden"
+          >
+            <Icon name={isOpen ? "close" : "menu"} className="size-5" />
+          </button>
         </div>
       </nav>
+
+      <div
+        className={`border-t border-white/10 bg-una-deep px-4 py-5 shadow-lg shadow-black/20 lg:hidden ${
+          isOpen ? "block" : "hidden"
+        }`}
+      >
+        <div className="mx-auto flex max-w-6xl flex-col gap-1">
+          {homeNavigationItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setIsOpen(false)}
+              className="rounded-lg px-3 py-3 text-base font-semibold text-white/80 hover:bg-white/10 hover:text-white"
+            >
+              {item.label}
+            </Link>
+          ))}
+          <a
+            href={createWhatsAppLink({
+              message:
+                "Assalamualaikum, saya ingin konsultasi pemasangan JWS Digital UNA Project.",
+            })}
+            target="_blank"
+            rel="noreferrer"
+            className="gold-cta mt-3 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-black text-una-gold-ink"
+          >
+            <Icon name="whatsapp" className="size-4" />
+            Konsultasi WhatsApp
+          </a>
+        </div>
+      </div>
     </header>
   );
 }

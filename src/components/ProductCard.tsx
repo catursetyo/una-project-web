@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { formatPrice } from "@/src/lib/formatPrice";
-import { ProductMediaPlaceholder } from "@/src/components/ProductMediaPlaceholder";
+import {
+  MiniLedPreview,
+  type MiniLedPreviewKind,
+} from "@/src/components/ui/MiniLedPreview";
+import { Icon } from "@/src/components/ui/Icon";
 import type { Product } from "@/src/types/product";
 
 type ProductCardProps = {
@@ -8,6 +12,52 @@ type ProductCardProps = {
   className?: string;
   revealDelay?: number;
 };
+
+function getPreviewKind(product: Product): MiniLedPreviewKind {
+  if (product.category === "Lisensi Aplikasi") {
+    return "key";
+  }
+
+  if (product.name.toLowerCase().includes("tv")) {
+    return "tv";
+  }
+
+  if (product.category === "Seven Segment" || product.name.includes("1 Warna")) {
+    return "single-time";
+  }
+
+  return "rgb-time";
+}
+
+function getPreviewValue(product: Product) {
+  if (product.name.includes("Seven")) {
+    return "04:15";
+  }
+
+  if (product.name.includes("5 Panel")) {
+    return "17:58";
+  }
+
+  if (product.name.includes("2 Panel")) {
+    return "09:30";
+  }
+
+  return "12:45";
+}
+
+function getSecondaryPriceLabel(product: Product) {
+  const autoMurotalVariant = product.variants?.find((variant) =>
+    variant.name.toLowerCase().includes("murotal"),
+  );
+
+  if (!autoMurotalVariant) {
+    return product.variants && product.variants.length > 1
+      ? `${product.variants.length} opsi varian`
+      : undefined;
+  }
+
+  return `Auto-murotal ${formatPrice(autoMurotalVariant.price)}`;
+}
 
 export function ProductCard({
   product,
@@ -18,58 +68,54 @@ export function ProductCard({
     <article
       data-scroll-reveal="scale"
       data-scroll-delay={revealDelay}
-      className={`scroll-reveal motion-card flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-xl shadow-primary/5 sm:p-6 ${className}`}
+      className={`scroll-reveal flex h-full flex-col overflow-hidden rounded-lg border border-black/10 bg-white transition-colors hover:bg-una-cream ${className}`}
     >
-      <ProductMediaPlaceholder product={product} compact />
+      <MiniLedPreview
+        kind={getPreviewKind(product)}
+        tag={product.category}
+        value={getPreviewValue(product)}
+      />
 
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <span className="max-w-[70%] rounded-full bg-primary/10 px-2.5 py-1 text-[0.68rem] font-black leading-4 tracking-[0.08em] text-primary sm:px-3 sm:py-1.5 sm:text-xs">
-          {product.category}
-        </span>
-        {product.dimensions ? (
-          <span className="text-xs font-bold tracking-[0.1em] text-zinc-500 sm:text-sm">
-            {product.dimensions}
+      <div className="flex flex-1 flex-col p-5">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <span className="rounded-full bg-primary/10 px-3 py-1 text-[0.68rem] font-black uppercase tracking-[0.08em] text-primary">
+            {product.dimensions ?? "Custom"}
           </span>
-        ) : null}
-      </div>
+          {product.isFeatured ? (
+            <span className="text-xs font-black text-una-gold">Unggulan</span>
+          ) : null}
+        </div>
 
-      <h3 className="text-xl font-black leading-tight text-zinc-950 sm:text-2xl">
-        {product.name}
-      </h3>
-      <p className="mt-4 text-sm leading-6 text-zinc-600 sm:text-base sm:leading-7">
-        {product.shortDescription}
-      </p>
-
-      <ul className="mt-5 space-y-3 text-sm text-zinc-700 sm:text-base">
-        {product.features.slice(0, 3).map((feature) => (
-          <li key={feature} className="flex gap-3">
-            <span
-              aria-hidden="true"
-              className="mt-1.5 size-2 rounded-full bg-primary"
-            />
-            <span>{feature}</span>
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-auto border-t border-zinc-200 pt-6">
-        {product.variants?.length ? (
-          <p className="mb-3 text-xs font-bold tracking-[0.12em] text-zinc-500 sm:text-sm">
-            {product.variants.length} opsi varian
-          </p>
-        ) : null}
-        <p className="text-xs font-black tracking-[0.16em] text-zinc-500 sm:text-sm">
-          Mulai Dari
+        <h3 className="text-lg font-extrabold leading-snug text-una-ink">
+          {product.name}
+        </h3>
+        <p className="mt-3 text-sm leading-6 text-una-muted">
+          {product.shortDescription}
         </p>
-        <p className="mt-2 text-2xl font-black text-primary sm:text-3xl">
-          {formatPrice(product.priceStartFrom)}
-        </p>
-        <Link
-          href={`/products/${product.slug}`}
-          className="motion-button mt-5 inline-flex w-full items-center justify-center rounded-xl border-2 border-primary px-5 py-3 text-sm font-black tracking-[0.08em] text-primary hover:bg-primary hover:text-white sm:text-base"
-        >
-          Lihat Detail
-        </Link>
+
+        <div className="mt-auto flex items-end justify-between gap-4 border-t border-black/10 pt-5">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.12em] text-una-muted">
+              Mulai dari
+            </p>
+            <p className="mt-1 font-heading text-xl font-extrabold text-primary">
+              {formatPrice(product.priceStartFrom)}
+            </p>
+            {getSecondaryPriceLabel(product) ? (
+              <p className="mt-1 text-xs font-semibold text-una-muted">
+                {getSecondaryPriceLabel(product)}
+              </p>
+            ) : null}
+          </div>
+
+          <Link
+            href={`/products/${product.slug}`}
+            aria-label={`Lihat detail ${product.name}`}
+            className="motion-button grid size-10 shrink-0 place-items-center rounded-full bg-una-deep text-white hover:bg-una-gold hover:text-una-gold-ink"
+          >
+            <Icon name="arrow" className="size-4" />
+          </Link>
+        </div>
       </div>
     </article>
   );

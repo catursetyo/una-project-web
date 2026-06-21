@@ -24,7 +24,9 @@ export default function ProductsPage() {
             Pilih produk sesuai kebutuhan tempat Anda
           </h1>
           <p className="mt-5 text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8">
-            Test, ini masih placeholder text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor.
+            Temukan pilihan JWS digital, running text, jam seven segment,
+            Android TV, dan paket auto-murotal yang bisa disesuaikan dengan
+            kebutuhan masjid, mushola, kantor, atau sekolah.
           </p>
         </div>
 
