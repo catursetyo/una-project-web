@@ -1,7 +1,7 @@
 import type { IconName } from "@/src/data/landing";
 
 type IconProps = {
-  name: IconName | "arrow" | "menu" | "close" | "star" | "whatsapp";
+  name: IconName | "arrow" | "menu" | "close" | "whatsapp";
   className?: string;
 };
 
@@ -75,12 +75,6 @@ export function Icon({ name, className = "size-5" }: IconProps) {
       return (
         <svg {...sharedProps}>
           <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-      );
-    case "star":
-      return (
-        <svg {...sharedProps} fill="currentColor">
-          <path d="m12 2.8 2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9L6.5 20l1-6.2L3 9.4l6.2-.9L12 2.8Z" />
         </svg>
       );
     case "whatsapp":
