@@ -22,7 +22,7 @@ export function TutorialMediaPlaceholder({
               Video Tutorial
             </p>
             <p className="mt-1 text-sm font-bold text-zinc-600">
-              Placeholder video panduan
+              Panduan penggunaan produk
             </p>
           </div>
           <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-primary shadow-sm">

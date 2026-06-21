@@ -91,189 +91,6 @@ p {
   color: var(--una-gold-ink);
 }
 
-@layer components {
-  .hero-showcase {
-    --hero-gap: 2rem;
-    --hero-pad-y: 4.75rem;
-    --card-pad: 1rem;
-    display: grid;
-    min-height: 620px;
-    max-width: 72rem;
-    margin-inline: auto;
-    padding: var(--hero-pad-y) 1rem;
-    align-items: center;
-    gap: var(--hero-gap);
-    text-align: left;
-  }
-
-  .hero-showcase-copy {
-    max-width: 42rem;
-  }
-
-  .hero-showcase-kicker,
-  .hero-showcase-chip {
-    display: inline-flex;
-    align-items: center;
-    width: fit-content;
-    border-radius: 999px;
-    background: rgb(214 164 55 / 14%);
-    color: var(--primary);
-    font-size: 0.75rem;
-    font-weight: 900;
-    letter-spacing: 0.12em;
-    line-height: 1;
-    padding: 0.65rem 0.9rem;
-    text-transform: uppercase;
-  }
-
-  .hero-showcase-title {
-    max-width: 12ch;
-    margin-top: 1.35rem;
-    color: var(--foreground);
-    font-size: clamp(3.2rem, 9vw, 5.5rem);
-    font-weight: 900;
-    letter-spacing: -0.025em;
-    line-height: 0.92;
-    text-wrap: balance;
-  }
-
-  .hero-showcase-description {
-    max-width: 62ch;
-    margin-top: 1.35rem;
-    color: var(--una-soft-text);
-    font-size: clamp(1rem, 1.8vw, 1.15rem);
-    line-height: 1.75;
-    text-wrap: pretty;
-  }
-
-  .hero-showcase-actions {
-    display: flex;
-    width: 100%;
-    max-width: 34rem;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 2rem;
-  }
-
-  .hero-showcase-proof {
-    display: grid;
-    gap: 0.75rem;
-    margin-top: 2rem;
-  }
-
-  .hero-showcase-proof-item {
-    border: 1px solid rgb(21 90 76 / 14%);
-    border-radius: 16px;
-    background: #fff;
-    padding: var(--card-pad);
-  }
-
-  .hero-showcase-proof-title {
-    color: var(--foreground);
-    font-weight: 900;
-    line-height: 1.25;
-  }
-
-  .hero-showcase-proof-text {
-    margin-top: 0.45rem;
-    color: var(--una-muted);
-    line-height: 1.6;
-  }
-
-  .hero-showcase-panel {
-    position: relative;
-    display: none;
-    overflow: hidden;
-    border-radius: 16px;
-    background: var(--una-deep);
-    color: white;
-    min-height: 25rem;
-    padding: clamp(1rem, 3vw, 1.5rem);
-  }
-
-  .hero-showcase-panel::before {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(rgb(255 255 255 / 7%) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(255 255 255 / 7%) 1px, transparent 1px);
-    background-size: 24px 24px;
-    content: "";
-    opacity: 0.57;
-  }
-
-  .hero-showcase-screen {
-    position: relative;
-    display: grid;
-    height: 100%;
-    align-content: space-between;
-    border: 1px solid rgb(255 255 255 / 14%);
-    border-radius: 12px;
-    background: rgb(255 255 255 / 7%);
-    padding: 1rem;
-  }
-
-  .hero-showcase-clock {
-    color: white;
-    font-size: clamp(3rem, 8vw, 4.75rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    line-height: 1;
-  }
-
-  .hero-showcase-running {
-    overflow: hidden;
-    border-radius: 12px;
-    background: rgb(214 164 55 / 18%);
-    color: var(--una-gold-light);
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    padding: 0.9rem;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .hero-showcase-prayer {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.65rem;
-    margin-top: 1rem;
-  }
-
-  .hero-showcase-prayer span {
-    border-radius: 10px;
-    background: rgb(255 255 255 / 10%);
-    color: rgb(255 255 255 / 88%);
-    font-weight: 800;
-    padding: 0.75rem;
-  }
-
-  @media (min-width: 640px) {
-    .hero-showcase {
-      padding-inline: 1.5rem;
-    }
-
-    .hero-showcase-actions {
-      flex-direction: row;
-    }
-
-    .hero-showcase-proof {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .hero-showcase {
-      grid-template-columns: minmax(0, 1fr) minmax(22rem, 0.78fr);
-      padding-inline: 2rem;
-    }
-
-    .hero-showcase-panel {
-      display: block;
-    }
-  }
-}
-
 @layer utilities {
   .islamic-star-pattern {
     background-image:
@@ -360,88 +177,6 @@ p {
     transform-origin: center bottom;
   }
 
-  @keyframes fade-up {
-    from {
-      opacity: 0;
-      transform: translateY(18px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes scale-in {
-    from {
-      opacity: 0;
-      transform: scale(0.96);
-    }
-
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  @keyframes slide-down {
-    from {
-      opacity: 0;
-      transform: translateY(-16px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-fade-up {
-    animation: fade-up 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  .animate-fade-in {
-    animation: fade-in 560ms ease both;
-  }
-
-  .animate-scale-in {
-    animation: scale-in 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  .animate-slide-down {
-    animation: slide-down 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  .animate-delay-100 {
-    animation-delay: 100ms;
-  }
-
-  .animate-delay-200 {
-    animation-delay: 200ms;
-  }
-
-  .animate-delay-300 {
-    animation-delay: 300ms;
-  }
-
-  .animate-delay-400 {
-    animation-delay: 400ms;
-  }
-
-  .animate-delay-500 {
-    animation-delay: 500ms;
-  }
-
   .motion-card {
     transition:
       transform 220ms ease,
@@ -470,46 +205,6 @@ p {
 
   .motion-button:active {
     transform: translateY(0) scale(0.98);
-  }
-
-  .nav-link-motion {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    min-height: 40px;
-    overflow: hidden;
-    border-radius: 999px;
-    padding: 0 12px;
-    transition:
-      color 180ms ease,
-      transform 180ms ease,
-      background-color 180ms ease;
-  }
-
-  .nav-link-motion::before {
-    position: absolute;
-    inset: auto 12px 8px;
-    height: 2px;
-    border-radius: 999px;
-    background: var(--primary);
-    content: "";
-    opacity: 0;
-    transform: translateX(-12px) scaleX(0.4);
-    transform-origin: left;
-    transition:
-      opacity 180ms ease,
-      transform 180ms ease;
-  }
-
-  .nav-link-motion:hover {
-    background-color: rgb(21 90 76 / 8%);
-    color: var(--primary);
-    transform: translateY(-2px);
-  }
-
-  .nav-link-motion:hover::before {
-    opacity: 1;
-    transform: translateX(0) scaleX(1);
   }
 
   .scroll-reveal {
@@ -545,30 +240,20 @@ p {
     }
 
     .animate-marquee,
-    .animate-wave,
-    .animate-fade-up,
-    .animate-fade-in,
-    .animate-scale-in,
-    .animate-slide-down {
+    .animate-wave {
       animation: none;
     }
 
     .motion-card,
     .motion-button,
-    .nav-link-motion,
     .scroll-reveal {
       transition: none;
     }
 
     .motion-card:hover,
     .motion-button:hover,
-    .motion-button:active,
-    .nav-link-motion:hover {
+    .motion-button:active {
       transform: none;
-    }
-
-    .nav-link-motion::before {
-      transition: none;
     }
 
     .scroll-reveal {

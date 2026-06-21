@@ -7,13 +7,6 @@ export type IconName =
   | "panel"
   | "warranty";
 
-export const heroTrustItems: { icon: IconName; label: string }[] = [
-  { icon: "gps", label: "Akurasi GPS" },
-  { icon: "phone", label: "Setting via HP" },
-  { icon: "shield", label: "Garansi resmi" },
-  { icon: "install", label: "Termasuk instalasi" },
-];
-
 export const stats = [
   { value: "15+", label: "Tipe produk tersedia" },
   { value: "100+", label: "Masjid & mushola terlayani" },

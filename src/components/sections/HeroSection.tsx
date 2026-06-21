@@ -24,9 +24,9 @@ export function HeroSection() {
               masjid Anda
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/72 sm:text-lg">
-              UNA Project menghadirkan jadwal sholat digital untuk masjid,
-              mushola, dan kantor: akurasi GPS otomatis, mudah diatur dari
-              smartphone, dan tersedia pilihan auto-murotal.
+              UNA Project menghadirkan jadwal sholat digital dan running text
+              untuk masjid, mushola, kantor, dan lain-lain. Dengan akurasi GPS,
+              mudah diatur dari smartphone, dan tersedia berbagai pilihan.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
