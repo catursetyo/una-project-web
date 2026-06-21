@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-21T01:05:52+07:00",
+  "title": "Design System: UNA Project",
+  "extensions": {
+    "colorMeta": {
+      "background": {
+        "role": "neutral",
+        "displayName": "Latar Katalog",
+        "canonical": "#f8f9fa",
+        "tonalRamp": ["oklch(15% 0.01 285)", "oklch(28% 0.01 285)", "oklch(42% 0.01 285)", "oklch(56% 0.01 285)", "oklch(70% 0.01 285)", "oklch(82% 0.008 285)", "oklch(92% 0.006 285)", "oklch(98% 0.004 285)"]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Tinta Utama",
+        "canonical": "#1b1b20",
+        "tonalRamp": ["oklch(12% 0.01 285)", "oklch(20% 0.01 285)", "oklch(32% 0.01 285)", "oklch(45% 0.01 285)", "oklch(60% 0.008 285)", "oklch(74% 0.006 285)", "oklch(88% 0.004 285)", "oklch(96% 0.003 285)"]
+      },
+      "primary": {
+        "role": "primary",
+        "displayName": "Ungu Aktivasi",
+        "canonical": "#7000ff",
+        "tonalRamp": ["oklch(18% 0.16 295)", "oklch(28% 0.2 295)", "oklch(40% 0.24 295)", "oklch(52% 0.27 295)", "oklch(64% 0.24 295)", "oklch(76% 0.18 295)", "oklch(88% 0.1 295)", "oklch(96% 0.04 295)"]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Magenta Sinyal",
+        "canonical": "#e1007e",
+        "tonalRamp": ["oklch(18% 0.14 340)", "oklch(30% 0.18 340)", "oklch(42% 0.22 340)", "oklch(56% 0.24 340)", "oklch(68% 0.2 340)", "oklch(80% 0.14 340)", "oklch(90% 0.08 340)", "oklch(97% 0.03 340)"]
+      },
+      "tertiary": {
+        "role": "tertiary",
+        "displayName": "Ungu Dalam",
+        "canonical": "#2b0066",
+        "tonalRamp": ["oklch(14% 0.12 295)", "oklch(23% 0.16 295)", "oklch(34% 0.2 295)", "oklch(48% 0.22 295)", "oklch(62% 0.18 295)", "oklch(76% 0.12 295)", "oklch(88% 0.07 295)", "oklch(96% 0.03 295)"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Permukaan Putih",
+        "canonical": "#ffffff",
+        "tonalRamp": ["oklch(16% 0 0)", "oklch(30% 0 0)", "oklch(44% 0 0)", "oklch(58% 0 0)", "oklch(72% 0 0)", "oklch(84% 0 0)", "oklch(94% 0 0)", "oklch(100% 0 0)"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero title dan brand name utama."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Judul halaman dan section penting."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Nama produk, card title, dan judul step."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Deskripsi produk, tutorial, dan alur pemesanan."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "CTA, chip, kategori, dan metadata pendek."
+      }
+    },
+    "shadows": [
+      {
+        "name": "surface-low",
+        "value": "0 1px 2px rgb(112 0 255 / 5%)",
+        "purpose": "Nav container, feature card ringan, dan badge kecil."
+      },
+      {
+        "name": "accent-button",
+        "value": "0 10px 15px rgb(112 0 255 / 20%)",
+        "purpose": "CTA utama dan chip aktif."
+      },
+      {
+        "name": "ambient-card-glow",
+        "value": "0 25px 50px rgb(112 0 255 / 5%)",
+        "purpose": "Pola existing pada beberapa card besar; kandidat untuk diperkecil saat polish."
+      }
+    ],
+    "motion": [
+      {
+        "name": "fade-up",
+        "value": "640ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Entrance ringan untuk hero dan konten section."
+      },
+      {
+        "name": "motion-button",
+        "value": "180ms ease",
+        "purpose": "Feedback hover dan active pada CTA."
+      },
+      {
+        "name": "scroll-reveal",
+        "value": "700ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Reveal berbasis IntersectionObserver dengan reduced-motion fallback."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "CTA utama untuk katalog, kontak, dan WhatsApp.",
+      "html": "<button class=\"ds-btn-primary\">Konsultasi</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 12px; background: var(--primary, #7000ff); color: #fff; padding: 14px 20px; font-family: Geist, Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 900; letter-spacing: 0.08em; transition: transform 180ms ease, background-color 180ms ease, box-shadow 180ms ease; box-shadow: 0 10px 15px rgb(112 0 255 / 20%); } .ds-btn-primary:hover { background: var(--tertiary, #2b0066); transform: translateY(-2px); } .ds-btn-primary:focus-visible { outline: 3px solid rgb(112 0 255 / 30%); outline-offset: 3px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "CTA sekunder untuk berpindah ke katalog atau kontak.",
+      "html": "<button class=\"ds-btn-outline\">Lihat Katalog</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; border: 2px solid var(--primary, #7000ff); border-radius: 12px; background: #fff; color: var(--primary, #7000ff); padding: 12px 18px; font-family: Geist, Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 900; letter-spacing: 0.08em; transition: transform 180ms ease, background-color 180ms ease, color 180ms ease; } .ds-btn-outline:hover { background: var(--primary, #7000ff); color: #fff; transform: translateY(-2px); } .ds-btn-outline:focus-visible { outline: 3px solid rgb(112 0 255 / 30%); outline-offset: 3px; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip-active",
+      "description": "Kategori katalog dengan state aktif yang jelas.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"true\">Jam Waktu Sholat</button>",
+      "css": ".ds-chip { border: 1px solid var(--primary, #7000ff); border-radius: 9999px; background: var(--primary, #7000ff); color: #fff; padding: 8px 16px; font-family: Geist, Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 900; letter-spacing: 0.08em; box-shadow: 0 10px 15px rgb(112 0 255 / 20%); } .ds-chip:focus-visible { outline: 3px solid rgb(112 0 255 / 30%); outline-offset: 3px; }"
+    },
+    {
+      "name": "Product Card",
+      "kind": "card",
+      "refersTo": "card-product",
+      "description": "Preview produk dengan kategori, ringkasan, fitur, harga mulai, dan link detail.",
+      "html": "<article class=\"ds-card\"><span class=\"ds-card-chip\">Jam Waktu Sholat</span><h3>JWS RGB 2 Panel</h3><p>Display jadwal sholat berwarna untuk masjid dan mushola.</p><strong>Rp1.600.000</strong></article>",
+      "css": ".ds-card { display: flex; flex-direction: column; gap: 16px; border: 1px solid #e4e4e7; border-radius: 16px; background: #fff; color: #1b1b20; padding: 24px; font-family: Geist, Arial, Helvetica, sans-serif; box-shadow: 0 1px 2px rgb(112 0 255 / 5%); } .ds-card h3 { margin: 0; color: #09090b; font-size: 24px; line-height: 1.2; font-weight: 900; } .ds-card p { margin: 0; color: #52525b; font-size: 16px; line-height: 1.6; } .ds-card strong { color: var(--primary, #7000ff); font-size: 28px; line-height: 1.1; font-weight: 900; } .ds-card-chip { width: fit-content; border-radius: 9999px; background: rgb(112 0 255 / 10%); color: var(--primary, #7000ff); padding: 6px 12px; font-size: 12px; font-weight: 900; letter-spacing: 0.08em; }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Navigasi sticky dengan brand mark grid dan link pill.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-mark\"></span>UNA Project</a><a class=\"ds-nav-link\" href=\"#\">Produk</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; border: 1px solid #e4e4e7; border-radius: 16px; background: rgb(248 249 250 / 80%); padding: 6px; font-family: Geist, Arial, Helvetica, sans-serif; } .ds-brand { display: inline-flex; align-items: center; gap: 12px; color: #09090b; text-decoration: none; font-size: 20px; font-weight: 900; } .ds-mark { width: 40px; height: 40px; border-radius: 12px; background: var(--primary, #7000ff); box-shadow: 0 10px 15px rgb(112 0 255 / 20%); } .ds-nav-link { display: inline-flex; align-items: center; min-height: 40px; border-radius: 9999px; color: #3f3f46; padding: 0 12px; text-decoration: none; font-size: 14px; font-weight: 900; letter-spacing: 0.04em; } .ds-nav-link:hover { background: rgb(112 0 255 / 8%); color: var(--primary, #7000ff); }"
+    },
+    {
+      "name": "Media Placeholder",
+      "kind": "custom",
+      "refersTo": "media-placeholder",
+      "description": "Placeholder visual produk sebelum foto asli tersedia.",
+      "html": "<div class=\"ds-media\"><span>Media Produk</span><strong>JWS RGB 2 Panel</strong></div>",
+      "css": ".ds-media { display: flex; min-height: 180px; flex-direction: column; justify-content: space-between; overflow: hidden; border: 1px solid rgb(112 0 255 / 15%); border-radius: 12px; background: linear-gradient(90deg, rgb(112 0 255 / 8%) 1px, transparent 1px), linear-gradient(rgb(112 0 255 / 8%) 1px, transparent 1px), #f8f9fa; background-size: 48px 48px; padding: 20px; font-family: Geist, Arial, Helvetica, sans-serif; } .ds-media span { color: var(--primary, #7000ff); font-size: 12px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; } .ds-media strong { max-width: 28ch; color: #09090b; font-size: 28px; line-height: 1.1; font-weight: 900; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Meja Katalog Teknis",
+    "overview": "Sistem visual UNA Project harus terasa seperti meja katalog teknis yang rapi: produk ditata jelas, spesifikasi mudah dipindai, dan jalur konsultasi terlihat tanpa harus mencari. Desainnya brand-focused karena website ini membangun kepercayaan pertama sebelum customer menghubungi WhatsApp.\n\nIdentitas saat ini memakai permukaan terang, teks gelap, dan aksen ungu-magenta yang kuat. Warna utama boleh tegas, tetapi konten harus tetap service-first: produk, harga mulai, fitur, tutorial, dan alur pemesanan lebih penting daripada dekorasi.\n\nSistem ini menolak pola dari PRODUCT.md: \"Struktur Google Sites lama dengan blok teks panjang\", \"Halaman katalog generik\", \"Pola commerce yang terlalu kompleks\", serta \"Tropes landing page dekoratif\" yang tidak membantu customer memilih produk.",
+    "keyCharacteristics": [
+      "Katalog terang dengan kontras kuat dan CTA WhatsApp yang jelas.",
+      "Hirarki tipografi tebal untuk nama produk, harga, dan tindakan.",
+      "Layout card-based untuk produk, tetapi tidak boleh berubah menjadi grid kartu identik tanpa konteks.",
+      "Motion ringan untuk membantu orientasi, bukan untuk menyembunyikan konten.",
+      "Copy praktis, teknis, dan langsung ke kebutuhan pemasangan nyata."
+    ],
+    "rules": [
+      {
+        "name": "The Action Color Rule",
+        "body": "Primary dipakai untuk tindakan dan fakta penting; jika semua elemen ungu, tidak ada yang terasa penting.",
+        "section": "colors"
+      },
+      {
+        "name": "The Plain Surface Rule",
+        "body": "Mayoritas halaman tetap terang dan tenang agar detail produk, harga, dan CTA lebih mudah dipindai.",
+        "section": "colors"
+      },
+      {
+        "name": "The Practical Label Rule",
+        "body": "Label uppercase hanya boleh memberi orientasi singkat seperti kategori atau status. Jangan menambah tiny section eyebrow berulang sebagai dekorasi otomatis.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Crammed Display Rule",
+        "body": "Display text tidak boleh lebih rapat dari letter-spacing normal sampai -0.03em; keterbacaan lebih penting daripada efek poster.",
+        "section": "typography"
+      },
+      {
+        "name": "The Shadow Diet Rule",
+        "body": "Jangan menggabungkan border dekoratif dengan shadow blur besar pada card baru. Pilih border yang jelas atau shadow ketat, kecuali saat hover state benar-benar membutuhkan depth.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do buat keputusan produk mudah dipahami: nama, kategori, fitur, harga mulai, dan CTA harus terlihat dalam satu scan.",
+      "Do gunakan #7000ff untuk tindakan utama, harga, bullet, dan chip aktif.",
+      "Do pertahankan body text gelap di atas latar terang agar kontras tetap kuat.",
+      "Do gunakan komponen data-driven untuk katalog; tampilan card menerima data dari parent, bukan hardcoded langsung di UI.",
+      "Do hormati reduced motion; konten tidak boleh kosong kalau animasi tidak berjalan."
+    ],
+    "donts": [
+      "Don't ulangi \"Struktur Google Sites lama dengan blok teks panjang, hirarki lemah, navigasi kurang jelas, dan panduan transaksi yang tidak rapi.\"",
+      "Don't membuat \"Halaman katalog generik yang membuat semua produk terasa sama dan tidak membantu pengunjung menentukan langkah berikutnya.\"",
+      "Don't menambah \"Pola commerce yang terlalu kompleks sebelum MVP membutuhkannya, seperti cart, login, payment gateway, dashboard, atau CMS.\"",
+      "Don't memakai \"Tropes landing page dekoratif\" seperti tiny section eyebrow yang berulang, gradient text, glass effect berlebihan, atau metrik ala SaaS yang kabur.",
+      "Don't sembunyikan fakta penting produk di balik teks kontras rendah, gambar tanpa alt text, atau CTA yang tidak deskriptif."
+    ]
+  }
+}

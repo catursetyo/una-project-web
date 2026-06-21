@@ -6,999 +6,797 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 <!-- END:nextjs-agent-rules -->
 
-# AGENTS.md — UNA Project Website Remake Learning Guide
+# AGENTS.md — UNA Project Web Remake Agent Guide
 
-## Project Identity
+## Project Context
 
-This project is a personal portfolio and learning project.
+This project is `una-project-web`, a personal portfolio and learning project by the developer.
 
-The goal is to remake the old UNA Project Google Sites website into a modern, responsive, maintainable website using Next.js, TypeScript, and Tailwind CSS.
+The project remakes the old UNA Project Google Sites website into a modern website for a small business that provides:
 
-UNA Project is a small business that provides services and products related to:
-
-* Jam digital
-* Jam waktu sholat
+* Jam waktu sholat digital
 * Running text LED
-* Jadwal waktu sholat digital
-* Produk custom untuk masjid, mushola, sekolah, kantor, dan instansi
+* JWS RGB panel
+* JWS Android TV
+* Seven segment digital clock
+* Auto-murotal features
+* Product installation and setup service
 
-Original website references:
+The current goal is to restyle and improve the existing website using the provided visual reference: a premium dark green and gold landing page design with a simulated LED/JWS display, product catalog cards, murotal section, order steps, testimonials, final CTA, and footer.
 
-* `https://sites.google.com/view/unaprojectofficial/halaman-muka`
-* `https://sites.google.com/view/unaprojectofficial/transaksi`
-* `https://sites.google.com/view/unaprojectofficial/tutorial`
-
-This remake is not only about making the website look better. It is also used as a learning project so the developer can understand the full workflow of building a real frontend project.
-
----
-
-## Main Goal
-
-Help the developer rebuild the UNA Project website while learning and understanding the project.
-
-The final website should be:
-
-* Modern
-* Responsive
-* Easy to navigate
-* Product-focused
-* Clear for potential customers
-* Easy to maintain
-* Suitable as a portfolio case study
-
-The developer is still learning Next.js, so every implementation must be educational, gradual, and easy to understand.
+This is not just a website completion task. This is also a learning project. Every change must help the developer understand the project structure, component flow, and design implementation.
 
 ---
 
-## Developer Learning Context
+## Current Project Assumptions
 
-The developer is learning:
+Before coding, inspect the real repository files.
+
+Expected stack:
 
 * Next.js
-* TypeScript
-* Tailwind CSS
-* Component-based frontend development
-* Project structure
-* Data-driven rendering
-* Dynamic routing
-* Deployment workflow
-* How to explain a project as a portfolio case study
-
-When helping, do not only write code. Always explain the reasoning and the flow.
-
-The developer wants to use vibe coding, but still wants to understand the whole project.
-
-Therefore, act as:
-
-* Pair programmer
-* Mentor
-* Code reviewer
-* Frontend project guide
-
-Do not act as an automatic full-code generator that produces a complete project without explanation.
-
----
-
-## Language Rule
-
-Use Indonesian when explaining concepts, decisions, and instructions.
-
-Code, file names, comments, and technical identifiers may remain in English.
-
-Prefer simple and beginner-friendly explanations.
-
----
-
-## Core Tech Stack
-
-Use the following stack unless the developer explicitly changes it:
-
-* Next.js
+* React
 * TypeScript
 * Tailwind CSS
 * ESLint
-* Vercel for deployment
+* npm
 
-Optional only when needed:
+Use npm because this repository uses `package-lock.json`.
 
-* `lucide-react` for icons
-* `clsx` or `tailwind-merge` for conditional class names
-* shadcn/ui only if the developer asks for it
+Use these commands unless the repo shows otherwise:
 
-Do not add unnecessary libraries.
+```bash
+npm install
+npm run dev
+npm run lint
+npm run build
+```
 
-Do not add a backend, database, authentication, admin dashboard, CMS, or payment gateway for the MVP unless explicitly requested.
+Do not switch package managers.
 
----
-
-## MVP Scope
-
-The first version of the project should include:
-
-1. Homepage
-2. Product catalog page
-3. Product detail page
-4. Tutorial page
-5. Order or transaction flow page
-6. Contact section with WhatsApp CTA
-7. Responsive layout
-8. Basic SEO metadata
-9. README suitable for portfolio
-
-The website does not need:
-
-* Login system
-* Admin dashboard
-* Database
-* Payment gateway
-* Shopping cart
-* Complex CMS
-* Over-engineered animations
+Do not introduce pnpm, yarn, or bun unless the developer explicitly asks.
 
 ---
 
-## Recommended Project Structure
+## Mandatory Reading Before Coding
 
-Use this structure as the default reference:
+Before writing or editing code, read these files if they exist:
 
 ```txt
-src/
-├── app/
-│   ├── page.tsx
-│   ├── layout.tsx
-│   ├── globals.css
-│   ├── products/
-│   │   ├── page.tsx
-│   │   └── [slug]/
-│   │       └── page.tsx
-│   ├── tutorial/
-│   │   └── page.tsx
-│   ├── order/
-│   │   └── page.tsx
-│   ├── about/
-│   │   └── page.tsx
-│   └── contact/
-│       └── page.tsx
-│
-├── components/
-│   ├── Navbar.tsx
-│   ├── Footer.tsx
-│   ├── HeroSection.tsx
-│   ├── SectionTitle.tsx
-│   ├── ProductCard.tsx
-│   ├── ProductGrid.tsx
-│   ├── WhatsAppButton.tsx
-│   └── FeatureCard.tsx
-│
-├── data/
-│   ├── products.ts
-│   └── tutorials.ts
-│
-├── types/
-│   ├── product.ts
-│   └── tutorial.ts
-│
-└── lib/
-    ├── formatPrice.ts
-    └── whatsapp.ts
+AGENTS.md
+DESIGN.md
+README.md
+package.json
+src/app/page.tsx
+src/app/layout.tsx
+src/app/globals.css
+src/components/
+src/data/
+src/lib/
+src/types/
 ```
 
-Explain this structure whenever adding or moving files.
-
----
-
-## Important Development Principle
-
-Do not generate the whole website at once.
-
-Always work in small steps.
-
-Use this flow:
+Also inspect the installed Next.js local documentation before changing Next.js-specific APIs:
 
 ```txt
-1 feature kecil
-→ jelaskan rencana
-→ buat atau ubah file yang diperlukan saja
-→ jelaskan fungsi setiap file
-→ jelaskan alur data
-→ beri cara menjalankan atau mengetes
-→ tunggu developer memahami sebelum lanjut
+node_modules/next/dist/docs/
 ```
 
-A good feature unit is:
+This is mandatory before using or changing:
 
-* Navbar
-* Footer
-* Hero section
-* Product type
-* Product data
-* Product card
-* Product grid
-* Product catalog page
-* Product detail route
-* WhatsApp button
-* Tutorial page
-* Order flow page
+* App Router
+* Layouts
+* Metadata
+* Dynamic routes
+* Link
+* Image
+* Server Components
+* Client Components
+* notFound
+* redirects
+* Server Actions
+* API routes
 
-Avoid combining too many features in one response or one code change.
+Do not rely only on memory because this project uses a newer Next.js version.
 
 ---
 
-## Required Response Format
+## Primary Design Source
 
-When asked to implement something, respond using this structure:
+Use `DESIGN.md` as the design contract.
 
-```md
-## Tujuan
+The new style must follow the provided reference design:
 
-Jelaskan fitur yang sedang dibuat.
+* Dark emerald/navy-green hero
+* Gold/yellow CTA buttons
+* Clean cream/off-white sections
+* Strong typography
+* JWS digital display simulation
+* LED dot matrix visual language
+* Product catalog cards with artificial LED preview
+* Floating WhatsApp button
+* Premium UMKM product landing page feel
 
-## File yang akan dibuat/diubah
+Do not create a random new design direction.
 
-Sebutkan file-file yang terlibat.
+Do not make the website look like a generic SaaS landing page.
 
-## Implementasi
+The identity should feel like:
 
-Berikan kode atau patch.
-
-## Penjelasan Alur
-
-Jelaskan:
-- Data berasal dari mana
-- Komponen menerima apa
-- Komponen menampilkan apa
-- File ini dipakai di mana
-- Bagaimana user berinteraksi dengan fitur ini
-
-## Cara Menjalankan / Mengecek
-
-Berikan command atau langkah pengecekan.
-
-## Hal yang Perlu Kamu Pahami
-
-Berikan ringkasan konsep yang sedang dipelajari.
+```txt
+Islamic digital product
+LED display business
+JWS/running text specialist
+modern UMKM
+professional but still approachable
 ```
 
-If the task is debugging, use this format:
+---
 
-```md
-## Penyebab Error
+## Very Important Design Rule
 
-Jelaskan penyebab error.
+Do not copy the Figma/React reference as one huge inline-style component.
 
-## Bagian yang Bermasalah
+The reference design may contain absolute positions and inline styles. Convert it into clean, responsive, maintainable code using:
 
-Tunjukkan file dan bagian kode yang relevan.
+* React components
+* TypeScript types
+* Tailwind utility classes
+* Reusable data arrays
+* CSS variables or Tailwind-compatible design tokens
+* Mobile-first responsive layout
 
-## Perbaikan
+Bad approach:
 
-Berikan kode yang diperbaiki.
+```tsx
+<div style={{ width: 1920, height: 6146, position: "relative" }}>
+  ...
+</div>
+```
 
-## Konsep yang Berkaitan
+Good approach:
 
-Jelaskan konsep Next.js, TypeScript, React, atau Tailwind yang relevan.
+```tsx
+<section className="bg-una-deep text-white">
+  <Container>
+    <HeroContent />
+    <JwsDisplayMockup />
+  </Container>
+</section>
 ```
 
 ---
 
 ## Learning-First Rule
 
-After writing code, always include a learning explanation.
+The developer is using vibe coding to learn.
 
-For every new file, explain:
+Therefore, do not silently generate large code changes.
 
-* What the file does
-* Why the file exists
-* Where the file is imported
-* Whether it is a page, component, data file, type file, or helper file
-* What would happen if the file is removed
-* What the developer can safely edit
+For every task:
 
-Example explanation:
+1. Explain the goal.
+2. Explain which files will be touched.
+3. Implement the smallest useful change.
+4. Explain the data/component flow.
+5. Explain what the developer should understand.
+6. Tell how to run and verify the result.
+7. Suggest a small manual edit the developer can try.
 
-```txt
-ProductCard.tsx adalah komponen presentasi.
-Komponen ini tidak menyimpan data sendiri.
-Data produk dikirim dari parent component melalui props.
-Kalau ingin mengubah isi produk, ubah data di products.ts.
-Kalau ingin mengubah tampilan card, ubah ProductCard.tsx.
+The developer must be able to explain the code later as a portfolio project.
+
+---
+
+## Response Format for Implementation Tasks
+
+When asked to implement a feature, respond using this format:
+
+```md
+## Tujuan
+
+Jelaskan fitur atau perubahan yang akan dibuat.
+
+## File yang Akan Diubah
+
+Sebutkan file yang akan dibuat/diubah.
+
+## Rencana Singkat
+
+Jelaskan langkah implementasi.
+
+## Implementasi
+
+Berikan patch/kode yang diperlukan.
+
+## Penjelasan Alur
+
+Jelaskan:
+- Data berasal dari mana
+- Komponen menerima props apa
+- Komponen menampilkan apa
+- File ini dipakai di mana
+- Bagaimana user berinteraksi dengan bagian ini
+
+## Cara Mengecek
+
+Berikan command dan hal yang harus dilihat di browser.
+
+## Yang Perlu Kamu Pahami
+
+Jelaskan konsep React/Next/Tailwind yang sedang dipelajari.
+```
+
+For debugging, use:
+
+```md
+## Penyebab Error
+
+Jelaskan akar masalahnya.
+
+## File yang Bermasalah
+
+Sebutkan file dan bagian yang relevan.
+
+## Perbaikan Minimal
+
+Berikan fix terkecil terlebih dahulu.
+
+## Konsep yang Berkaitan
+
+Jelaskan konsep yang perlu dipahami.
+
+## Cara Mengecek
+
+Berikan langkah validasi.
 ```
 
 ---
 
-## Do Not Over-Engineer
+## Current Refactor Goal
 
-Avoid unnecessary complexity.
+The current goal is to restyle the website to match the provided premium UNA Project landing page reference.
 
-Do not introduce:
+Focus on visual and structural improvements first.
 
-* Global state management
-* Redux
-* Zustand
-* Database
-* ORM
-* Authentication
-* Admin dashboard
-* Server actions
-* API routes
-* Payment gateway
-* Complex animation system
-* Premature CMS integration
+Do not add backend features.
 
-Only add these if the developer explicitly asks after the MVP is finished.
+Do not add database.
+
+Do not add login.
+
+Do not add admin dashboard.
+
+Do not add payment gateway.
+
+Do not add complex CMS.
 
 ---
 
-## Data-Driven Rendering Rule
+## Target Page Structure
 
-Product content should not be hardcoded directly inside UI components.
+The homepage should be structured like this:
 
-Use a data file:
+```txt
+Header / Navbar
+Hero Section
+Stats Strip
+Trust Badges
+Why / Keunggulan Section
+Product Catalog Preview
+Auto-Murotal Feature Section
+Order Steps Section
+Testimonials Section
+Final CTA Section
+Footer
+Floating WhatsApp Button
+```
+
+Use section IDs for navigation:
+
+```txt
+#home
+#produk
+#keunggulan
+#murotal
+#testimoni
+#kontak
+```
+
+Navbar should link to those sections.
+
+---
+
+## Suggested Component Structure
+
+Keep components small and readable.
+
+Recommended structure:
+
+```txt
+src/components/
+├── layout/
+│   ├── Header.tsx
+│   ├── Footer.tsx
+│   └── Container.tsx
+│
+├── sections/
+│   ├── HeroSection.tsx
+│   ├── StatsStrip.tsx
+│   ├── TrustBadges.tsx
+│   ├── WhySection.tsx
+│   ├── ProductCatalogSection.tsx
+│   ├── MurotalSection.tsx
+│   ├── OrderStepsSection.tsx
+│   ├── TestimonialsSection.tsx
+│   └── FinalCtaSection.tsx
+│
+├── ui/
+│   ├── Button.tsx
+│   ├── SectionLabel.tsx
+│   ├── SectionHeading.tsx
+│   ├── ProductCard.tsx
+│   ├── FeatureCard.tsx
+│   ├── LogoMark.tsx
+│   ├── JwsDisplayMockup.tsx
+│   ├── MiniLedPreview.tsx
+│   └── FloatingWhatsApp.tsx
+```
+
+Only create or move files gradually.
+
+If the current repo already has a different structure, adapt carefully instead of doing a massive rewrite.
+
+---
+
+## Data Structure Rule
+
+Content should be data-driven where useful.
+
+Use data files for:
 
 ```txt
 src/data/products.ts
+src/data/features.ts
+src/data/testimonials.ts
+src/data/navigation.ts
+src/data/trustBadges.ts
 ```
 
-Product structure should be defined in:
+Do not hardcode repeated product cards directly in JSX.
 
-```txt
-src/types/product.ts
-```
+A product object should support the new design.
 
-UI components should receive product data through props.
-
-Good:
-
-```tsx
-<ProductCard product={product} />
-```
-
-Bad:
-
-```tsx
-<h3>JWS RGB 2 Panel</h3>
-<p>Rp1.600.000</p>
-```
-
-Direct hardcoding is only acceptable for temporary placeholder content, and it must be clearly marked.
-
----
-
-## Product Data Model
-
-Use a simple product model for the MVP.
-
-Recommended type:
+Recommended product type:
 
 ```ts
 export type Product = {
   slug: string;
   name: string;
+  tag: string;
   category: string;
-  shortDescription: string;
   description: string;
-  dimensions?: string;
-  features: string[];
-  priceStartFrom: number;
-  image?: string;
+  specs: string;
+  price: number;
+  secondaryPriceLabel?: string;
+  ledPreview: {
+    kind: "rgb-time" | "single-time" | "tv" | "key";
+    value?: string;
+    colors?: string[];
+  };
   isFeatured?: boolean;
 };
 ```
 
-Do not make the type too complex at the beginning.
-
-If product variants are needed later, add them gradually.
-
----
-
-## WhatsApp CTA Rule
-
-The order process should use WhatsApp CTA for the MVP.
-
-Use a helper file:
-
-```txt
-src/lib/whatsapp.ts
-```
-
-The WhatsApp URL should be generated using a reusable function.
-
-Example concept:
-
-```ts
-createWhatsAppLink(productName?: string)
-```
-
-Do not repeat WhatsApp URL logic in many components.
+Keep it simple. Do not over-engineer variants unless needed.
 
 ---
 
 ## Styling Rule
 
-Use Tailwind CSS.
+Use Tailwind CSS as the primary styling method.
 
-Prioritize:
-
-* Clean layout
-* Good spacing
-* Mobile-first design
-* Readable typography
-* Consistent button styles
-* Reusable section components
+Prefer reusable utility patterns.
 
 Avoid:
 
-* Too many colors
-* Random spacing
-* Inline CSS
-* Overly complex animation
-* Unnecessary custom CSS
+* Random custom CSS
+* Large inline style objects
+* Absolute positioning for entire layout
+* Fixed 1920px widths
+* Pixel-perfect desktop-only layout
+* Overuse of animations
+* Overuse of client components
 
-The design direction should feel:
-
-* Clean
-* Modern
-* Professional
-* Slightly industrial/technical
-* Suitable for a digital clock and LED display business
+Use CSS variables in `globals.css` only when helpful for design tokens.
 
 ---
 
-## Suggested Visual Direction
+## Font Rule
 
-Recommended style:
+The reference design uses:
 
-* Background: white, slate, zinc, or neutral tones
-* Accent color: green, emerald, amber, or blue
-* Typography: clean sans-serif
-* Layout: card-based catalog
-* CTA: clear WhatsApp button
-* Visuals: product images, installation gallery, simple icons
+* Outfit for headings and brand
+* Plus Jakarta Sans for body
+* VT323 for LED/digital display text
 
-Keep the UI professional rather than playful.
+If fonts are not installed yet, add them through `next/font/google` if compatible with the installed Next.js version.
 
----
+Before changing font setup, inspect the local Next.js docs.
 
-## Website Content Goals
+Use font variables if possible:
 
-The remake should improve the old website by adding:
+```tsx
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+});
 
-* Clear hero section
-* Business explanation
-* Product categories
-* Product cards
-* Product detail page
-* Clear pricing format
-* Clear order flow
-* Tutorial section
-* FAQ section
-* Contact and WhatsApp CTA
-* Better copywriting
-* Typo fixes
-* Better mobile layout
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
+});
 
----
-
-## Old Website Problems to Address
-
-The old website has these issues:
-
-* Product information is displayed as long text
-* No strong hero section
-* No clear navigation flow
-* Transaction page is unclear
-* Tutorial page is too short
-* Some typos and inconsistent wording
-* Product pricing format is inconsistent
-* No clear CTA per product
-* No product detail pages
-* No filtering or catalog structure
-* Visual hierarchy is weak
-
-The new website should solve these issues gradually.
-
----
-
-## Routing Plan
-
-Use App Router.
-
-Recommended routes:
-
-```txt
-/
-Homepage
-
-/products
-Product catalog
-
-/products/[slug]
-Product detail page
-
-/tutorial
-Tutorial page
-
-/order
-Order flow / transaction guide
-
-/about
-About UNA Project
-
-/contact
-Contact page
+const vt323 = VT323({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-vt323",
+});
 ```
 
-Do not add more routes until the MVP routes are stable.
+Then use classes or CSS variables consistently.
 
 ---
 
-## Homepage Sections
+## Component Responsibility
 
-Recommended homepage sections:
+### Header
 
-```txt
-Hero
-Keunggulan
-Produk Unggulan
-Kategori Produk
-Cara Pesan Singkat
-Tutorial Singkat
-FAQ Singkat
-CTA WhatsApp
-```
+The header should:
 
-Do not make the homepage too long at first.
+* Use dark green translucent background
+* Be sticky or fixed only if it does not break layout
+* Show UNA Project logo
+* Show navigation links
+* Show gold WhatsApp CTA button
+* Be responsive on mobile
 
----
+Avoid complicated mobile menu at first. A simple responsive layout is acceptable.
 
-## Product Catalog Page
+### HeroSection
 
-The product catalog page should display:
+The hero should include:
 
-* Page title
-* Short intro
-* Product grid
-* Product cards
-* CTA to WhatsApp or product detail
+* Label: `JAM WAKTU SHOLAT DIGITAL • AKURASI GPS`
+* Main heading: `Waktu sholat yang menyala presisi di masjid Anda`
+* Highlight word: `menyala presisi`
+* Short description
+* Primary CTA: `Pesan via WhatsApp`
+* Secondary CTA: `Lihat Katalog`
+* Trust items
+* Large JWS display mockup
 
-Search and filter are optional after the basic catalog works.
+### JwsDisplayMockup
 
----
+This component simulates the physical product display.
 
-## Product Detail Page
+It should include:
 
-The product detail page should display:
+* Metallic outer frame
+* Dark LED screen
+* Dot matrix background
+* Large digital time
+* Date line
+* Prayer time grid
+* Running text/marquee strip
+* Optional `GPS Synced` indicator
 
+This component may be a client component only if it uses live time or browser timers.
+
+If static, keep it as a server component.
+
+If using `useEffect`, explain why `"use client"` is needed.
+
+### ProductCatalogSection
+
+The catalog section should:
+
+* Use cream/off-white background
+* Display section label and heading
+* Show 6 featured products in a grid
+* Use product cards with dark LED preview top and white content body
+* Include price and optional murotal variant label
+* Include CTA arrow button
+* Include “Minta Katalog Lengkap” CTA
+
+### ProductCard
+
+Each card should include:
+
+* LED-style thumbnail
+* Tag badge
 * Product name
-* Category
+* Specs/short description
+* Price
+* Secondary price label
+* Small circular arrow CTA
+
+Do not put all product content inside ProductCard. Pass product data through props.
+
+### MurotalSection
+
+This section should use a dark green gradient and explain auto-murotal.
+
+Include:
+
+* Section label
+* Heading
 * Description
-* Dimensions
-* Features
-* Starting price
-* WhatsApp order button
-* Back to catalog link
+* Benefits list
+* Gold CTA
+* Audio-wave style visual card
 
-If the slug is invalid, show a simple not found state or use Next.js `notFound()` if supported by the installed Next.js version.
+### OrderStepsSection
 
-Before using `notFound()`, check the local Next.js documentation in `node_modules/next/dist/docs/`.
-
----
-
-## Tutorial Page
-
-The tutorial page should be beginner-friendly for customers.
-
-Suggested tutorial topics:
-
-* Cara setting jam waktu sholat
-* Cara setting running text
-* Cara menggunakan aplikasi setting
-* FAQ penggunaan produk
-
-Fix typos from the old website and rewrite content in clear Indonesian.
-
----
-
-## Order Page
-
-The order or transaction page should explain the manual transaction flow.
-
-Recommended order flow:
+This section should show a simple 3-step process:
 
 ```txt
-1. Pilih produk
-2. Konsultasi kebutuhan
-3. Konfirmasi ukuran dan harga
-4. Pembayaran DP
-5. Proses produksi
-6. Instalasi
-7. Garansi dan after-sales
+01 Konsultasi via WhatsApp
+02 Pilih Tipe & Ukuran
+03 Instalasi & Aktivasi
 ```
 
-Do not implement real payment for MVP.
+Use clean white layout with large spacing and subtle dividers.
+
+### TestimonialsSection
+
+Use cream background.
+
+Show testimonial cards with:
+
+* Star rating
+* Testimonial text
+* Initial avatar
+* Name
+* Role/location
+
+If testimonials are placeholders, make them realistic but not excessive.
+
+### FinalCtaSection
+
+Use dark green background.
+
+Include:
+
+* Label
+* Strong headline
+* Short description
+* WhatsApp CTA
+* Catalog CTA
+
+### Footer
+
+Use near-black green background.
+
+Include:
+
+* Brand block
+* Short business description
+* Social icons or placeholders
+* Contact info
+* Navigation links
+* Information links
+* Copyright
+
+### FloatingWhatsApp
+
+Add floating WhatsApp button on bottom-right.
+
+It should:
+
+* Use green WhatsApp color
+* Have accessible label
+* Link to WhatsApp helper
+* Not cover important mobile content excessively
+
+---
+
+## WhatsApp Rule
+
+Use a reusable helper for WhatsApp links.
+
+Recommended file:
+
+```txt
+src/lib/whatsapp.ts
+```
+
+Example responsibility:
+
+```ts
+export function createWhatsAppLink(message?: string): string {
+  ...
+}
+```
+
+Do not duplicate WhatsApp URL strings in many components.
+
+Use a placeholder phone number only if the real number is not available. Mark it clearly as TODO.
 
 ---
 
 ## Accessibility Rule
 
-When creating UI:
+Maintain semantic HTML.
 
-* Use semantic HTML
-* Use proper heading order
-* Use readable contrast
-* Use descriptive button text
-* Add `alt` text for images
-* Do not use clickable `div` when a `button` or `a` is appropriate
+Use:
 
----
+* `<header>`
+* `<nav>`
+* `<main>`
+* `<section>`
+* `<footer>`
+* `<a>`
+* `<button>` only for real button actions
 
-## SEO Rule
+Do not use clickable `<div>`.
 
-Add basic metadata where appropriate.
+Add:
 
-Include:
-
-* Title
-* Description
-* Open Graph basics if simple
-* Clear heading structure
-* Descriptive page content
-
-Do not overcomplicate SEO in the MVP.
+* `aria-label` for icon-only buttons
+* descriptive link text
+* useful alt text for images
+* readable contrast
+* logical heading order
 
 ---
 
-## Image Rule
+## Responsive Rule
 
-Use placeholder images if real product images are not available.
+The design must be responsive.
 
-When using images:
+Desktop reference can be inspired by the screenshot, but implementation must work on:
 
-* Store local images in `public/`
-* Use descriptive file names
-* Use alt text
-* Avoid huge image files
+* Mobile
+* Tablet
+* Desktop
 
-Do not block implementation only because images are not ready.
+Use mobile-first Tailwind classes.
+
+Expected behavior:
+
+* Header navigation may simplify on mobile
+* Hero text stacks above display mockup
+* Stats become 2-column or 1-column on mobile
+* Product cards become 1 column on mobile, 2 on tablet, 3 on desktop
+* Feature cards stack on mobile
+* Footer columns stack on mobile
+
+Never use fixed widths that break mobile.
 
 ---
 
-## Git Workflow
+## Do Not Rewrite Everything at Once
 
-Encourage small commits.
+Use this refactor order:
 
-Recommended commit style:
+### Phase 1 — Design Foundation
+
+* Add or update `DESIGN.md`
+* Update `globals.css` tokens
+* Configure fonts
+* Create shared `Container`, `Button`, `SectionLabel`, `LogoMark`
+
+### Phase 2 — Layout Foundation
+
+* Update Header
+* Update Footer
+* Add Floating WhatsApp
+
+### Phase 3 — Hero
+
+* Create new HeroSection
+* Create JwsDisplayMockup
+* Add CTA and trust items
+
+### Phase 4 — Content Sections
+
+* StatsStrip
+* TrustBadges
+* WhySection
+* ProductCatalogSection
+* MurotalSection
+* OrderStepsSection
+* TestimonialsSection
+* FinalCtaSection
+
+### Phase 5 — Polish
+
+* Responsive fixes
+* Spacing consistency
+* Accessibility check
+* SEO metadata
+* README screenshots/notes
+
+One phase should be implemented and reviewed before moving to the next.
+
+---
+
+## Quality Checklist
+
+A change is done only when:
+
+* `npm run lint` passes
+* `npm run build` passes
+* The homepage renders without console errors
+* Mobile layout is not broken
+* The design follows `DESIGN.md`
+* Components are readable
+* Data is not unnecessarily hardcoded
+* The developer can explain what changed
+
+---
+
+## Commit Style
+
+Use conventional commits:
 
 ```txt
-feat: add navbar and footer
-feat: add product data model
-feat: add product card component
-feat: add product catalog page
-feat: add product detail route
-feat: add whatsapp CTA helper
-fix: correct product price formatting
-docs: add project learning notes
+docs: add design system guide
+style: add UNA Project design tokens
+feat: add redesigned header
+feat: add hero section with JWS display mockup
+feat: add product catalog section
+feat: add auto murotal section
+feat: add order steps section
+feat: add testimonial section
+feat: add final CTA and footer
+fix: improve mobile spacing
+refactor: split homepage into sections
 ```
 
 Do not mix unrelated changes in one commit.
 
 ---
 
-## Testing and Validation
+## Documentation Rule
 
-After code changes, suggest checks:
+When finishing a major section, update learning documentation if present.
 
-```bash
-npm run dev
-npm run lint
-npm run build
-```
-
-If the project uses pnpm, bun, or yarn, adapt commands based on the existing lockfile.
-
-Check which package manager is used before giving install or run commands.
-
----
-
-## Package Manager Rule
-
-Before installing dependencies, inspect existing files:
-
-* `package-lock.json` means npm
-* `pnpm-lock.yaml` means pnpm
-* `yarn.lock` means yarn
-* `bun.lockb` or `bun.lock` means bun
-
-Do not mix package managers.
-
----
-
-## Next.js Documentation Rule
-
-Before using or changing Next.js-specific features, inspect the local docs:
-
-```txt
-node_modules/next/dist/docs/
-```
-
-This is mandatory for:
-
-* Routing
-* Metadata
-* Layouts
-* Server components
-* Client components
-* Dynamic routes
-* Image component
-* Link component
-* notFound
-* redirects
-* server actions
-* API routes
-
-Do not rely only on memory.
-
-This project may use a newer Next.js version than the model expects.
-
----
-
-## Server and Client Component Rule
-
-Do not add `"use client"` unless needed.
-
-Use client components only when using:
-
-* `useState`
-* `useEffect`
-* Event handlers
-* Browser APIs
-* Interactive UI that requires client-side behavior
-
-Default to server components for static pages and static product rendering.
-
-When adding `"use client"`, explain why it is needed.
-
----
-
-## TypeScript Rule
-
-Use explicit types for shared data.
-
-Avoid `any`.
-
-If a type is unclear, define a simple type first and improve later.
-
-Good:
-
-```ts
-type ProductCardProps = {
-  product: Product;
-};
-```
-
-Bad:
-
-```ts
-function ProductCard(props: any) {
-  ...
-}
-```
-
----
-
-## Component Rule
-
-Components should be small and reusable.
-
-A component should usually do one clear job.
-
-Examples:
-
-```txt
-Navbar → site navigation
-Footer → footer links and contact
-HeroSection → homepage hero
-ProductCard → single product preview
-ProductGrid → list of product cards
-WhatsAppButton → WhatsApp CTA
-SectionTitle → reusable section heading
-```
-
-Do not put the entire homepage into one giant component.
-
----
-
-## Refactoring Rule
-
-If a file becomes too large, suggest refactoring.
-
-Refactoring should be explained before being applied.
-
-Do not refactor many files at once unless necessary.
-
----
-
-## Portfolio Case Study Rule
-
-This project should be useful as a portfolio case study.
-
-Whenever a major feature is completed, help the developer document:
-
-* Problem solved
-* Design decision
-* Technical decision
-* What was learned
-* Before vs after improvement
-
-Recommended future README sections:
-
-```txt
-Overview
-Problem
-Solution
-Tech Stack
-Features
-Project Structure
-What I Learned
-Screenshots
-Deployment
-```
-
----
-
-## Learning Notes Rule
-
-Encourage the developer to maintain:
+Suggested file:
 
 ```txt
 LEARNING_NOTES.md
 ```
 
-After every feature, suggest a short note like:
+Add short notes like:
 
 ```md
-## Product Card
+## Hero Section
 
-Hari ini saya belajar:
-- Cara membuat komponen reusable
-- Cara mengirim data lewat props
-- Cara menampilkan data produk dari array
-- Cara memformat harga
+Yang dipelajari:
+- Cara memecah UI besar menjadi komponen kecil
+- Cara membuat mockup visual dengan CSS dan Tailwind
+- Cara menggunakan font khusus untuk efek digital
+- Cara membuat CTA WhatsApp reusable
 ```
 
-This is useful for portfolio explanation and personal learning.
+This project should be explainable in a portfolio.
 
 ---
 
-## Error Handling Rule
+## Final Reminder
 
-When an error appears:
+The goal is not only to make the website look like the reference.
 
-1. Read the exact error message
-2. Identify the file and line
-3. Explain the root cause
-4. Provide the smallest fix
-5. Explain the concept
-6. Avoid rewriting unrelated files
+The goal is to help the developer learn how a real landing page is structured:
 
-Do not give blind fixes.
+* Design tokens
+* Components
+* Data
+* Layout
+* Responsive behavior
+* Reusable CTA
+* Clean refactor
+* Portfolio storytelling
 
----
-
-## Code Review Rule
-
-When reviewing code, check:
-
-* File structure
-* Naming
-* Reusability
-* Hardcoded values
-* TypeScript correctness
-* Component responsibility
-* Tailwind readability
-* Responsive design
-* Accessibility
-* Unnecessary complexity
-
-Give constructive feedback.
-
----
-
-## Documentation Rule
-
-When adding a new feature, update documentation if relevant:
-
-* README.md
-* LEARNING_NOTES.md
-* Project checklist
-* Comments only when helpful
-
-Do not over-comment obvious code.
-
----
-
-## Development Roadmap
-
-Follow this order unless the developer explicitly changes direction:
-
-### Phase 1 — Setup and Layout
-
-* Setup Next.js project
-* Confirm package manager
-* Create Navbar
-* Create Footer
-* Create basic layout
-* Create simple homepage
-
-### Phase 2 — Product Data and Catalog
-
-* Create Product type
-* Create product data file
-* Create price formatter
-* Create ProductCard
-* Create ProductGrid
-* Create `/products` page
-
-### Phase 3 — Product Detail
-
-* Create dynamic route `/products/[slug]`
-* Fetch product by slug from static data
-* Show product detail
-* Add WhatsApp CTA
-
-### Phase 4 — Business Pages
-
-* Create `/order`
-* Create `/tutorial`
-* Create `/about`
-* Create `/contact`
-
-### Phase 5 — Polish
-
-* Responsive improvements
-* Better spacing
-* Better copywriting
-* Basic SEO
-* Placeholder images
-* Accessibility check
-
-### Phase 6 — Portfolio Preparation
-
-* README
-* Learning notes
-* Screenshots
-* Deployment notes
-* Case study write-up
-
----
-
-## Quality Bar
-
-A feature is considered done only when:
-
-* It works in the browser
-* It has no obvious TypeScript error
-* It has no obvious layout issue on mobile
-* The developer can explain what the code does
-* The code is not over-engineered
-* The feature has a clear purpose
-* Any new concept is explained simply
-
----
-
-## Final Reminder for the Agent
-
-This is a learning project.
-
-The goal is not just to finish the website.
-
-The goal is to help the developer understand:
-
-* What is being built
-* Why each file exists
-* How data flows through the app
-* How components work together
-* How Next.js routing works
-* How to maintain and explain the project
-
-Prefer small, clear, educational changes over large, impressive, confusing changes.
+Prefer clear, maintainable, educational code over flashy but confusing code.
