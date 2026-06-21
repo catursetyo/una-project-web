@@ -1,220 +1,1438 @@
----
-name: "UNA Project"
-description: "Website katalog untuk jam waktu sholat digital, running text LED, dan display custom."
-colors:
-  background: "#f8f9fa"
-  foreground: "#1b1b20"
-  primary: "#7000ff"
-  secondary: "#e1007e"
-  tertiary: "#2b0066"
-  surface: "#ffffff"
-  border: "#e4e4e7"
-  muted-text: "#52525b"
-  soft-text: "#71717a"
-typography:
-  display:
-    fontFamily: "Geist, Arial, Helvetica, sans-serif"
-    fontSize: "clamp(3rem, 7vw, 4.5rem)"
-    fontWeight: 900
-    lineHeight: 0.95
-    letterSpacing: "normal"
-  headline:
-    fontFamily: "Geist, Arial, Helvetica, sans-serif"
-    fontSize: "clamp(2.25rem, 5vw, 3rem)"
-    fontWeight: 900
-    lineHeight: 1.1
-    letterSpacing: "normal"
-  title:
-    fontFamily: "Geist, Arial, Helvetica, sans-serif"
-    fontSize: "1.25rem"
-    fontWeight: 900
-    lineHeight: 1.25
-    letterSpacing: "normal"
-  body:
-    fontFamily: "Geist, Arial, Helvetica, sans-serif"
-    fontSize: "1rem"
-    fontWeight: 400
-    lineHeight: 1.6
-    letterSpacing: "normal"
-  label:
-    fontFamily: "Geist, Arial, Helvetica, sans-serif"
-    fontSize: "0.875rem"
-    fontWeight: 900
-    lineHeight: 1.2
-    letterSpacing: "0.08em"
-rounded:
-  sm: "8px"
-  md: "12px"
-  lg: "16px"
-  pill: "9999px"
-spacing:
-  xs: "4px"
-  sm: "8px"
-  md: "16px"
-  lg: "24px"
-  xl: "40px"
-  section-y: "64px"
-components:
-  button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.surface}"
-    typography: "{typography.label}"
-    rounded: "{rounded.md}"
-    padding: "14px 20px"
-  button-outline:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.primary}"
-    typography: "{typography.label}"
-    rounded: "{rounded.md}"
-    padding: "14px 20px"
-  chip-active:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.surface}"
-    typography: "{typography.label}"
-    rounded: "{rounded.pill}"
-    padding: "8px 16px"
-  card-product:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.foreground}"
-    rounded: "{rounded.lg}"
-    padding: "24px"
+# DESIGN.md — UNA Project Visual Design System
+
+## Design Direction
+
+UNA Project should look like a premium landing page for a digital Islamic hardware/service business.
+
+The visual identity should communicate:
+
+```txt
+Presisi
+Amanah
+Modern
+Teknis
+Profesional
+Cocok untuk masjid & mushola
+Tetap ramah untuk UMKM
+```
+
+The design must be inspired by the provided reference:
+
+* Dark green premium hero
+* Gold CTA buttons
+* LED digital clock visuals
+* Cream/off-white content sections
+* Product catalog with LED preview cards
+* Auto-murotal feature section
+* Clean order steps
+* Testimonials
+* Strong footer and floating WhatsApp button
+
+Do not make the website look too playful, generic, or like a normal e-commerce template.
+
 ---
 
-# Design System: UNA Project
+## Core Visual Keywords
 
-## 1. Overview
+Use these keywords as the visual guide:
 
-**Creative North Star: "Meja Katalog Teknis"**
+```txt
+dark emerald
+gold accent
+LED glow
+digital display
+mosque-friendly
+premium UMKM
+clean industrial
+semi-islamic
+modern catalog
+```
 
-Sistem visual UNA Project harus terasa seperti meja katalog teknis yang rapi: produk ditata jelas, spesifikasi mudah dipindai, dan jalur konsultasi terlihat tanpa harus mencari. Desainnya brand-focused karena website ini membangun kepercayaan pertama sebelum customer menghubungi WhatsApp.
+---
 
-Identitas saat ini memakai permukaan terang, teks gelap, dan aksen ungu-magenta yang kuat. Warna utama boleh tegas, tetapi konten harus tetap service-first: produk, harga mulai, fitur, tutorial, dan alur pemesanan lebih penting daripada dekorasi.
+## Color Palette
 
-Sistem ini menolak pola dari PRODUCT.md: "Struktur Google Sites lama dengan blok teks panjang", "Halaman katalog generik", "Pola commerce yang terlalu kompleks", serta "Tropes landing page dekoratif" yang tidak membantu customer memilih produk.
+### Primary Colors
 
-**Key Characteristics:**
+```txt
+Deep Green        #0A211D
+Dark Emerald      #0F3A32
+Muted Emerald     #0D2E26
+Brand Green       #155A4C
+Accent Teal       #1C6F5C
+Soft Teal         #2C8C72
+```
 
-- Katalog terang dengan kontras kuat dan CTA WhatsApp yang jelas.
-- Hirarki tipografi tebal untuk nama produk, harga, dan tindakan.
-- Layout card-based untuk produk, tetapi tidak boleh berubah menjadi grid kartu identik tanpa konteks.
-- Motion ringan untuk membantu orientasi, bukan untuk menyembunyikan konten.
-- Copy praktis, teknis, dan langsung ke kebutuhan pemasangan nyata.
+Usage:
 
-## 2. Colors
+* Hero background
+* Header
+* Footer
+* Dark buttons
+* Icon backgrounds
+* Product LED panel backgrounds
 
-Palet saat ini adalah neutral terang dengan aksen elektrik ungu-magenta. Gunakan warna sebagai penanda tindakan dan kategori, bukan sebagai dekorasi acak.
+---
 
-### Primary
+### Gold Accent
 
-- **Ungu Aktivasi** (#7000ff): warna utama untuk CTA, chip aktif, bullet produk, harga, dan state hover penting.
+```txt
+Gold Light        #F0C875
+Gold Main         #D6A437
+Gold Text Dark    #221500
+```
 
-### Secondary
+Usage:
 
-- **Magenta Sinyal** (#e1007e): aksen pendukung untuk momen brand yang lebih ekspresif. Gunakan hemat; jangan jadikan setiap section punya glow magenta.
+* Primary CTA buttons
+* Brand subtitle
+* Section labels on dark background
+* Product tags
+* Icon strokes
+* Highlight marks
 
-### Tertiary
+CTA gradient:
 
-- **Ungu Dalam** (#2b0066): warna hover CTA dan selection text. Pakai untuk state aktif yang butuh kedalaman lebih dari primary.
+```css
+linear-gradient(180deg, #F0C875 0%, #D6A437 100%)
+```
 
-### Neutral
+---
 
-- **Latar Katalog** (#f8f9fa): latar halaman dan permukaan section yang ringan.
-- **Tinta Utama** (#1b1b20): warna body text utama di atas latar terang.
-- **Permukaan Putih** (#ffffff): kartu, navbar, footer, dan panel konten.
-- **Garis Zinc** (#e4e4e7): border netral untuk card, nav rail, dan pemisah.
-- **Teks Penjelas** (#52525b): paragraf dan deskripsi panjang.
-- **Teks Lembut** (#71717a): metadata, label harga kecil, dan catatan sekunder.
+### Background Colors
 
-### Named Rules
+```txt
+Cream Background  #FAFAF5
+Soft Section       #F5F6F0
+White              #FFFFFF
+Footer Dark        #060F0D
+```
 
-**The Action Color Rule.** Primary dipakai untuk tindakan dan fakta penting; jika semua elemen ungu, tidak ada yang terasa penting.
+Usage:
 
-**The Plain Surface Rule.** Mayoritas halaman tetap terang dan tenang agar detail produk, harga, dan CTA lebih mudah dipindai.
+* Main page background
+* Product sections
+* Testimonial section
+* Footer
 
-## 3. Typography
+---
 
-**Display Font:** Geist dengan fallback Arial, Helvetica, sans-serif  
-**Body Font:** Geist dengan fallback Arial, Helvetica, sans-serif  
-**Label/Mono Font:** Geist Mono hanya untuk potongan teknis seperti kode atau highlight setting.
+### Text Colors
 
-**Character:** Tipografi UNA Project tebal, bersih, dan teknis. Berat font tinggi memberi rasa yakin, sementara body text tetap biasa agar halaman tidak terasa berteriak.
+```txt
+Main Text          #111A10
+Muted Text         #6B7568
+Soft Text          #3A4438
+White Text         #FFFFFF
+White Muted        rgba(255,255,255,0.72)
+White Subtle       rgba(255,255,255,0.45)
+```
 
-### Hierarchy
+Usage:
 
-- **Display** (900, clamp(3rem, 7vw, 4.5rem), 0.95): hero title dan brand name utama.
-- **Headline** (900, clamp(2.25rem, 5vw, 3rem), 1.1): judul halaman dan section penting.
-- **Title** (900, 1.25rem-1.5rem, 1.25): nama produk, card title, dan judul step.
-- **Body** (400-600, 1rem, 1.6): deskripsi produk, tutorial, dan penjelasan alur. Batasi panjang paragraf sekitar 65-75ch.
-- **Label** (800-900, 0.75rem-0.875rem, tracking 0.08em-0.16em): chip kategori, CTA, dan label pendek.
+* Main headings
+* Paragraphs
+* Footer text
+* Hero description
 
-### Named Rules
+---
 
-**The Practical Label Rule.** Label uppercase hanya boleh memberi orientasi singkat seperti kategori atau status. Jangan menambah tiny section eyebrow berulang sebagai dekorasi otomatis.
+### LED Colors
 
-**The No Crammed Display Rule.** Display text tidak boleh lebih rapat dari letter-spacing normal sampai -0.03em; keterbacaan lebih penting daripada efek poster.
+```txt
+LED Orange         #FF5C33
+LED Pink           #FF5C8A
+LED Blue           #5CB0FF
+LED Green          #5CFFB0
+LED Warm           #F0C875
+WhatsApp Green     #1FAE5C
+```
 
-## 4. Elevation
+Usage:
 
-Sistem sekarang memakai border halus, permukaan putih, dan shadow berwarna primary untuk memberi rasa interaktif. Arah berikutnya harus lebih disiplin: depth dipakai untuk state dan pemisahan konten, bukan untuk membuat setiap card mengambang.
+* Digital clock text
+* Product preview mockups
+* Running text
+* RGB product simulation
+* WhatsApp floating button
 
-### Shadow Vocabulary
+---
 
-- **Surface Low** (`box-shadow: 0 1px 2px rgb(112 0 255 / 5%)`): nav container, feature card ringan, dan badge kecil.
-- **Accent Button** (`box-shadow: 0 10px 15px rgb(112 0 255 / 20%)`): CTA utama dan chip aktif.
-- **Ambient Card Glow** (`box-shadow: 0 25px 50px rgb(112 0 255 / 5%)`): pola yang sudah ada pada beberapa card besar; gunakan sebagai batas atas sementara, bukan default baru.
+## Typography
 
-### Named Rules
+### Font Roles
 
-**The Shadow Diet Rule.** Jangan menggabungkan border dekoratif dengan shadow blur besar pada card baru. Pilih border yang jelas atau shadow ketat, kecuali saat hover state benar-benar membutuhkan depth.
+Use three font families:
 
-## 5. Components
+```txt
+Heading / Brand    Outfit
+Body / UI          Plus Jakarta Sans
+Digital LED        VT323
+```
 
-### Buttons
+### Heading Style
 
-- **Shape:** rounded teknis yang nyaman (12px).
-- **Primary:** background primary, teks putih, padding 14px 20px, font-weight 900, tracking 0.08em.
-- **Hover / Focus:** primary boleh bergeser ke tertiary; fokus harus tetap terlihat dengan ring kontras.
-- **Secondary / Outline:** border primary 2px, teks primary, hover berubah menjadi primary dengan teks putih.
+Headings should feel bold, rounded, modern, and confident.
 
-### Chips
+Suggested classes:
 
-- **Style:** pill untuk kategori dan filter. Chip aktif memakai primary solid; chip nonaktif memakai surface putih dengan border primary transparan.
-- **State:** `aria-pressed` dipakai pada filter katalog agar state interaktif terbaca secara aksesibel.
+```txt
+font-heading font-extrabold tracking-tight
+```
 
-### Cards / Containers
+Hero heading:
 
-- **Corner Style:** product card memakai 16px; feature card dan media placeholder memakai 12px.
-- **Background:** surface putih untuk card utama; background netral untuk inner panel.
-- **Shadow Strategy:** pakai Surface Low atau Accent Button. Ambient Card Glow hanya untuk card besar yang memang butuh emphasis.
-- **Border:** gunakan zinc border atau primary tint ringan. Jangan gunakan side-stripe border.
-- **Internal Padding:** 20px di mobile, 24px-32px di layar lebih besar.
+```txt
+text-4xl md:text-5xl lg:text-6xl
+leading-[0.95] md:leading-[1.02]
+```
 
-### Inputs / Fields
+Section heading:
 
-Belum ada input form utama dalam MVP. Jika nanti ditambahkan, field harus tetap sederhana: surface putih, border zinc, radius 12px, focus ring primary yang jelas, dan label deskriptif.
+```txt
+text-3xl md:text-4xl
+leading-tight
+```
 
-### Navigation
+Card heading:
 
-Navbar sticky memakai surface putih transparan, border bawah zinc, dan link pill yang punya underline motion kecil saat hover. Mobile navigation saat ini horizontal-scroll; jaga label tetap pendek agar tidak menumpuk.
+```txt
+text-base md:text-lg
+font-bold
+```
 
-### Media Placeholders
+---
 
-Placeholder produk dan tutorial memakai grid panel halus untuk memberi konteks display LED sebelum aset asli tersedia. Saat foto produk asli tersedia, placeholder harus diganti dengan gambar lokal yang punya alt text deskriptif.
+### Body Style
 
-## 6. Do's and Don'ts
+Body text should be clean and readable.
 
-### Do:
+Suggested classes:
 
-- **Do** buat keputusan produk mudah dipahami: nama, kategori, fitur, harga mulai, dan CTA harus terlihat dalam satu scan.
-- **Do** gunakan #7000ff untuk tindakan utama, harga, bullet, dan chip aktif.
-- **Do** pertahankan body text gelap di atas latar terang agar kontras tetap kuat.
-- **Do** gunakan komponen data-driven untuk katalog; tampilan card menerima data dari parent, bukan hardcoded langsung di UI.
-- **Do** hormati reduced motion; konten tidak boleh kosong kalau animasi tidak berjalan.
+```txt
+font-body text-base leading-7 text-muted
+```
 
-### Don't:
+Hero description:
 
-- **Don't** ulangi "Struktur Google Sites lama dengan blok teks panjang, hirarki lemah, navigasi kurang jelas, dan panduan transaksi yang tidak rapi."
-- **Don't** membuat "Halaman katalog generik yang membuat semua produk terasa sama dan tidak membantu pengunjung menentukan langkah berikutnya."
-- **Don't** menambah "Pola commerce yang terlalu kompleks sebelum MVP membutuhkannya, seperti cart, login, payment gateway, dashboard, atau CMS."
-- **Don't** memakai "Tropes landing page dekoratif" seperti tiny section eyebrow yang berulang, gradient text, glass effect berlebihan, atau metrik ala SaaS yang kabur.
-- **Don't** sembunyikan fakta penting produk di balik teks kontras rendah, gambar tanpa alt text, atau CTA yang tidak deskriptif.
+```txt
+text-white/70 text-base md:text-lg leading-8
+```
+
+---
+
+### LED Text Style
+
+Use VT323 for simulated LED text.
+
+Suggested classes:
+
+```txt
+font-led tracking-wider
+```
+
+Large clock:
+
+```txt
+text-5xl md:text-7xl lg:text-8xl
+text-[#FF5C33]
+drop-shadow or text-shadow glow
+```
+
+Small product preview:
+
+```txt
+text-4xl md:text-5xl
+```
+
+---
+
+## Layout System
+
+### Container
+
+Use a consistent max-width container.
+
+Recommended:
+
+```txt
+max-w-6xl mx-auto px-4 sm:px-6 lg:px-8
+```
+
+Reference desktop content width is around 1096–1160px.
+
+Do not use fixed `1920px` or `absolute` page layout.
+
+---
+
+### Section Spacing
+
+Use generous spacing.
+
+Recommended:
+
+```txt
+py-16 md:py-24
+```
+
+Hero:
+
+```txt
+pt-28 pb-20 md:pt-36 md:pb-28
+```
+
+Compact strips:
+
+```txt
+py-5 md:py-8
+```
+
+---
+
+### Grid Rules
+
+Product catalog:
+
+```txt
+grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3
+```
+
+Feature cards:
+
+```txt
+grid grid-cols-1 md:grid-cols-2
+```
+
+Testimonials:
+
+```txt
+grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3
+```
+
+Stats:
+
+```txt
+grid grid-cols-2 md:grid-cols-4
+```
+
+---
+
+## Buttons
+
+### Primary Button
+
+Use for WhatsApp and main CTA.
+
+Visual:
+
+```txt
+Gold gradient
+Rounded full
+Dark text
+Medium shadow
+Icon optional
+```
+
+Suggested Tailwind:
+
+```txt
+inline-flex items-center justify-center gap-2 rounded-full
+bg-gradient-to-b from-[#F0C875] to-[#D6A437]
+px-7 py-3.5
+font-bold text-[#221500]
+shadow-[0_10px_28px_-10px_rgba(214,164,55,0.6)]
+transition hover:-translate-y-0.5 hover:shadow-lg
+```
+
+Text examples:
+
+```txt
+Pesan via WhatsApp
+Hubungi Kami
+Mulai Konsultasi
+Tanya Soal Murotal
+```
+
+---
+
+### Dark Button
+
+Use on cream/white backgrounds.
+
+```txt
+rounded-full
+bg-[#0A211D]
+text-[#FAFAF5]
+px-7 py-3.5
+font-bold
+```
+
+Text examples:
+
+```txt
+Konsultasi Gratis
+Minta Katalog Lengkap
+```
+
+---
+
+### Outline Light Button
+
+Use on dark background.
+
+```txt
+rounded-full
+border border-white/30
+text-white
+px-7 py-3.5
+font-bold
+hover:bg-white/10
+```
+
+Text examples:
+
+```txt
+Lihat Katalog
+```
+
+---
+
+### Outline Dark Button
+
+Use on light background.
+
+```txt
+rounded-full
+border border-[#111A10]/10
+text-[#111A10]
+px-7 py-3.5
+font-bold
+hover:bg-[#111A10]/5
+```
+
+---
+
+## Header / Navbar
+
+### Visual
+
+The header should be dark green with slight transparency.
+
+```txt
+background: rgba(10, 33, 29, 0.95)
+border-bottom: 1px solid rgba(255,255,255,0.12)
+backdrop-filter: blur(6px)
+```
+
+Use:
+
+```txt
+sticky top-0 z-50
+```
+
+or fixed only if spacing is handled correctly.
+
+### Content
+
+Header contains:
+
+```txt
+Logo mark
+UNA Project
+Jam Waktu Sholat Digital
+Navigation links
+Gold WhatsApp CTA
+```
+
+Navigation:
+
+```txt
+Beranda
+Produk
+Keunggulan
+Murotal
+Testimoni
+```
+
+CTA:
+
+```txt
+Hubungi Kami
+```
+
+---
+
+## Logo Direction
+
+The logo mark can be a simple mosque/dome/drop shape with dots, inspired by the reference.
+
+Visual:
+
+```txt
+Dark green fill
+Gold stroke
+Gold dot grid
+Rounded vertical form
+```
+
+If no image logo exists, create a simple SVG component named:
+
+```txt
+LogoMark.tsx
+```
+
+Do not use an unrelated logo.
+
+---
+
+## Hero Section
+
+### Background
+
+Use dark emerald gradient:
+
+```css
+linear-gradient(160deg, #0A211D 0%, #0F3A32 55%, #0D2E26 100%)
+```
+
+### Structure
+
+Hero should contain:
+
+```txt
+Section label
+Headline
+Description
+Primary and secondary CTA
+Trust items
+JWS display mockup
+```
+
+### Hero Label
+
+Text:
+
+```txt
+JAM WAKTU SHOLAT DIGITAL • AKURASI GPS
+```
+
+Style:
+
+```txt
+text-[#F0C875]
+uppercase
+tracking-[0.16em]
+font-bold
+text-xs
+```
+
+Add a small horizontal line before the label if suitable.
+
+---
+
+### Hero Heading
+
+Text:
+
+```txt
+Waktu sholat yang menyala presisi di masjid Anda
+```
+
+Highlight:
+
+```txt
+menyala presisi
+```
+
+Highlight color:
+
+```txt
+#FF8A5C or #FF5C33
+```
+
+The heading should be large, bold, and compact.
+
+---
+
+### Hero Description
+
+Text direction:
+
+```txt
+UNA Project menghadirkan jadwal sholat digital untuk masjid, mushola, dan kantor — akurasi GPS otomatis, mudah diatur dari smartphone, dan tersedia fitur auto-murotal.
+```
+
+Keep it clear and benefit-driven.
+
+---
+
+### Hero Trust Items
+
+Use 4 items:
+
+```txt
+Akurasi GPS
+Setting via HP
+Garansi Resmi
+Termasuk Instalasi
+```
+
+Use small gold outline icons.
+
+---
+
+## JWS Display Mockup
+
+The JWS display is the visual centerpiece.
+
+### Outer Frame
+
+Use a metallic frame effect:
+
+```txt
+rounded-2xl
+p-3
+bg-gradient-to-br from-slate-200 via-slate-400 to-slate-600
+shadow-xl
+```
+
+### Screen
+
+Use dark reddish/black LED screen:
+
+```txt
+bg-[#181210]
+rounded-xl
+overflow-hidden
+relative
+```
+
+### Dot Matrix Pattern
+
+Use CSS background pattern:
+
+```css
+background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+background-size: 8px 8px;
+```
+
+### Display Elements
+
+Include:
+
+```txt
+UNA PROJECT · JWS DISPLAY
+GPS Synced
+Large time
+Date line
+Tampilan contoh produk
+Prayer time grid
+Running text
+```
+
+Prayer time examples:
+
+```txt
+Subuh    04:15
+Dzuhur   11:45
+Ashar    15:05
+Maghrib  17:58
+Isya     19:08
+```
+
+Highlight the next prayer using LED orange.
+
+### Running Text
+
+Use VT323 font.
+
+Example:
+
+```txt
+UNA PROJECT — JAM WAKTU SHOLAT DIGITAL — AKURASI GPS — SETTING VIA SMARTPHONE — AUTO MUROTAL — HUBUNGI KAMI •
+```
+
+Animation is optional.
+
+If animation is added, keep it simple and CSS-based.
+
+---
+
+## Stats Strip
+
+Background:
+
+```txt
+white
+```
+
+Stats:
+
+```txt
+15+    Tipe produk tersedia
+100+   Masjid & mushola terlayani
+GPS    Akurasi otomatis lokasi
+Rp0    Biaya setting tambahan
+```
+
+Use:
+
+```txt
+Brand green for numbers
+Gold for plus/significant accent
+Muted text for label
+Subtle vertical dividers on desktop
+```
+
+Mobile:
+
+```txt
+2 columns
+```
+
+Desktop:
+
+```txt
+4 columns
+```
+
+---
+
+## Trust Badges Strip
+
+Background:
+
+```txt
+#F5F6F0
+```
+
+Items:
+
+```txt
+Jadwal sholat akurasi GPS
+Atur langsung dari HP
+Fitur auto-murotal
+Garansi resmi produk
+Harga sudah termasuk instalasi
+```
+
+Use small green line icons.
+
+On mobile, allow wrapping.
+
+---
+
+## Why / Keunggulan Section
+
+### Layout
+
+Desktop:
+
+```txt
+Left: copy and CTA
+Right: 2x2 feature cards
+```
+
+Mobile:
+
+```txt
+Stacked
+```
+
+### Copy
+
+Label:
+
+```txt
+KENAPA UNA PROJECT
+```
+
+Heading:
+
+```txt
+Dibuat khusus untuk masjid & mushola
+```
+
+Description:
+
+```txt
+Setiap produk JWS Digital dirancang agar mudah dipasang, mudah dirawat, dan tetap akurat tanpa perlu kalibrasi ulang setiap tahun.
+```
+
+Buttons:
+
+```txt
+Konsultasi Gratis
+Lihat Katalog
+```
+
+### Feature Cards
+
+Cards:
+
+```txt
+Akurasi GPS Otomatis
+Setting dari Smartphone
+Pilihan Auto-Murotal
+Garansi & Instalasi
+```
+
+Card visual:
+
+```txt
+White background
+Subtle border
+Large dark-green icon box
+Gold icon
+Generous padding
+```
+
+---
+
+## Product Catalog Section
+
+### Background
+
+```txt
+#F5F6F0
+```
+
+### Header
+
+Label:
+
+```txt
+KATALOG PRODUK
+```
+
+Heading:
+
+```txt
+Pilih tipe JWS Digital sesuai kebutuhan
+```
+
+Description:
+
+```txt
+Running text RGB hingga Android TV — berbagai ukuran dan anggaran, semua termasuk instalasi.
+```
+
+CTA:
+
+```txt
+Katalog Lengkap →
+```
+
+### Catalog Grid
+
+Use rounded container with subtle border.
+
+```txt
+rounded-[28px]
+overflow-hidden
+border border-[#111A10]/10
+```
+
+Inside, use product cards.
+
+---
+
+## Product Card
+
+### Structure
+
+```txt
+Thumbnail / LED preview
+Body
+Title
+Specs
+Footer
+Price
+Secondary price label
+Circular CTA arrow
+```
+
+### Thumbnail
+
+Background:
+
+```txt
+#0A211D
+```
+
+Add dot matrix pattern.
+
+Top-left tag:
+
+```txt
+RGB FULL COLOR
+ANDROID TV
+RGB FIGURA
+RGB ALUMUNIUM
+SEVEN SEGMENT
+LISENSI
+```
+
+Tag style:
+
+```txt
+rounded-full
+border border-[#F0C875]/30
+bg-white/10
+text-[#F0C875]
+uppercase
+tracking-wider
+text-[10px]
+```
+
+### LED Preview Types
+
+#### RGB Time
+
+Use multiple colored spans:
+
+```txt
+12 : 45
+09 : 30
+17 : 58
+```
+
+Colors:
+
+```txt
+Pink, Gold, Green, Blue
+```
+
+#### Single Time
+
+Use one LED orange text:
+
+```txt
+04:15
+```
+
+#### TV
+
+Show a mini TV outline with a clock icon.
+
+#### Key
+
+Show text:
+
+```txt
+KEY
+```
+
+### Card Body
+
+Use white background.
+
+Title:
+
+```txt
+font-heading font-bold text-[#111A10]
+```
+
+Specs:
+
+```txt
+text-sm text-[#6B7568] leading-relaxed
+```
+
+Price:
+
+```txt
+text-[#155A4C] font-heading font-extrabold text-lg
+```
+
+CTA circle:
+
+```txt
+bg-[#0A211D]
+text-white
+rounded-full
+```
+
+---
+
+## Featured Product Data
+
+Use these 6 products as catalog preview if the current product data is not ready:
+
+```txt
+1. JWS RGB P5 — 4 Panel Frame Alumunium
+   Tag: RGB Full Color
+   Specs: 133×20 cm · full color · setting via smartphone · akurasi GPS
+   Price: Rp 2.000.000
+   Secondary: + Murotal Rp 2.300.000
+   Preview: 12:45 RGB
+
+2. JWS LED TV 32" (Android / Google TV)
+   Tag: Android TV
+   Specs: Jam, kalender, jadwal sholat, poster & video dakwah · cocok untuk mushola kantor
+   Price: Rp 3.700.000
+   Secondary: Dengan STB Rp 4.100.000
+   Preview: mini TV
+
+3. JWS RGB 2 Panel — Frame Figura 100×50
+   Tag: RGB Figura
+   Specs: Dilengkapi poster masjid · full color · akurasi GPS · setting via smartphone
+   Price: Rp 1.800.000
+   Secondary: + Murotal Rp 2.100.000
+   Preview: 09:30 RGB
+
+4. JWS P5 RGB — 3 Panel Frame Alumunium
+   Tag: RGB Alumunium
+   Specs: 100×20 cm · jam, kalender, jadwal sholat & teks berjalan · akurasi GPS
+   Price: Rp 1.800.000
+   Secondary: + Murotal Rp 2.100.000
+   Preview: 17:58 RGB
+
+5. JWS Seven Segment Jumbo + Running Text
+   Tag: Seven Segment
+   Specs: 120×60 cm · kaca akrilik anti pecah · jam besar 2,5" · running text terpisah
+   Price: Rp 3.600.000
+   Secondary: + Murotal Rp 3.900.000
+   Preview: 04:15 single orange
+
+6. Lisensi Aktivasi — Android TV Anda
+   Tag: Lisensi
+   Specs: Sudah punya Android TV? Cukup aktivasi · berlaku seumur hidup · bonus poster & video dakwah
+   Price: Rp 1.300.000
+   Secondary: Sekali bayar, seumur hidup
+   Preview: KEY
+```
+
+---
+
+## Catalog More CTA
+
+Below product cards:
+
+```txt
+Masih ada 9+ tipe lain — single color, ukuran mini, hingga frame figura khusus.
+```
+
+Button:
+
+```txt
+Minta Katalog Lengkap
+```
+
+---
+
+## Auto-Murotal Section
+
+### Background
+
+Use dark green gradient:
+
+```css
+linear-gradient(135deg, #0A211D 0%, #0F3A32 60%, #0D2E26 100%)
+```
+
+### Content
+
+Label:
+
+```txt
+FITUR UNGGULAN
+```
+
+Heading:
+
+```txt
+Auto-Murotal — suasana masjid yang lebih hidup
+```
+
+Description:
+
+```txt
+Beberapa menit menjelang azan, JWS otomatis memutar murotal pilihan — mengingatkan jamaah tanpa ada yang perlu menyalakan apa pun secara manual.
+```
+
+Benefits:
+
+```txt
+Aktif otomatis sesuai jadwal sholat lokasi
+Tersedia untuk hampir semua tipe panel RGB & figura
+Selisih harga mulai Rp 300.000 dari versi standar
+```
+
+CTA:
+
+```txt
+Tanya Soal Murotal
+```
+
+### Visual
+
+Add an audio wave card:
+
+```txt
+Large rounded card
+Dark translucent background
+Gold/orange vertical bars
+Text: PEMUTARAN MUROTAL OTOMATIS
+```
+
+---
+
+## Order Steps Section
+
+### Background
+
+```txt
+White
+```
+
+Label:
+
+```txt
+CARA PESAN
+```
+
+Heading:
+
+```txt
+Tiga langkah, tanpa ribet
+```
+
+Description:
+
+```txt
+Dari konsultasi hingga produk terpasang dan aktif di lokasi Anda.
+```
+
+Steps:
+
+```txt
+01 Konsultasi via WhatsApp
+Ceritakan kebutuhan masjid atau mushola Anda — ukuran ruang, anggaran, dan fitur yang diinginkan.
+
+02 Pilih Tipe & Ukuran
+Kami bantu rekomendasikan tipe JWS yang paling sesuai, lengkap dengan rincian harga dan estimasi waktu.
+
+03 Instalasi & Aktivasi
+Tim kami pasang di lokasi, setting GPS, dan pandu hingga jamaah Anda mahir menggunakannya.
+```
+
+CTA:
+
+```txt
+Mulai Konsultasi
+```
+
+---
+
+## Testimonials Section
+
+### Background
+
+```txt
+#F5F6F0
+```
+
+Label:
+
+```txt
+TESTIMONI
+```
+
+Heading:
+
+```txt
+Dipercaya pengurus masjid & mushola
+```
+
+Use testimonial cards.
+
+Example content:
+
+```txt
+Sejak pasang JWS, jadwal sholat selalu pas dan jamaah jadi lebih disiplin datang ke masjid. Settingnya pun gampang banget.
+
+Ust. Hadi
+Takmir Masjid Al-Ikhlas, Surabaya
+```
+
+```txt
+Settingnya gampang banget, tinggal dari HP. Fitur auto-murotal juga bikin suasana lebih syahdu — jamaah jadi lebih tepat waktu.
+
+Pak Joko
+Pengurus Mushola Babussalam
+```
+
+```txt
+Pemasangan cepat dan rapi, harganya pun ramah untuk kas masjid kami yang terbatas. Tim UNA Project sangat responsif dan profesional.
+
+Bu Sari
+Bendahara Masjid Nurul Iman
+```
+
+If these are placeholders, mark them as placeholder until real testimonials are available.
+
+---
+
+## Final CTA Section
+
+### Background
+
+```txt
+#0A211D
+```
+
+Label:
+
+```txt
+SIAP PASANG SEKARANG?
+```
+
+Heading:
+
+```txt
+Pasang Jam Waktu Sholat Digital di masjid Anda hari ini
+```
+
+Description:
+
+```txt
+Konsultasi gratis — tim kami bantu pilih tipe yang paling sesuai kebutuhan dan anggaran.
+```
+
+Buttons:
+
+```txt
+Hubungi via WhatsApp
+Lihat Katalog
+```
+
+---
+
+## Footer
+
+### Background
+
+```txt
+#060F0D
+```
+
+Footer columns:
+
+```txt
+Brand
+Kontak
+Navigasi
+Informasi
+```
+
+Brand description:
+
+```txt
+Produsen jam waktu sholat digital untuk masjid, mushola, kantor, dan rumah — akurasi GPS, mudah disetel, garansi resmi.
+```
+
+Contact examples:
+
+```txt
+Surabaya, Jawa Timur
++62 812-3456-7890
+unaprojectofficial@gmail.com
+```
+
+Navigation:
+
+```txt
+Beranda
+Produk
+Keunggulan
+Fitur Murotal
+Testimoni
+```
+
+Information:
+
+```txt
+Cara Transaksi
+Tutorial Penggunaan
+Katalog Lengkap
+Info Garansi
+```
+
+Footer bottom:
+
+```txt
+© 2026 UNA Project — Jam Waktu Sholat Digital, Surabaya
+Dibuat dengan ❤ untuk UMKM Indonesia
+```
+
+Use real contact data if available. If not available, keep TODO comments or placeholders.
+
+---
+
+## Floating WhatsApp Button
+
+Position:
+
+```txt
+fixed bottom-6 right-6 z-50
+```
+
+Visual:
+
+```txt
+56px circle
+background #1FAE5C
+white WhatsApp icon
+strong green shadow
+```
+
+Accessibility:
+
+```txt
+aria-label="Hubungi UNA Project via WhatsApp"
+```
+
+---
+
+## Icon Style
+
+Use simple line icons.
+
+Recommended source:
+
+```txt
+lucide-react
+```
+
+Only add the dependency if not already installed and if icons are needed.
+
+Icon style:
+
+```txt
+stroke width around 1.5–2
+gold on dark backgrounds
+green on light backgrounds
+```
+
+Do not use inconsistent icon sets.
+
+---
+
+## Shadows and Borders
+
+Use subtle premium shadows.
+
+Gold CTA shadow:
+
+```css
+0 10px 28px -10px rgba(214, 164, 55, 0.60)
+```
+
+WhatsApp shadow:
+
+```css
+0 12px 30px -8px rgba(31, 174, 92, 0.65)
+```
+
+Card borders:
+
+```css
+1px solid rgba(17, 26, 16, 0.10)
+```
+
+Dark card border:
+
+```css
+1px solid rgba(255, 255, 255, 0.10)
+```
+
+---
+
+## Animation Rules
+
+Animations are optional.
+
+Allowed:
+
+* subtle hover lift on buttons/cards
+* CSS marquee for running text
+* gentle pulse/glow for GPS indicator
+* simple LED glow
+
+Avoid:
+
+* heavy animation libraries
+* too many scroll animations
+* performance-heavy effects
+* animation that makes text hard to read
+
+If using animation, prefer CSS.
+
+---
+
+## Copywriting Tone
+
+Use Indonesian.
+
+Tone should be:
+
+```txt
+jelas
+profesional
+meyakinkan
+tidak berlebihan
+mudah dipahami pengurus masjid/mushola
+```
+
+Avoid exaggerated claims.
+
+Good:
+
+```txt
+Akurasi GPS otomatis
+Mudah diatur dari smartphone
+Harga sudah termasuk instalasi
+Garansi resmi produk
+```
+
+Avoid:
+
+```txt
+Nomor 1 paling hebat
+Paling murah sedunia
+100% pasti sempurna
+```
+
+---
+
+## Implementation Notes
+
+When converting the design into code:
+
+1. Build reusable components.
+2. Keep content in data files where repeated.
+3. Use Tailwind utility classes.
+4. Keep layouts responsive.
+5. Do not copy the reference code as absolute-positioned inline style.
+6. Use CSS variables for repeated colors if helpful.
+7. Keep the homepage understandable for a beginner developer.
+8. Comment only when it explains non-obvious visual tricks.
+
+---
+
+## Minimum Acceptance Criteria
+
+The redesign is acceptable when:
+
+* Header matches the dark green/gold visual direction.
+* Hero has strong headline, CTA, and JWS display mockup.
+* Product catalog uses LED-style product cards.
+* Murotal section uses dark feature styling.
+* Steps and testimonials are clean and readable.
+* Footer feels complete.
+* WhatsApp CTA is visible and reusable.
+* Mobile layout is usable.
+* `npm run lint` passes.
+* `npm run build` passes.
+* Code remains understandable for a learning project.
