@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { WhatsAppButton } from "@/src/components/WhatsAppButton";
+import { WhatsAppButton } from "@/src/components/ui/WhatsAppButton";
 
 export const metadata: Metadata = {
   title: "Cara Pesan | UNA Project",

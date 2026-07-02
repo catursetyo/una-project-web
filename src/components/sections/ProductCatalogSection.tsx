@@ -1,6 +1,6 @@
 import { products } from "@/src/data/products";
 import { createWhatsAppLink } from "@/src/lib/whatsapp";
-import { ProductCard } from "@/src/components/ProductCard";
+import { ProductCard } from "@/src/components/products/ProductCard";
 import { Button } from "@/src/components/ui/Button";
 import { SectionLabel } from "@/src/components/ui/SectionLabel";
 import { Container } from "@/src/components/layout/Container";

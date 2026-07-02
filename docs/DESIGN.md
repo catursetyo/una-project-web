@@ -1,4 +1,4 @@
-# DESIGN.md — UNA Project Visual Design System
+# UNA Project Visual Design System
 
 ## Design Direction
 

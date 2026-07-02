@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Outfit, Plus_Jakarta_Sans, VT323 } from "next/font/google";
-import { Navbar } from "@/src/components/Navbar";
-import { Footer } from "@/src/components/Footer";
-import { ScrollReveal } from "@/src/components/ScrollReveal";
+import { Footer } from "@/src/components/layout/Footer";
+import { Navbar } from "@/src/components/layout/Navbar";
 import { FloatingWhatsApp } from "@/src/components/ui/FloatingWhatsApp";
+import { ScrollReveal } from "@/src/components/ui/ScrollReveal";
 import "./globals.css";
 
 const outfit = Outfit({

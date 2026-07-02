@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# UNA Project Web
 
-## Getting Started
+Remake modern website UNA Project untuk katalog jam waktu sholat digital,
+running text LED, JWS RGB, Android TV, dan layanan instalasi.
 
-First, run the development server:
+## Menjalankan Proyek
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Perintah
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev    # development server
+npm run lint   # pemeriksaan ESLint
+npm run build  # production build
+npm run start  # menjalankan production build
+```
 
-## Learn More
+## Struktur
 
-To learn more about Next.js, take a look at the following resources:
+```txt
+docs/                  Dokumentasi produk dan design system
+src/app/               Route dan layout Next.js
+src/components/layout/ Komponen layout global
+src/components/products/ Komponen domain katalog produk
+src/components/sections/  Section landing page
+src/components/tutorials/ Komponen domain tutorial
+src/components/ui/        Komponen UI yang dipakai ulang
+src/data/              Data statis produk, tutorial, dan landing page
+src/lib/               Helper umum
+src/types/             TypeScript types
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Dokumentasi utama:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Product brief](docs/PRODUCT.md)
+- [Visual design system](docs/DESIGN.md)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Gunakan npm; proyek ini menyimpan dependency lock di `package-lock.json`.

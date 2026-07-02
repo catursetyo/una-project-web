@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ProductMediaPlaceholder } from "@/src/components/ProductMediaPlaceholder";
-import { WhatsAppButton } from "@/src/components/WhatsAppButton";
+import { ProductMediaPlaceholder } from "@/src/components/products/ProductMediaPlaceholder";
+import { WhatsAppButton } from "@/src/components/ui/WhatsAppButton";
 import { products } from "@/src/data/products";
 import { formatPrice } from "@/src/lib/formatPrice";
 
