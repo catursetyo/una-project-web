@@ -36,11 +36,52 @@ yarn-error.log*
 # vercel
 .vercel
 
-# local agent tooling
+# local agent & AI tooling
 .agents/
 .codex/
 .impeccable/
+.gemini/
+.claude/
+.cursor/
+.brain/
+.aider*
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# golang (backend & build artifacts)
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.prof
+coverage.out
+coverage.html
+/main
+/server
+/api-server
+tmp/
+.air.toml
+
+# database & supabase local dev
+.supabase/temp/
+.supabase/.temp/
+.supabase/storage/
+.supabase/dump/
+*.dump
+*.sql.gz
+*.sqlite
+*.db
+
+# IDE & OS files
+.idea/
+*.swp
+*.swo
+*~
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+._*

@@ -1293,3 +1293,23 @@ The redesign is acceptable when:
 * `npm run lint` passes.
 * `npm run build` passes.
 * Code remains understandable for a learning project.
+
+---
+
+## Admin Dashboard Design Guidelines (`/admin/*`)
+
+When building the internal Admin Dashboard for UNA Project, maintain the brand's premium, technical, and industrial identity while focusing on functional clarity:
+
+1. **Color & Theme Consistency**:
+   * Use **Deep Green (`#0A211D`)** or **Dark Emerald (`#0F3A32`)** for the top navbar or sidebar navigation to maintain brand recognition.
+   * Use **Cream Background (`#FAFAF5`)** or **Soft Section (`#F5F6F0`)** as the main workspace background.
+   * Use **White (`#FFFFFF`)** with subtle borders (`border-black/10` or `border-primary/10`) for data cards, tables, and form containers.
+2. **Button & CTA Rules**:
+   * **Never use gradients** on action buttons. Use solid colors: `#e2b64d` (Gold Solid) for primary save/create actions and `#0a211d` (Deep Green Solid) for secondary/navigation actions.
+   * Use clear red/destructive styles (`bg-red-600 text-white`) only for Delete actions with confirmation modals.
+3. **Data Presentation**:
+   * Use structured HTML tables with responsive horizontal scroll for product lists, variants, and testimonials.
+   * Provide visual badges for boolean states (e.g. `Active` vs `Draft`, `Featured`).
+4. **Form Experience**:
+   * Form inputs should have clear labels, descriptive placeholders, and visible focus rings (`focus:ring-primary` or `focus:ring-una-gold`).
+   * For WhatsApp chat templates, provide a live preview box showing how the message pattern (with `{product_name}`) will render to the customer.

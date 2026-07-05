@@ -255,21 +255,21 @@ Berikan langkah validasi.
 
 ## Current Refactor Goal
 
-The current goal is to restyle the website to match the provided premium UNA Project landing page reference.
+The current goal is to implement Phase 6: **Decoupled Backend & Admin Dashboard**.
 
-Focus on visual and structural improvements first.
+We have completed the frontend restyling and dead code cleanup. Now we are building a production-grade full-stack architecture using:
+* **Frontend UI**: Next.js App Router (deployed on Vercel)
+* **Backend API**: Golang REST API (Echo / Fiber / net/http, deployed on Google Cloud Run)
+* **Database**: PostgreSQL (hosted on Supabase Free Tier)
 
-Do not add backend features.
+Features to implement on the Admin Dashboard (`/admin/*`):
+1. **Product Management**: CRUD for products, prices, variants, images, specs, and features.
+2. **Testimonials Management**: CRUD for installation documentation and customer reviews.
+3. **Tutorial Management**: CRUD for user guides and step-by-step instructions.
+4. **Order Steps Management**: Customize the transaction workflow steps shown on the landing page.
+5. **WhatsApp Chat Templates Management**: Customize dynamic message patterns (e.g. `{product_name}`) for WhatsApp CTAs.
 
-Do not add database.
-
-Do not add login.
-
-Do not add admin dashboard.
-
-Do not add payment gateway.
-
-Do not add complex CMS.
+Do not add unnecessary microservices or complex CMS tools. Keep the architecture clean, type-safe, and educational.
 
 ---
 
@@ -717,6 +717,15 @@ Use this refactor order:
 * Accessibility check
 * SEO metadata
 * README screenshots/notes
+
+### Phase 6 — Full-Stack Decoupled Backend & Admin Dashboard
+
+* Setup Supabase PostgreSQL database and execute SQL DDL from `docs/DATABASE_SCHEMA.md`
+* Build Golang REST API server (Echo/Fiber) with JWT Auth and `sqlc` repository layer
+* Create Next.js Admin Dashboard UI (`/admin/*`) with secure cookie session handling
+* Implement CRUD for Products, Testimonials, Tutorials, Order Steps, and WhatsApp Templates
+* Connect public frontend pages to consume Golang REST API endpoints
+* Deploy backend to Google Cloud Run and verify Vercel environment variables
 
 One phase should be implemented and reviewed before moving to the next.
 
