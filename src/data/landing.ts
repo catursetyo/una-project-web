@@ -1,11 +1,8 @@
 export type IconName =
   | "gps"
   | "phone"
-  | "shield"
-  | "install"
   | "audio"
-  | "panel"
-  | "warranty";
+  | "panel";
 
 export const stats: { value: string; accent?: string; label: string }[] = [
   { value: "15", accent: "+", label: "Tipe produk tersedia" },
@@ -66,7 +63,7 @@ export const orderSteps = [
   },
 ];
 
-export type TestimonialPlaceholder = {
+type TestimonialPlaceholder = {
   title: string;
   description: string;
   imageAlt: string;

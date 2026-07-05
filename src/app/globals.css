@@ -215,7 +215,6 @@ p {
       scroll-behavior: auto;
     }
 
-    .animate-marquee,
     .hero-display-float,
     .hero-marquee {
       animation: none;

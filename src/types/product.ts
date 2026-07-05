@@ -1,4 +1,4 @@
-export type ProductVariant = {
+type ProductVariant = {
   name: string;
   price: number;
   description?: string;

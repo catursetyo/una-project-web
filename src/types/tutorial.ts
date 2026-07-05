@@ -1,4 +1,4 @@
-export type TutorialStep = {
+type TutorialStep = {
   title: string;
   description: string;
   highlight?: string;
