@@ -1,133 +1,79 @@
-# Skema Database & ERD UNA Project
+# Kontrak Database untuk AI Agent
 
-Dokumen ini memuat rancangan skema database relasional (PostgreSQL) untuk mendukung 5 fitur utama pada Admin Dashboard UNA Project:
-1. **Manajemen Produk** (Katalog, Harga, Varian, Gambar, Deskripsi)
-2. **Manajemen Testimoni** (CRUD dokumentasi pemasangan)
-3. **Manajemen Tutorial** (Panduan dan langkah pengoperasian)
-4. **Manajemen Alur Transaksi** (Langkah pemesanan kustom)
-5. **Manajemen Template Chat WhatsApp** (Custom CTA message template)
+Dokumen ini adalah baseline PostgreSQL untuk backend UNA Project. Terapkan perubahan melalui migration; jangan mengedit database production secara manual atau destruktif tanpa izin user dan backup.
 
----
-
-## 1. Entity Relationship Diagram (ERD)
+## Relasi
 
 ```mermaid
 erDiagram
-    ADMINS {
-        uuid id PK
-        string email
-        string password_hash
-        string name
-        timestamp created_at
-        timestamp updated_at
-    }
+  PRODUCTS ||--o{ PRODUCT_VARIANTS : has
+  TUTORIALS ||--o{ TUTORIAL_STEPS : has
 
-    PRODUCTS ||--o{ PRODUCT_VARIANTS : "has many"
-    PRODUCTS {
-        uuid id PK
-        string slug UK
-        string name
-        string category
-        string short_description
-        text description
-        string dimensions
-        text[] features
-        decimal price_start_from
-        string image_url
-        string video_url
-        boolean is_featured
-        boolean is_active
-        integer order_index
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    PRODUCT_VARIANTS {
-        uuid id PK
-        uuid product_id FK
-        string name
-        decimal price
-        string description
-        integer order_index
-    }
-
-    TESTIMONIALS {
-        uuid id PK
-        string title
-        text description
-        string image_url
-        string image_alt
-        string role_location
-        integer rating
-        boolean is_active
-        integer order_index
-        timestamp created_at
-    }
-
-    TUTORIALS ||--o{ TUTORIAL_STEPS : "has many"
-    TUTORIALS {
-        uuid id PK
-        string slug UK
-        string title
-        string category
-        string short_description
-        string video_url
-        boolean is_active
-        integer order_index
-        timestamp created_at
-    }
-
-    TUTORIAL_STEPS {
-        uuid id PK
-        uuid tutorial_id FK
-        integer step_number
-        string title
-        text description
-        string highlight
-    }
-
-    ORDER_STEPS {
-        uuid id PK
-        string step_number
-        string title
-        text description
-        string icon_name
-        boolean is_active
-        integer order_index
-    }
-
-    WHATSAPP_TEMPLATES {
-        uuid id PK
-        string template_name UK
-        string category
-        text message_pattern
-        boolean is_default
-        boolean is_active
-        timestamp created_at
-    }
+  ADMINS {
+    uuid id PK
+    string email UK
+    string password_hash
+    string name
+  }
+  PRODUCTS {
+    uuid id PK
+    string slug UK
+    string name
+    decimal price_start_from
+    boolean is_active
+    integer order_index
+  }
+  PRODUCT_VARIANTS {
+    uuid id PK
+    uuid product_id FK
+    string name
+    decimal price
+  }
+  TESTIMONIALS {
+    uuid id PK
+    string title
+    integer rating
+    boolean is_active
+  }
+  TUTORIALS {
+    uuid id PK
+    string slug UK
+    string title
+    boolean is_active
+  }
+  TUTORIAL_STEPS {
+    uuid id PK
+    uuid tutorial_id FK
+    integer step_number
+  }
+  ORDER_STEPS {
+    uuid id PK
+    string step_number
+    integer order_index
+  }
+  WHATSAPP_TEMPLATES {
+    uuid id PK
+    string template_name UK
+    boolean is_active
+  }
 ```
 
----
+## Baseline SQL
 
-## 2. SQL DDL (Data Definition Language)
-
-Gunakan perintah SQL berikut untuk membuat tabel di dalam database PostgreSQL (misal: melalui SQL Editor di Supabase):
+Gunakan ini sebagai migration awal pada database baru.
 
 ```sql
--- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- 1. TABEL ADMINS
 CREATE TABLE admins (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     name VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. TABEL PRODUCTS
 CREATE TABLE products (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     slug VARCHAR(150) UNIQUE NOT NULL,
@@ -136,28 +82,26 @@ CREATE TABLE products (
     short_description VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     dimensions VARCHAR(100),
-    features TEXT[] DEFAULT '{}',
-    price_start_from NUMERIC(12, 2) NOT NULL DEFAULT 0,
+    features TEXT[] NOT NULL DEFAULT '{}',
+    price_start_from NUMERIC(12, 2) NOT NULL DEFAULT 0 CHECK (price_start_from >= 0),
     image_url VARCHAR(500),
     video_url VARCHAR(500),
-    is_featured BOOLEAN DEFAULT FALSE,
-    is_active BOOLEAN DEFAULT TRUE,
-    order_index INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    order_index INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. TABEL PRODUCT_VARIANTS
 CREATE TABLE product_variants (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL,
-    price NUMERIC(12, 2) NOT NULL DEFAULT 0,
+    price NUMERIC(12, 2) NOT NULL DEFAULT 0 CHECK (price >= 0),
     description VARCHAR(255),
-    order_index INTEGER DEFAULT 0
+    order_index INTEGER NOT NULL DEFAULT 0
 );
 
--- 4. TABEL TESTIMONIALS
 CREATE TABLE testimonials (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     title VARCHAR(150) NOT NULL,
@@ -165,13 +109,12 @@ CREATE TABLE testimonials (
     image_url VARCHAR(500),
     image_alt VARCHAR(255) NOT NULL,
     role_location VARCHAR(150),
-    rating INTEGER DEFAULT 5 CHECK (rating >= 1 AND rating <= 5),
-    is_active BOOLEAN DEFAULT TRUE,
-    order_index INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    rating INTEGER NOT NULL DEFAULT 5 CHECK (rating BETWEEN 1 AND 5),
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    order_index INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 5. TABEL TUTORIALS
 CREATE TABLE tutorials (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     slug VARCHAR(150) UNIQUE NOT NULL,
@@ -179,55 +122,72 @@ CREATE TABLE tutorials (
     category VARCHAR(50) NOT NULL,
     short_description VARCHAR(255) NOT NULL,
     video_url VARCHAR(500),
-    is_active BOOLEAN DEFAULT TRUE,
-    order_index INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    order_index INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 6. TABEL TUTORIAL_STEPS
 CREATE TABLE tutorial_steps (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     tutorial_id UUID NOT NULL REFERENCES tutorials(id) ON DELETE CASCADE,
     step_number INTEGER NOT NULL,
     title VARCHAR(150) NOT NULL,
     description TEXT NOT NULL,
-    highlight VARCHAR(255)
+    highlight VARCHAR(255),
+    UNIQUE (tutorial_id, step_number)
 );
 
--- 7. TABEL ORDER_STEPS
 CREATE TABLE order_steps (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    step_number VARCHAR(10) NOT NULL, -- Contoh: '01', '02', '03'
+    step_number VARCHAR(10) NOT NULL,
     title VARCHAR(150) NOT NULL,
     description TEXT NOT NULL,
-    icon_name VARCHAR(50) DEFAULT 'whatsapp',
-    is_active BOOLEAN DEFAULT TRUE,
-    order_index INTEGER DEFAULT 0
+    icon_name VARCHAR(50) NOT NULL DEFAULT 'whatsapp',
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    order_index INTEGER NOT NULL DEFAULT 0
 );
 
--- 8. TABEL WHATSAPP_TEMPLATES
 CREATE TABLE whatsapp_templates (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    template_name VARCHAR(100) UNIQUE NOT NULL, -- Contoh: 'konsultasi_jws', 'order_rgb', 'minta_katalog'
-    category VARCHAR(50) DEFAULT 'umum',
-    message_pattern TEXT NOT NULL, -- Contoh: 'Assalamualaikum, saya tertarik dengan {product_name}. Mohon info harga dan pemasangan.'
-    is_default BOOLEAN DEFAULT FALSE,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    template_name VARCHAR(100) UNIQUE NOT NULL,
+    category VARCHAR(50) NOT NULL DEFAULT 'umum',
+    message_pattern TEXT NOT NULL,
+    is_default BOOLEAN NOT NULL DEFAULT FALSE,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create Indexes for Performance
-CREATE INDEX idx_products_slug ON products(slug);
+CREATE INDEX idx_products_active_order ON products(is_active, order_index);
 CREATE INDEX idx_products_category ON products(category);
-CREATE INDEX idx_product_variants_product_id ON product_variants(product_id);
-CREATE INDEX idx_tutorials_slug ON tutorials(slug);
-CREATE INDEX idx_tutorial_steps_tutorial_id ON tutorial_steps(tutorial_id);
+CREATE INDEX idx_product_variants_product ON product_variants(product_id, order_index);
+CREATE INDEX idx_testimonials_active_order ON testimonials(is_active, order_index);
+CREATE INDEX idx_tutorials_active_order ON tutorials(is_active, order_index);
+CREATE INDEX idx_tutorial_steps_tutorial ON tutorial_steps(tutorial_id, step_number);
+CREATE INDEX idx_order_steps_active_order ON order_steps(is_active, order_index);
 ```
 
----
+## Aturan Migration
 
-## 3. Catatan Desain Database
+- Satu perubahan schema per migration dengan `up` dan rollback yang aman bila tooling mendukungnya.
+- Jangan mengubah migration yang sudah diterapkan; buat migration baru.
+- Penambahan kolom wajib menentukan strategi default/backfill sebelum `NOT NULL`.
+- Penghapusan kolom/tabel memerlukan konfirmasi user dan rencana backup.
+- Seed admin tidak boleh menyimpan password plaintext; hasil hash saja.
+- Backend harus mengatur `updated_at` saat update hingga trigger khusus memang diperlukan.
 
-1. **Cascading Deletes (`ON DELETE CASCADE`)**: Pada tabel varian produk dan langkah tutorial, penghapusan data induk (Produk / Tutorial) akan otomatis menghapus seluruh data anak/varian terkait.
-2. **Order Indexing (`order_index`)**: Memungkinkan admin untuk mengurutkan posisi tampil kartu produk, testimoni, atau langkah pemesanan secara custom tanpa bergantung pada abjad atau tanggal pembuatan.
-3. **Template WhatsApp Dinamis (`message_pattern`)**: Menggunakan sintaks placeholder seperti `{product_name}`, `{variant_name}`, atau `{category}` yang nantinya akan direplace secara dinamis oleh helper di Frontend sebelum membuka link `wa.me`.
+## Aturan Data
+
+- Public query selalu filter `is_active = true` dan urutkan `order_index`.
+- Harga disimpan sebagai numeric IDR, bukan string berformat.
+- Placeholder WhatsApp yang diizinkan harus divalidasi aplikasi; jangan mengeksekusi template sebagai kode.
+- Penghapusan produk/tutorial menghapus child melalui cascade. UI harus meminta konfirmasi.
+- Mutation parent dan seluruh child dilakukan dalam satu transaksi.
+
+## Validasi Agent
+
+Sebelum menyatakan perubahan schema selesai:
+
+1. Jalankan migration pada database disposable/local.
+2. Uji insert valid dan constraint utama.
+3. Uji rollback bila tersedia.
+4. Perbarui type/query backend dan `API_SPECIFICATION.md` dalam perubahan yang sama.

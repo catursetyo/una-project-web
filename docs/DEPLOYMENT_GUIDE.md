@@ -1,81 +1,90 @@
-# Panduan Deployment UNA Project (Decoupled Stack)
+# Panduan Deployment untuk AI Agent
 
-Dokumen ini berisi panduan langkah demi langkah untuk melakukan deployment arsitektur terpisah UNA Project secara **100% Gratis (Free Tier)** menggunakan **Supabase**, **Google Cloud Run**, dan **Vercel**.
+Deployment mengubah sistem eksternal. Jangan deploy, membuat project cloud, menjalankan migration production, atau mengubah environment variable tanpa permintaan/izin eksplisit user.
 
----
+## Target
 
-## 1. Deployment Database (Supabase PostgreSQL)
+| Komponen | Target | Konfigurasi rahasia |
+| --- | --- | --- |
+| Frontend Next.js | Vercel | Tidak membutuhkan secret database |
+| Golang REST API | Google Cloud Run atau target yang disetujui user | `DATABASE_URL`, `JWT_SECRET` |
+| PostgreSQL | Supabase/PostgreSQL yang disetujui user | Credential database |
 
-1. Buka [https://supabase.com](https://supabase.com) dan buat akun/login.
-2. Klik **New Project**, pilih organisasi, beri nama proyek (misal: `una-project-db`), buat password database yang kuat, dan pilih region terdekat (**Singapore / `sin`**).
-3. Setelah database siap, buka menu **SQL Editor** di panel kiri.
-4. Salin seluruh isi skema SQL dari file [DATABASE_SCHEMA.md](file:///home/caur/programs/porto/una-project/docs/DATABASE_SCHEMA.md) dan jalankan (**Run**).
-5. Buka menu **Project Settings** -> **Database**.
-6. Pada bagian **Connection string**, pilih tab **URI** atau **Connection pooling**.
-7. Salin *connection string* tersebut (ganti `[YOUR-PASSWORD]` dengan password yang kamu buat di langkah 2):
-   `postgresql://postgres:[YOUR-PASSWORD]@db.xxxx.supabase.co:5432/postgres`
+Free tier dapat berubah. Jangan menjanjikan biaya nol tanpa memeriksa kebijakan provider saat deployment dilakukan.
 
----
+## Environment
 
-## 2. Deployment Backend Golang (Google Cloud Run + Docker)
+### Frontend
 
-### A. Persiapan Dockerfile di Repo Golang
-Pastikan repo backend Golang kamu memiliki `Dockerfile` multi-stage build yang ringan:
-
-```dockerfile
-# Stage 1: Build binary
-FROM golang:1.22-alpine AS builder
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
-
-# Stage 2: Minimal runtime image
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=builder /app/main .
-EXPOSE 8080
-CMD ["./main"]
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8080/v1
 ```
 
-### B. Deploy ke Google Cloud Run
-1. Buka [Google Cloud Console](https://console.cloud.google.com) dan buat proyek baru (misal: `una-project-api`).
-2. Aktifkan API: **Cloud Run API** dan **Cloud Build API**.
-3. Buka **Cloud Run** -> Klik **Create Service**.
-4. Pilih **Continuously deploy new revisions from a source repository** -> Hubungkan repo GitHub backend Golang kamu.
-5. Pada pengaturan Service:
-   - **Service name**: `una-project-api`
-   - **Region**: `asia-southeast1` (Singapura - agar super cepat ke pengguna Indonesia & Supabase).
-   - **Authentication**: Pilih **Allow unauthenticated invocations** (karena publik perlu mengakses katalog produk; autentikasi admin diurus oleh JWT Middleware kita).
-6. Pada bagian **Container, Variables & Secrets** -> Tab **Environment variables**, tambahkan:
-   - `DATABASE_URL` = `<Connection string Supabase dari Langkah 1>`
-   - `JWT_SECRET` = `<String acak rahasia untuk token admin>`
-   - `PORT` = `8080`
-7. Klik **Create / Deploy**. Dalam 2-3 menit, kamu akan mendapatkan URL publik backend, misal:
-   `https://una-project-api-xxxxx-as.a.run.app`
+`NEXT_PUBLIC_API_URL` boleh terlihat browser. Jangan menaruh token atau credential pada prefix `NEXT_PUBLIC_`.
 
----
+### Backend
 
-## 3. Deployment Frontend & Admin Dashboard (Vercel)
+```env
+DATABASE_URL=postgresql://...
+JWT_SECRET=...
+PORT=8080
+ALLOWED_ORIGINS=http://localhost:3000
+```
 
-Karena landing page saat ini sudah terdeploy di Vercel, kamu hanya perlu menghubungkannya dengan API Golang yang baru saja online.
+Gunakan secret manager/provider environment settings. Jangan commit file `.env` berisi nilai nyata.
 
-1. Buka dashboard Vercel -> Pilih proyek **una-project-web**.
-2. Buka menu **Settings** -> **Environment Variables**.
-3. Tambahkan variabel baru:
-   - **Key**: `NEXT_PUBLIC_API_URL`
-   - **Value**: `https://una-project-api-xxxxx-as.a.run.app/v1`
-   - **Environment**: Centang Production, Preview, dan Development.
-4. Klik **Save**.
-5. Buka tab **Deployments**, klik titik tiga pada deployment terakhir, dan pilih **Redeploy** agar Vercel membangun ulang web dengan variabel lingkungan yang baru.
+## Urutan Deployment
 
----
+1. Pastikan lint, test, dan build lokal lolos.
+2. Buat backup database sebelum migration yang berisiko.
+3. Terapkan migration database.
+4. Deploy backend dan verifikasi health/public endpoint.
+5. Atur URL backend pada frontend.
+6. Deploy frontend.
+7. Jalankan smoke test publik dan admin.
 
-## 4. Verifikasi & Pengujian Sistem
+Jangan melanjutkan ke tahap berikutnya jika tahap sebelumnya gagal.
 
-1. Buka URL landing page Vercel kamu (misal: `https://unaproject.com`).
-2. Buka *Developer Tools* di browser (F12) -> Tab **Network**.
-3. Pastikan request ke endpoint `https://una-project-api-xxxxx-as.a.run.app/v1/products` mengembalikan status **200 OK** dan merender produk dengan cepat.
-4. Buka halaman `/admin/login`, coba masuk dengan kredensial admin yang telah di-seed di database, dan periksa apakah token JWT berhasil disimpan serta fungsi CRUD berjalan lancar!
+## Preflight Frontend
+
+```bash
+npm ci
+npm run lint
+npm run build
+```
+
+Gunakan npm karena repository memiliki `package-lock.json`.
+
+## Smoke Test
+
+Periksa minimal:
+
+- landing page dan katalog dapat dibuka;
+- detail produk valid dan slug tidak dikenal menghasilkan 404;
+- public API tidak menampilkan draft;
+- login valid dan invalid bekerja tanpa membocorkan detail akun;
+- route admin menolak sesi kosong/kedaluwarsa;
+- create/update/delete merefleksikan data setelah refresh;
+- CTA WhatsApp menghasilkan pesan yang benar;
+- tidak ada error console atau request 5xx.
+
+## Keamanan
+
+- Jangan mencetak nilai secret dalam command output atau laporan.
+- Gunakan credential scoped dan rotasi bila pernah terekspos.
+- Cloud Run boleh menerima request publik hanya karena endpoint public diperlukan; endpoint admin tetap wajib dilindungi JWT.
+- Batasi CORS ke domain deployment yang digunakan.
+- Cookie auth production wajib `HttpOnly` dan `Secure`.
+
+## Rollback
+
+Sebelum deployment, catat versi frontend, image backend, dan migration terakhir. Jika smoke test gagal:
+
+1. Hentikan rollout.
+2. Kembalikan frontend/backend ke versi terakhir yang sehat.
+3. Rollback database hanya jika migration menyediakan langkah aman; jika tidak, pulihkan dari backup.
+4. Laporkan failure dan bukti, jangan menyembunyikan deployment parsial.
+
+## Handoff
+
+Laporan deployment harus berisi target/environment, versi yang terpasang, migration yang dijalankan, hasil smoke test, dan rollback point. Jangan menyertakan nilai secret.
