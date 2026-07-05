@@ -14,7 +14,7 @@ export function Navbar() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-una-deep/95 text-white backdrop-blur-xl">
       <nav
         aria-label="Navigasi utama"
-        className="mx-auto flex h-[68px] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
+        className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
       >
         <Link
           href="/#home"
@@ -32,7 +32,7 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-8 lg:flex">
+        <div className="hidden items-center gap-7 lg:flex">
           {homeNavigationItems.slice(0, 5).map((item) => (
             <Link
               key={item.href}

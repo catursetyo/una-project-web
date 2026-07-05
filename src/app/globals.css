@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafaf5;
+  --background: #ffffff;
   --foreground: #111a10;
   --primary: #155a4c;
   --secondary: #d6a437;
@@ -14,8 +14,8 @@
   --una-gold-light: #f0c875;
   --una-gold: #d6a437;
   --una-gold-ink: #221500;
-  --una-cream: #fafaf5;
-  --una-soft: #f5f6f0;
+  --una-cream: #ffffff;
+  --una-soft: #f2f6f5;
   --una-ink: #111a10;
   --una-muted: #5d685c;
   --una-soft-text: #3a4438;
@@ -104,7 +104,7 @@ p {
   }
 
   .gold-cta {
-    background: linear-gradient(180deg, #f0c875 0%, #d6a437 100%);
+    background: #e2b64d;
     color: var(--una-gold-ink);
   }
 
@@ -122,59 +122,35 @@ p {
   .metal-frame {
     background: linear-gradient(
       145deg,
-      #d8dde0 0%,
-      #90989d 42%,
-      #cdd2d5 64%,
-      #747b80 100%
+      #e5e8e5 0%,
+      #6f7773 38%,
+      #c4cbc7 62%,
+      #464c49 100%
     );
   }
 
-  .wave-bar {
-    background: linear-gradient(180deg, #f0c875, #ff5c33);
-  }
-
-  .text-led-orange {
-    color: var(--una-led-orange);
-    text-shadow:
-      0 0 10px rgb(255 92 51 / 58%),
-      0 0 22px rgb(255 92 51 / 24%);
-  }
-
-  .text-led-green {
-    color: var(--una-led-green);
-    text-shadow:
-      0 0 10px rgb(92 255 176 / 48%),
-      0 0 22px rgb(92 255 176 / 20%);
-  }
-
-  @keyframes marquee {
-    from {
-      transform: translateX(35%);
-    }
-
-    to {
-      transform: translateX(-100%);
-    }
-  }
-
-  .animate-marquee {
-    animation: marquee 18s linear infinite;
-  }
-
-  @keyframes wave {
-    0%,
-    100% {
-      transform: scaleY(0.25);
-    }
-
+  @keyframes hero-display-float {
     50% {
-      transform: scaleY(1);
+      transform: translateY(-6px);
     }
   }
 
-  .animate-wave {
-    animation: wave 1.4s ease-in-out infinite;
-    transform-origin: center bottom;
+  .hero-display-float {
+    animation: hero-display-float 5s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  @keyframes hero-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .hero-marquee {
+    display: flex;
+    width: max-content;
+    animation: hero-marquee 22s linear infinite;
+    will-change: transform;
   }
 
   .motion-card {
@@ -240,7 +216,8 @@ p {
     }
 
     .animate-marquee,
-    .animate-wave {
+    .hero-display-float,
+    .hero-marquee {
       animation: none;
     }
 

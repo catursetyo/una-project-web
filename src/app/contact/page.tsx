@@ -47,10 +47,10 @@ export default function ContactPage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <WhatsAppButton />
               <Link
-                href="/products"
+                href="/product"
                 className="motion-button inline-flex items-center justify-center rounded-xl border-2 border-primary px-5 py-3.5 text-sm font-black tracking-[0.08em] text-primary hover:bg-primary hover:text-white sm:text-base"
               >
-                Lihat Katalog
+                Lihat Katalog Lengkap
               </Link>
             </div>
           </div>

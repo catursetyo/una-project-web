@@ -267,24 +267,24 @@ Do not use fixed `1920px` or `absolute` page layout.
 
 ### Section Spacing
 
-Use generous spacing.
+Use compact, consistent spacing so sections remain connected.
 
 Recommended:
 
 ```txt
-py-16 md:py-24
+py-12 sm:py-14 lg:py-16
 ```
 
-Hero:
+Hero content:
 
 ```txt
-pt-28 pb-20 md:pt-36 md:pb-28
+py-12 sm:py-14 lg:py-16
 ```
 
 Compact strips:
 
 ```txt
-py-5 md:py-8
+py-6 sm:py-7
 ```
 
 ---
@@ -489,95 +489,52 @@ Do not use an unrelated logo.
 
 ### Background
 
-Use dark emerald gradient:
-
-```css
-linear-gradient(160deg, #0A211D 0%, #0F3A32 55%, #0D2E26 100%)
-```
+Use a deep emerald background with a restrained radial teal glow and subtle
+LED dot-matrix texture. The product display should feel illuminated inside a
+dark showroom, while gold remains the only bright accent.
 
 ### Structure
 
 Hero should contain:
 
 ```txt
-Section label
-Headline
-Description
-Primary and secondary CTA
-Trust items
-JWS display mockup
+Title
+Subtitle
+Live digital clock with running text
+Down-arrow navigation to the stats strip
 ```
 
-### Hero Label
+Keep the composition centered with compact vertical spacing. Do not add CTA,
+trust badges, product specs, or prayer-time details inside the hero.
+
+### Hero Title
 
 Text:
 
 ```txt
-JAM WAKTU SHOLAT DIGITAL • AKURASI GPS
+UNA Project
 ```
 
 Style:
 
 ```txt
-text-[#F0C875]
-uppercase
-tracking-[0.16em]
-font-bold
-text-xs
+Large Outfit heading
+White `UNA` with solid gold `Project`
+Compact line height
+Centered alignment
 ```
-
-Add a small horizontal line before the label if suitable.
 
 ---
 
-### Hero Heading
+### Hero Subtitle
 
 Text:
 
 ```txt
-Waktu sholat yang menyala presisi di masjid Anda
+Menyediakan running text dan jam waktu sholat sesuai kebutuhan Anda.
 ```
 
-Highlight:
-
-```txt
-menyala presisi
-```
-
-Highlight color:
-
-```txt
-#FF8A5C or #FF5C33
-```
-
-The heading should be large, bold, and compact.
-
----
-
-### Hero Description
-
-Text direction:
-
-```txt
-UNA Project menghadirkan jadwal sholat digital untuk masjid, mushola, dan kantor — akurasi GPS otomatis, mudah diatur dari smartphone, dan tersedia fitur auto-murotal.
-```
-
-Keep it clear and benefit-driven.
-
----
-
-### Hero Trust Items
-
-Use 4 items:
-
-```txt
-Akurasi GPS
-Setting via HP
-Garansi Resmi
-Termasuk Instalasi
-```
-
-Use small gold outline icons.
+Keep it short, readable, and no wider than about 65 characters per line.
 
 ---
 
@@ -621,26 +578,9 @@ background-size: 8px 8px;
 Include:
 
 ```txt
-UNA PROJECT · JWS DISPLAY
-GPS Synced
 Large time
-Date line
-Tampilan contoh produk
-Prayer time grid
 Running text
 ```
-
-Prayer time examples:
-
-```txt
-Subuh    04:15
-Dzuhur   11:45
-Ashar    15:05
-Maghrib  17:58
-Isya     19:08
-```
-
-Highlight the next prayer using LED orange.
 
 ### Running Text
 
@@ -649,12 +589,11 @@ Use VT323 font.
 Example:
 
 ```txt
-UNA PROJECT — JAM WAKTU SHOLAT DIGITAL — AKURASI GPS — SETTING VIA SMARTPHONE — AUTO MUROTAL — HUBUNGI KAMI •
+UNA PROJECT • RUNNING TEXT • JAM WAKTU SHOLAT DIGITAL • CUSTOM SESUAI KEBUTUHAN •
 ```
 
-Animation is optional.
-
-If animation is added, keep it simple and CSS-based.
+Use a seamless CSS animation and disable it when the visitor prefers reduced
+motion.
 
 ---
 
@@ -669,10 +608,10 @@ white
 Stats:
 
 ```txt
-15+    Tipe produk tersedia
-100+   Masjid & mushola terlayani
-GPS    Akurasi otomatis lokasi
-Rp0    Biaya setting tambahan
+15+     Tipe produk tersedia
+100+    Masjid & mushola terlayani
+GPS     Akurasi otomatis lokasi
+Rp. 0   Biaya setting tambahan
 ```
 
 Use:
@@ -695,30 +634,6 @@ Desktop:
 ```txt
 4 columns
 ```
-
----
-
-## Trust Badges Strip
-
-Background:
-
-```txt
-#F5F6F0
-```
-
-Items:
-
-```txt
-Jadwal sholat akurasi GPS
-Atur langsung dari HP
-Fitur auto-murotal
-Garansi resmi produk
-Harga sudah termasuk instalasi
-```
-
-Use small green line icons.
-
-On mobile, allow wrapping.
 
 ---
 
@@ -1021,63 +936,6 @@ Minta Katalog Lengkap
 
 ---
 
-## Auto-Murotal Section
-
-### Background
-
-Use dark green gradient:
-
-```css
-linear-gradient(135deg, #0A211D 0%, #0F3A32 60%, #0D2E26 100%)
-```
-
-### Content
-
-Label:
-
-```txt
-FITUR UNGGULAN
-```
-
-Heading:
-
-```txt
-Auto-Murotal — suasana masjid yang lebih hidup
-```
-
-Description:
-
-```txt
-Beberapa menit menjelang azan, JWS otomatis memutar murotal pilihan — mengingatkan jamaah tanpa ada yang perlu menyalakan apa pun secara manual.
-```
-
-Benefits:
-
-```txt
-Aktif otomatis sesuai jadwal sholat lokasi
-Tersedia untuk hampir semua tipe panel RGB & figura
-Selisih harga mulai Rp 300.000 dari versi standar
-```
-
-CTA:
-
-```txt
-Tanya Soal Murotal
-```
-
-### Visual
-
-Add an audio wave card:
-
-```txt
-Large rounded card
-Dark translucent background
-Gold/orange vertical bars
-Text: PEMUTARAN MUROTAL OTOMATIS
-```
-
----
-
 ## Order Steps Section
 
 ### Background
@@ -1246,7 +1104,6 @@ Navigation:
 Beranda
 Produk
 Keunggulan
-Fitur Murotal
 Testimoni
 ```
 

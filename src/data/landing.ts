@@ -7,19 +7,11 @@ export type IconName =
   | "panel"
   | "warranty";
 
-export const stats = [
-  { value: "15+", label: "Tipe produk tersedia" },
-  { value: "100+", label: "Masjid & mushola terlayani" },
+export const stats: { value: string; accent?: string; label: string }[] = [
+  { value: "15", accent: "+", label: "Tipe produk tersedia" },
+  { value: "100", accent: "+", label: "Masjid & mushola terlayani" },
   { value: "GPS", label: "Akurasi otomatis lokasi" },
-  { value: "0", label: "Biaya setting tambahan" },
-];
-
-export const trustBadges: { icon: IconName; label: string }[] = [
-  { icon: "gps", label: "Jadwal sholat akurasi GPS" },
-  { icon: "phone", label: "Atur langsung dari HP" },
-  { icon: "audio", label: "Fitur auto-murotal" },
-  { icon: "warranty", label: "Garansi resmi produk" },
-  { icon: "install", label: "Harga termasuk instalasi" },
+  { value: "Rp. ", accent: "0", label: "Biaya setting tambahan" },
 ];
 
 export const whyFeatures: {
@@ -53,12 +45,6 @@ export const whyFeatures: {
   },
 ];
 
-export const murotalBenefits = [
-  "Aktif otomatis mengikuti jadwal sholat lokasi",
-  "Tersedia untuk banyak tipe panel RGB dan figura",
-  "Selisih harga mulai dari varian auto-murotal",
-];
-
 export const orderSteps = [
   {
     number: "01",
@@ -80,17 +66,26 @@ export const orderSteps = [
   },
 ];
 
-export const testimonialPlaceholders = [
+export type TestimonialPlaceholder = {
+  title: string;
+  description: string;
+  imageAlt: string;
+};
+
+export const testimonials: TestimonialPlaceholder[] = [
   {
-    title: "Testimoni 01",
-    description: "Screenshot chat pelanggan",
+    title: "Pemasangan JWS Digital",
+    description: "Dokumentasi produk setelah terpasang dan aktif di lokasi.",
+    imageAlt: "Placeholder foto pemasangan JWS Digital",
   },
   {
-    title: "Testimoni 02",
-    description: "Foto produk terpasang",
+    title: "Panel Running Text",
+    description: "Dokumentasi tampilan running text sesuai kebutuhan pelanggan.",
+    imageAlt: "Placeholder foto panel running text",
   },
   {
-    title: "Testimoni 03",
-    description: "Bukti ulasan pelanggan",
+    title: "Pengaturan Perangkat",
+    description: "Dokumentasi proses aktivasi dan pengaturan perangkat.",
+    imageAlt: "Placeholder foto pengaturan perangkat JWS",
   },
 ];

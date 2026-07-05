@@ -32,7 +32,7 @@ export function Button({
   rel,
 }: ButtonProps) {
   const buttonClassName = [
-    "motion-button inline-flex min-h-12 w-full max-w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-center text-sm font-black tracking-[0.04em] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-secondary sm:w-auto sm:text-base",
+    "motion-button inline-flex min-h-11 w-full max-w-full items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-center text-sm font-black tracking-[0.02em] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-secondary sm:w-auto",
     variantClassNames[variant],
     className,
   ]
