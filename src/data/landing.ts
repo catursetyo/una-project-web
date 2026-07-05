@@ -4,11 +4,22 @@ export type IconName =
   | "audio"
   | "panel";
 
-export const stats: { value: string; accent?: string; label: string }[] = [
-  { value: "15", accent: "+", label: "Tipe produk tersedia" },
-  { value: "100", accent: "+", label: "Masjid & mushola terlayani" },
+export const stats: {
+  value: number | string;
+  prefix?: string;
+  accent?: string;
+  accentValue?: boolean;
+  label: string;
+}[] = [
+  { value: 15, accent: "+", label: "Tipe produk tersedia" },
+  { value: 100, accent: "+", label: "Masjid & mushola terlayani" },
   { value: "GPS", label: "Akurasi otomatis lokasi" },
-  { value: "Rp. ", accent: "0", label: "Biaya setting tambahan" },
+  {
+    value: 0,
+    prefix: "Rp. ",
+    accentValue: true,
+    label: "Biaya setting tambahan",
+  },
 ];
 
 export const whyFeatures: {

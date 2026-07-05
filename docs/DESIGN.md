@@ -91,10 +91,10 @@ Usage:
 * Icon strokes
 * Highlight marks
 
-CTA gradient:
+CTA color:
 
 ```css
-linear-gradient(180deg, #F0C875 0%, #D6A437 100%)
+#E2B64D
 ```
 
 ---
@@ -931,7 +931,7 @@ Masih ada 9+ tipe lain — single color, ukuran mini, hingga frame figura khusus
 Button:
 
 ```txt
-Minta Katalog Lengkap
+Lihat Katalog Lengkap → /product
 ```
 
 ---
@@ -954,12 +954,6 @@ Heading:
 
 ```txt
 Tiga langkah, tanpa ribet
-```
-
-Description:
-
-```txt
-Dari konsultasi hingga produk terpasang dan aktif di lokasi Anda.
 ```
 
 Steps:
@@ -991,44 +985,21 @@ Mulai Konsultasi
 #F5F6F0
 ```
 
-Label:
-
-```txt
-TESTIMONI
-```
-
 Heading:
 
 ```txt
-Dipercaya pengurus masjid & mushola
+Testimoni
 ```
 
-Use testimonial cards.
+Use documentation placeholder cards until real customer images are available.
 
-Example content:
+Each card contains:
 
 ```txt
-Sejak pasang JWS, jadwal sholat selalu pas dan jamaah jadi lebih disiplin datang ke masjid. Settingnya pun gampang banget.
-
-Ust. Hadi
-Takmir Masjid Al-Ikhlas, Surabaya
+Image placeholder
+Short documentation title
+Short description
 ```
-
-```txt
-Settingnya gampang banget, tinggal dari HP. Fitur auto-murotal juga bikin suasana lebih syahdu — jamaah jadi lebih tepat waktu.
-
-Pak Joko
-Pengurus Mushola Babussalam
-```
-
-```txt
-Pemasangan cepat dan rapi, harganya pun ramah untuk kas masjid kami yang terbatas. Tim UNA Project sangat responsif dan profesional.
-
-Bu Sari
-Bendahara Masjid Nurul Iman
-```
-
-If these are placeholders, mark them as placeholder until real testimonials are available.
 
 ---
 
@@ -1208,14 +1179,15 @@ Dark card border:
 
 ## Animation Rules
 
-Animations are optional.
+Hero and stats animations are part of the landing-page experience.
 
 Allowed:
 
 * subtle hover lift on buttons/cards
 * CSS marquee for running text
-* gentle pulse/glow for GPS indicator
-* simple LED glow
+* title and JWS entrance whenever the hero re-enters the viewport
+* counting animation whenever the stats strip re-enters the viewport
+* animated down-arrow fixed to the bottom of the hero viewport
 
 Avoid:
 
@@ -1225,6 +1197,8 @@ Avoid:
 * animation that makes text hard to read
 
 If using animation, prefer CSS.
+Use `IntersectionObserver` and `requestAnimationFrame` only for numeric counting.
+Always provide a reduced-motion fallback.
 
 ---
 
