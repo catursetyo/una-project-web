@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ProductGrid } from "@/src/components/ProductGrid";
+import { ProductGrid } from "@/src/components/products/ProductGrid";
 import type { Product } from "@/src/types/product";
 
 const allProductsLabel = "Semua Produk";

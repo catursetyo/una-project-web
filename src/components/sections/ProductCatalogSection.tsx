@@ -1,6 +1,5 @@
 import { products } from "@/src/data/products";
-import { createWhatsAppLink } from "@/src/lib/whatsapp";
-import { ProductCard } from "@/src/components/ProductCard";
+import { ProductCard } from "@/src/components/products/ProductCard";
 import { Button } from "@/src/components/ui/Button";
 import { SectionLabel } from "@/src/components/ui/SectionLabel";
 import { Container } from "@/src/components/layout/Container";
@@ -21,29 +20,25 @@ const catalogProducts = selectedProductSlugs
 
 export function ProductCatalogSection() {
   return (
-    <section id="produk" className="bg-una-soft py-16 sm:py-20 lg:py-24">
+    <section id="produk" className="bg-una-soft py-12 sm:py-14 lg:py-16">
       <Container>
-        <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <SectionLabel>Katalog Produk</SectionLabel>
-            <h2 className="mt-5 font-heading text-3xl font-extrabold leading-tight text-una-ink sm:text-4xl">
+            <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight text-una-ink sm:text-4xl">
               Pilih tipe JWS Digital sesuai kebutuhan
             </h2>
-            <p className="mt-4 text-base leading-8 text-una-muted">
+            <p className="mt-3 text-base leading-7 text-una-muted">
               Running text RGB hingga Android TV, tersedia berbagai ukuran dan
               anggaran dengan konsultasi pemasangan yang jelas.
             </p>
           </div>
           <Button
-            href={createWhatsAppLink({
-              message:
-                "Halo UNA Project, saya ingin lihat katalog lengkap JWS Digital.",
-            })}
-            target="_blank"
+            href="/product"
             variant="outline"
             className="md:shrink-0"
           >
-            Katalog Lengkap
+            Lihat Katalog Lengkap
           </Button>
         </div>
 
@@ -57,20 +52,13 @@ export function ProductCatalogSection() {
           ))}
         </div>
 
-        <div className="mx-auto mt-11 flex max-w-xl flex-col items-center gap-4 text-center">
+        <div className="mx-auto mt-8 flex max-w-xl flex-col items-center gap-3 text-center">
           <p className="text-sm leading-6 text-una-muted">
             Masih ada tipe single color, ukuran mini, frame figura khusus, dan
             display custom sesuai kebutuhan lokasi.
           </p>
-          <Button
-            href={createWhatsAppLink({
-              message:
-                "Halo UNA Project, saya ingin minta katalog lengkap JWS Digital.",
-            })}
-            target="_blank"
-            variant="dark"
-          >
-            Minta Katalog Lengkap
+          <Button href="/product" variant="dark">
+            Lihat Katalog Lengkap
           </Button>
         </div>
       </Container>

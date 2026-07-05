@@ -64,7 +64,8 @@ Before writing or editing code, read these files if they exist:
 
 ```txt
 AGENTS.md
-DESIGN.md
+docs/DESIGN.md
+docs/PRODUCT.md
 README.md
 package.json
 src/app/page.tsx
@@ -103,7 +104,7 @@ Do not rely only on memory because this project uses a newer Next.js version.
 
 ## Primary Design Source
 
-Use `DESIGN.md` as the design contract.
+Use `docs/DESIGN.md` as the design contract.
 
 The new style must follow the provided reference design:
 
@@ -681,7 +682,7 @@ Use this refactor order:
 
 ### Phase 1 — Design Foundation
 
-* Add or update `DESIGN.md`
+* Add or update `docs/DESIGN.md`
 * Update `globals.css` tokens
 * Configure fonts
 * Create shared `Container`, `Button`, `SectionLabel`, `LogoMark`
@@ -729,7 +730,7 @@ A change is done only when:
 * `npm run build` passes
 * The homepage renders without console errors
 * Mobile layout is not broken
-* The design follows `DESIGN.md`
+* The design follows `docs/DESIGN.md`
 * Components are readable
 * Data is not unnecessarily hardcoded
 * The developer can explain what changed

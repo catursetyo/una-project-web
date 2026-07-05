@@ -39,8 +39,7 @@ yarn-error.log*
 # local agent tooling
 .agents/
 .codex/
-.impeccable/live/sessions/
-.impeccable/live/*.log
+.impeccable/
 
 # typescript
 *.tsbuildinfo

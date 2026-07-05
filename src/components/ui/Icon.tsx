@@ -30,21 +30,7 @@ export function Icon({ name, className = "size-5" }: IconProps) {
           <path d="M10.5 17.5h3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
         </svg>
       );
-    case "shield":
-    case "warranty":
-      return (
-        <svg {...sharedProps}>
-          <path d="M12 2.8 19 6v5.2c0 4.5-2.8 8.5-7 10-4.2-1.5-7-5.5-7-10V6l7-3.2Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-          <path d="m8.8 12 2.1 2.1 4.4-4.7" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      );
-    case "install":
-      return (
-        <svg {...sharedProps}>
-          <rect x="3" y="10" width="18" height="10" rx="2" stroke="currentColor" strokeWidth="1.8" />
-          <path d="M7 10V7.5a5 5 0 0 1 10 0V10M8 15h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-        </svg>
-      );
+
     case "audio":
       return (
         <svg {...sharedProps}>

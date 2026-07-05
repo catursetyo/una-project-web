@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { TutorialMediaPlaceholder } from "@/src/components/TutorialMediaPlaceholder";
+import { TutorialMediaPlaceholder } from "@/src/components/tutorials/TutorialMediaPlaceholder";
 import { tutorials } from "@/src/data/tutorials";
 
 export const metadata: Metadata = {

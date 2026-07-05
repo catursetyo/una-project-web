@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ProductMediaPlaceholder } from "@/src/components/ProductMediaPlaceholder";
-import { WhatsAppButton } from "@/src/components/WhatsAppButton";
+import { ProductMediaPlaceholder } from "@/src/components/products/ProductMediaPlaceholder";
+import { WhatsAppButton } from "@/src/components/ui/WhatsAppButton";
 import { products } from "@/src/data/products";
 import { formatPrice } from "@/src/lib/formatPrice";
 
@@ -54,7 +54,7 @@ export default async function ProductDetailPage({
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
         <Link
-          href="/products"
+          href="/product"
           className="text-sm font-bold text-primary transition-colors hover:text-tertiary sm:text-base"
         >
           Kembali ke katalog

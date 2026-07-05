@@ -1,4 +1,4 @@
-# Product
+# Product Brief
 
 ## Register
 
