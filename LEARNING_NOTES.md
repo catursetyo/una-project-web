@@ -574,3 +574,64 @@ Teknik ini disebut **Defensive Parsing**. Mengapa ini penting dalam arsitektur m
 Pada komponen client (`AdminTestimonialsClient.tsx`), kita menerapkan prinsip desain premium UNA Project (*visual excellence*):
 1. **Konversi Angka ke Ikon Bintang**: Angka rating (1–5) dari database tidak ditampilkan mentah sebagai teks, melainkan di-transformasi menjadi jejeran bintang emas (`★`) menggunakan `Array.from({ length: item.rating })`.
 2. **Badge Status Hidup**: Badge status "Aktif" dilengkapi dengan indikator titik hijau beranimasi *pulse* (`animate-pulse`). Ini memberikan micro-animation halus yang membuat dasbor terasa hidup, profesional, dan menyenangkan untuk digunakan oleh admin UMKM!
+
+## 21. Step 5 - Part 2: Migrasi UI Dasbor Tutorial (`/admin/tutorials`) & Dynamic Step Form Editor
+
+Melanjutkan migrasi UI dasbor, kita menghubungkan modul **Tutorial (`/admin/tutorials`)** ke server Golang REST API. Modul ini memiliki keunikan karena struktur datanya bersifat *Parent-Child*, di mana satu tutorial memiliki banyak langkah pengoperasian (`steps`).
+
+### Dynamic Form Array untuk Parent-Child Resource (Tutorial & Steps)
+
+Bagaimana kita mengelola form di mana admin bisa menambah, mengedit, atau menghapus langkah tutorial secara dinamis tanpa merefresh halaman?
+Pada komponen client (`AdminTutorialsClient.tsx`), kita memanfaatkan React state array:
+```ts
+const [formSteps, setFormSteps] = useState<ApiTutorialStep[]>([]);
+```
+- **Menambah Langkah**: Saat tombol `+ Tambah Langkah` ditekan, kita menyisipkan objek langkah baru ke akhir array:
+  `setFormSteps(prev => [...prev, { step_number: prev.length + 1, title: "", description: "" }])`
+- **Menghapus Langkah**: Kita menggunakan `filter` untuk membuang langkah berdasarkan indeksnya.
+- **Mengubah Isi Langkah**: Fungsi `handleStepChange` memperbarui properti khusus pada indeks yang diubah dengan teknik *immutable array copy* (`[...prev]`).
+
+### Sinkronisasi Data Transaksional Frontend-Backend
+
+Saat admin menekan tombol **"Simpan Tutorial"**, seluruh payload yang berisi informasi utama tutorial beserta array `steps` dikirim dalam satu HTTP request JSON ke Server Action (`createTutorialAction` / `updateTutorialAction`).
+Di sisi Golang backend (`internal/store/tutorials.go`), kita sudah mengimplementasikan transaksi atomik PostgreSQL (`tx.Begin(ctx)` -> Hapus langkah lama -> Insert langkah baru -> `tx.Commit`). Kombinasi ini menghasilkan arsitektur yang sangat responsif dan interaktif di browser, namun tetap dijamin 100% konsisten dan atomik di level database!
+
+### Penyederhanaan Kategori dengan Datalist HTML5 Native
+
+Fitur native HTML5 ini memberikan pengalaman *combobox / autocomplete* yang sangat ringan, mulus, dan dapat diakses dengan baik tanpa perlu menginstal library UI tambahan (*zero dependencies*, sesuai filosofi *Ponytail mode* minimalis)!
+
+## 22. Step 5 - Part 3: Migrasi UI Dasbor Langkah Pemesanan (`/admin/order-steps`) & Bulk Reordering
+
+Pada tahap ketiga Step 5 ini, kita mengintegrasikan Dasbor **Langkah Pemesanan (`/admin/order-steps`)** dengan endpoint Golang REST API (`PUT /v1/admin/order-steps`).
+
+### Pola Bulk Update / Simpan Urutan Simultan di Frontend
+
+Berbeda dengan dasbor lain yang menggunakan pola Create/Edit per item, urutan langkah pemesanan di landing page memiliki ketergantungan posisi (menggeser langkah 1 ke bawah otomatis mengubah posisi langkah 2 ke atas).
+Oleh karena itu, di komponen client (`AdminOrderStepsClient.tsx`), kita menerapkan desain **Bulk Reordering**:
+- Admin dapat menekan tombol `⬆️ Naik` atau `⬇️ Turun` pada setiap kartu langkah. Fungsi `handleMoveUp` dan `handleMoveDown` akan menukar posisi elemen dalam array `steps` sekaligus menghitung ulang nilai `order_index` (1, 2, 3, dst).
+- Saat tombol **"Simpan Seluruh Urutan & Perubahan"** ditekan, seluruh array dikirim serentak ke `replaceAllOrderStepsAction`. Di backend Go, transaksi atomik menghapus seluruh langkah lama dan menyisipkan urutan baru yang telah disempurnakan tanpa risiko duplikasi atau urutan terputus!
+
+### Fleksibilitas Nomor Tampil (`step_number`) vs Urutan Fisik (`order_index`)
+
+Kita memisahkan antara `step_number` (string) dan `order_index` (integer):
+- `order_index`: Dipakai oleh database untuk mengurutkan baris saat query (`ORDER BY order_index ASC`).
+- `step_number`: Teks visual yang ditampilkan di kartu landing page (seperti `"01"`, `"02"`, atau `"Langkah A"`). Admin diberi kendali penuh untuk mengedit teks visual ini sesuai selera branding UMKM!
+
+## 23. Step 5 - Part 4: Migrasi UI Dasbor Template WhatsApp (`/admin/whatsapp-templates`) & Interactive Helper Buttons
+
+Menutup **Step 5**, kita menyelesaikan migrasi Dasbor **Template WhatsApp (`/admin/whatsapp-templates`)** ke Golang REST API, tempat admin mengatur sapaan pesan otomatis yang terhubung dengan tombol-tombol CTA di seluruh website.
+
+### Peningkatan UX dengan Tombol Sisip Variabel (Interactive Placeholder Buttons)
+
+Pola pesan dinamis mengandalkan variabel seperti `{product_name}` yang nantinya diganti oleh kode frontend saat tombol WhatsApp ditekan. Agar admin tidak salah ketik (*typo*) saat menulis tanda kurung kurawal, kita menambahkan tombol bantuan interaktif di atas kotak pesan:
+- Tombol `+ {product_name}`, `+ {price}`, dan `+ {category}`.
+- Saat diklik, fungsi `insertPlaceholder(tag)` langsung menyisipkan variabel tersebut ke dalam teks pesan secara mulus. Ini adalah contoh penerapan *Error Prevention* yang sangat berharga bagi pengguna awam!
+
+### Otomatisasi Format snake_case untuk Nama Template
+
+Agar nama template konsisten dan aman saat dipanggil sebagai parameter pengenal, fungsi `handleNameChange` mengkonversi input teks admin menjadi format `snake_case` secara *real-time* (spasi diubah menjadi underscore `_` dan huruf besar diubah menjadi kecil).
+
+### Tonggak Besar: Keseluruhan Step 5 Selesai! 🎉
+
+Dengan rampungnya modul Template WhatsApp ini, **seluruh 5 modul Dasbor Admin UNA Project** (Produk, Testimoni, Tutorial, Langkah Pemesanan, dan Template WhatsApp) kini telah **100% termigrasi**!
+Semua halaman admin kini tidak lagi bergantung pada data mock statis di `src/data/`, melainkan beroperasi secara penuh menggunakan arsitektur **BFF (React Server Components + Next.js Server Actions)** yang berkomunikasi secara aman dengan **server Golang REST API** berperforma tinggi. Proyek UNA Project kini memiliki fondasi *full-stack* yang modern, tangguh, type-safe, dan siap dipelajari sebagai karya portofolio unggulan!
