@@ -167,20 +167,21 @@ Nilai credential asli tidak dibuat atau dimasukkan ke repository.
 
 ## 10. Batasan yang Masih Ada
 
-- Backend Golang dan database belum tersedia.
-- Login baru dapat bekerja setelah `POST /auth/login` dan `GET /auth/me` mengikuti kontrak API.
+- Database Supabase dan credential lokal tetap harus disiapkan oleh developer.
+- Login baru dapat bekerja setelah migration dijalankan dan akun admin dibuat.
 - Data dashboard masih berasal dari file lokal.
 - Create, update, delete, upload media, rate limiting, dan audit log belum diimplementasikan.
 - CSP ditunda sampai daftar origin production final.
 
 Urutan lanjutan yang aman:
 
-1. Buat `backend/` dengan health endpoint, migration, dan auth.
-2. Deploy API dan atur `API_URL` server-only pada Vercel.
-3. Verifikasi login dan cookie pada `admin.unaproject.my.id`.
-4. Hubungkan endpoint list admin.
-5. Implementasikan mutation satu resource terlebih dahulu, dimulai dari produk.
-6. Tambahkan upload setelah storage dan validasi file ditentukan.
+1. Jalankan migration dan buat admin pada Supabase development.
+2. Verifikasi login lokal dari `admin.localhost:3000`.
+3. Deploy API dan atur `API_URL` server-only pada Vercel.
+4. Verifikasi login dan cookie pada `admin.unaproject.my.id`.
+5. Hubungkan endpoint list admin.
+6. Implementasikan mutation satu resource terlebih dahulu, dimulai dari produk.
+7. Tambahkan upload setelah storage dan validasi file ditentukan.
 
 ## 11. Cara Verifikasi
 
@@ -209,3 +210,79 @@ Hasil verifikasi perubahan ini:
 - `npx tsc --noEmit`: lulus;
 - `npm run build`: lulus, seluruh route admin menjadi dynamic;
 - smoke test HTTP: public `200`, root admin host `307 -> /admin`, admin tanpa session `307 -> /admin/login`, login `200` dan `no-store`.
+
+## 12. Backend Authentication Golang
+
+Backend sekarang berada di `backend/` dan sengaja memakai library minimum:
+
+- `net/http` untuk routing dan server;
+- `pgxpool` untuk PostgreSQL;
+- `bcrypt` untuk password hash;
+- `golang-jwt/jwt` untuk JWT HS256;
+- `x/term` hanya untuk input password CLI tanpa echo.
+
+Endpoint yang tersedia:
+
+```text
+GET  /healthz
+POST /v1/auth/login
+GET  /v1/auth/me
+```
+
+### Login Flow
+
+1. Body dibatasi 16 KiB dan decoder menolak field JSON yang tidak dikenal.
+2. Email dinormalisasi dan password dibatasi maksimal 72 byte sesuai batas bcrypt.
+3. Email yang tidak ditemukan tetap menjalankan bcrypt terhadap dummy hash agar timing tidak langsung membocorkan keberadaan akun.
+4. Limiter global per instance membatasi 10 percobaan per menit.
+5. Login valid menghasilkan JWT dengan subject admin ID, role `admin`, issuer, audience, issued-at, dan expiry.
+6. Error credential selalu memakai pesan generik.
+
+### Session Verification
+
+`GET /v1/auth/me` memverifikasi signature, algoritma HS256, issuer, audience, expiry, role, dan subject. Setelah token valid, admin dibaca ulang dari PostgreSQL. Karena itu, menghapus admin dari database juga menghentikan akses token lama.
+
+Response hanya mengirim DTO aman:
+
+```json
+{
+  "id": "admin-uuid",
+  "email": "admin@unaproject.my.id",
+  "name": "UNA Admin"
+}
+```
+
+Password hash tidak pernah masuk response.
+
+### Database dan CLI
+
+`backend/migrations/001_init.sql` berisi baseline seluruh tabel agar migration dan kontrak schema tidak pecah menjadi dua sumber berbeda.
+
+Admin dibuat atau dirotasi melalui CLI:
+
+```bash
+cd backend
+go run ./cmd/create-admin -email admin@unaproject.my.id -name "UNA Admin"
+```
+
+Password diminta dua kali melalui terminal tanpa echo, wajib 12–72 byte, lalu disimpan sebagai bcrypt hash. Password tidak masuk argument, shell history, atau log.
+
+### Operasional
+
+- `backend/compose.yaml` menyediakan PostgreSQL 17 lokal, bind hanya ke `127.0.0.1`, dan menjalankan migration saat volume pertama dibuat.
+- Pool PostgreSQL dibatasi lima koneksi per instance.
+- HTTP server memiliki read-header, read, write, idle, dan graceful-shutdown timeout.
+- Health check menguji koneksi database dengan timeout dua detik.
+- Auth response memakai `Cache-Control: no-store` dan `X-Content-Type-Options: nosniff`.
+- Dockerfile memakai multi-stage build dan runtime distroless non-root.
+- `.env.example` boleh di-commit, sedangkan `.env` tetap diabaikan.
+
+### Test Backend
+
+Unit test mengunci:
+
+- issuance dan verification JWT;
+- penolakan secret lemah dan token kedaluwarsa;
+- reset login limiter;
+- flow HTTP login → JWT → `/auth/me`;
+- DTO `/auth/me` tidak membocorkan `password_hash`.

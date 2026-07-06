@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:api": "cd backend && go run ./cmd/api",
     "build": "next build",
+    "build:api": "cd backend && go build ./cmd/api",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test src/lib/*.test.mjs"
+    "test": "node --test src/lib/*.test.mjs",
+    "test:api": "cd backend && go test ./..."
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

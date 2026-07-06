@@ -22,11 +22,16 @@ Repository memakai monorepo sederhana tanpa Turborepo/Nx:
 
 ```text
 src/                 frontend Next.js
-backend/             Golang API dan migration (ditambahkan saat implementasi dimulai)
+backend/             Golang API, migration, CLI admin, dan Dockerfile
 docs/                kontrak lintas frontend/backend
 ```
 
 Frontend tetap di root agar deployment Vercel saat ini tidak perlu dipindah. Jangan menaruh `DATABASE_URL` atau query SQL runtime di frontend.
+
+Status implementasi backend saat ini:
+
+- tersedia: `/healthz`, `/v1/auth/login`, `/v1/auth/me`, JWT, bcrypt, PostgreSQL admin store, migration, dan CLI create-admin;
+- belum tersedia: endpoint produk, testimoni, tutorial, alur pemesanan, template WhatsApp, dan upload.
 
 ## Alur Publik
 

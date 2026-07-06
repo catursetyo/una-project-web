@@ -65,6 +65,17 @@ npm run build
 
 Gunakan npm karena repository memiliki `package-lock.json`.
 
+## Preflight Backend
+
+```bash
+cd backend
+go test ./...
+go vet ./...
+go build ./cmd/api ./cmd/create-admin
+```
+
+Image Cloud Run menggunakan `backend/Dockerfile`. Jalankan migration dan `cmd/create-admin` sebelum menerima login production; keduanya tidak dijalankan otomatis saat container start.
+
 ## Smoke Test
 
 Periksa minimal:

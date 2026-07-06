@@ -1,6 +1,6 @@
 # Kontrak Database untuk AI Agent
 
-Dokumen ini adalah baseline PostgreSQL untuk backend UNA Project. Terapkan perubahan melalui migration; jangan mengedit database production secara manual atau destruktif tanpa izin user dan backup.
+Dokumen ini menjelaskan baseline PostgreSQL untuk backend UNA Project. Migration executable berada di `backend/migrations/001_init.sql`; keduanya harus diperbarui bersama. Jangan mengedit database production secara manual atau destruktif tanpa izin user dan backup.
 
 ## Relasi
 

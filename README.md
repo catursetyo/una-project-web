@@ -2,7 +2,7 @@
 
 Remake modern website dan katalog digital UNA Project untuk produk jam waktu sholat digital, running text LED, JWS RGB, Android TV, dan layanan instalasi. 
 
-Proyek ini berevolusi menjadi monorepo sederhana: Next.js di root, Golang REST API di `backend/` saat mulai diimplementasikan, dan PostgreSQL di Supabase. Website publik menggunakan `unaproject.my.id`, sedangkan dashboard menggunakan `admin.unaproject.my.id` pada project Vercel yang sama.
+Proyek ini menggunakan monorepo sederhana: Next.js di root, Golang REST API di `backend/`, dan PostgreSQL di Supabase. Website publik menggunakan `unaproject.my.id`, sedangkan dashboard menggunakan `admin.unaproject.my.id` pada project Vercel yang sama.
 
 ## Menjalankan Proyek (Frontend)
 
@@ -26,7 +26,7 @@ npm run start  # menjalankan production build
 
 ```txt
 docs/                  Dokumentasi produk, arsitektur backend, dan design system
-backend/               Golang API dan migration (belum diimplementasikan)
+backend/               Golang API, migration, CLI admin, dan Dockerfile
 src/app/               Route dan layout Next.js (termasuk /admin untuk dashboard)
 src/components/layout/ Komponen layout global
 src/components/products/ Komponen domain katalog produk

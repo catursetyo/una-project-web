@@ -83,6 +83,8 @@ Cookie admin:
 
 Login harus mengembalikan pesan generik untuk email tidak dikenal dan password salah. Backend wajib memberi rate limit dan audit log aman pada endpoint login.
 
+Implementasi awal memakai limiter global per instance sebanyak 10 percobaan per menit. Ini cukup untuk local development dan baseline satu service, tetapi bukan rate limit terdistribusi; sebelum menaikkan jumlah instance atau traffic, tambahkan pembatasan di edge/Cloud Armor tanpa menghapus validasi aplikasi.
+
 ## Authorization
 
 - Next.js DAL memanggil `/auth/me` dan hanya meneruskan DTO minimal: `id`, `name`, dan `email`.

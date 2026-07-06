@@ -37,6 +37,9 @@ export async function login(formData: FormData) {
   }
 
   if (!response.ok) {
+    if (response.status === 429) {
+      loginError("rate-limit");
+    }
     loginError([401, 403].includes(response.status) ? "credentials" : "unavailable");
   }
 

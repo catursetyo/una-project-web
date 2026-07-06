@@ -8,6 +8,7 @@ const loginErrors: Record<string, string> = {
   configuration: "API backend belum dikonfigurasi.",
   credentials: "Email atau password tidak valid.",
   invalid: "Periksa kembali format email dan password.",
+  "rate-limit": "Terlalu banyak percobaan login. Tunggu satu menit lalu coba lagi.",
   unavailable: "Layanan login sedang tidak tersedia. Coba beberapa saat lagi.",
 };
 

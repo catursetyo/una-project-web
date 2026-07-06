@@ -264,7 +264,7 @@ We have completed the frontend restyling and are building a pragmatic monorepo u
 * **Backend API**: Golang REST API (Echo / Fiber / net/http, deployed on Google Cloud Run)
 * **Database**: PostgreSQL (hosted on Supabase Free Tier)
 
-The Next.js frontend stays at the repository root. The Golang API belongs in `backend/` when implemented. Production hosts are `unaproject.my.id` for public pages and `admin.unaproject.my.id` for the admin dashboard on the same Vercel project.
+The Next.js frontend stays at the repository root. The Golang API lives in `backend/`; auth is implemented while content CRUD is still pending. Production hosts are `unaproject.my.id` for public pages and `admin.unaproject.my.id` for the admin dashboard on the same Vercel project.
 
 Features to implement on the Admin Dashboard (`/admin/*`):
 1. **Product Management**: CRUD for products, prices, variants, images, specs, and features.

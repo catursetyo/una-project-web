@@ -2,6 +2,8 @@
 
 Gunakan dokumen ini saat menghubungkan Next.js dengan backend Golang. Jangan mengubah path, casing, atau bentuk respons hanya di salah satu sisi.
 
+Status: endpoint health dan authentication sudah tersedia di `backend/`; endpoint konten dan CRUD masih berupa kontrak target.
+
 ## Konvensi
 
 - Production: `https://api.unaproject.com/v1`.

@@ -37,7 +37,7 @@ Jika dokumen dan implementasi berbeda, jangan menebak. Jelaskan perbedaannya, la
 
 ## Batas Tanggung Jawab Repository
 
-Repository ini memakai monorepo sederhana: frontend Next.js tetap di root, sedangkan backend Golang ditempatkan di `backend/` ketika mulai diimplementasikan. Backend belum boleh diasumsikan tersedia hanya karena kontraknya sudah didokumentasikan.
+Repository ini memakai monorepo sederhana: frontend Next.js tetap di root dan backend Golang berada di `backend/`. Endpoint auth sudah diimplementasikan; endpoint konten/CRUD belum boleh diasumsikan tersedia.
 
 - Gunakan data lokal selama API belum tersedia.
 - Jangan membuat CRUD seolah berhasil bila persistence belum terhubung.
