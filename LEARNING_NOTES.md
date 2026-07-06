@@ -367,3 +367,55 @@ go test ./...  # api ✅, auth ✅
 go build ./cmd/api ./cmd/create-admin  # build — clean
 ```
 
+## 15. Products Admin UI (Next.js App Router + Server Actions + BFF Pattern)
+
+Pada tahap ini (Step 3), kita menghubungkan halaman **Manajemen Produk (`/admin/products`)** di frontend Next.js agar berhenti menggunakan data lokal sementara dan mulai berkomunikasi real-time dengan Golang REST API yang dibuat pada Step 2.
+
+### Arsitektur Rute & Route Overriding
+
+Sebelumnya, seluruh sub-halaman admin di-handle oleh satu rute dinamis: `src/app/admin/(dashboard)/[section]/page.tsx` yang membaca array lokal `adminSections`. 
+
+Untuk menghubungkan produk ke API, kita membuat folder spesifik:
+```text
+src/app/admin/(dashboard)/products/page.tsx
+```
+Dalam hukum routing **Next.js App Router**, rute statis yang spesifik (`/products`) akan selalu **memprioritaskan dan menimpa** rute dinamis (`/[section]`). Ini memungkinkan kita memigrasikan modul admin satu per satu (secara bertahap / *incremental migration*) tanpa merusak modul lain yang masih statis (seperti Testimoni atau Tutorial).
+
+### Pengambilan Data di Server Component (`page.tsx`)
+
+Halaman `AdminProductsPage` adalah sebuah **React Server Component (RSC)**:
+1. Memanggil helper `getVerifiedAdminToken()` yang mengecek validitas sesi admin di cookie `una_admin_session` via endpoint Go `GET /v1/auth/me`.
+2. Jika tidak valid atau belum login, server langsung melempar redirect ke `/admin/login` sebelum HTML dirender.
+3. Jika valid, RSC melakukan fetch ke `GET http://localhost:8080/v1/admin/products` dengan menyertakan header `Authorization: Bearer <token>`.
+4. Hasil JSON langsung di-passing sebagai props `initialProducts` ke komponen client (`AdminProductsClient`).
+
+**Keunggulan:** Browser pengguna tidak pernah melakukan request initial fetch ke port 8080. HTML yang sampai di browser sudah berisi data produk siap pakai (SEO & Perceived Performance sangat cepat).
+
+### Pola Server Actions & Defense in Depth (`actions.ts`)
+
+Untuk operasi mutasi (Create, Update, Delete), kita menggunakan **Next.js Server Actions** (`"use server"`):
+- `createProductAction(data)` -> `POST /v1/admin/products`
+- `updateProductAction(id, data)` -> `PUT /v1/admin/products/{id}`
+- `deleteProductAction(id)` -> `DELETE /v1/admin/products/{id}`
+
+**Prinsip Keamanan (Defense in Depth):**
+Walaupun tombol mutasi hanya ada di halaman admin yang sudah dilindungi, setiap Server Action tetap **wajib memverifikasi ulang sesi admin** di baris pertamanya (`await getVerifiedAdminToken()`). Ini mencegah serangan di mana pihak luar mencoba memanggil Server Action langsung via HTTP POST tanpa melalui UI browser.
+
+**Cache Revalidation (`revalidatePath`):**
+Setelah Go API berhasil mengubah data di database PostgreSQL, Server Action memanggil:
+```ts
+revalidatePath("/admin/products");
+revalidatePath("/admin");
+revalidatePath("/");
+```
+Ini menyuruh Next.js untuk menghapus cache halaman-halaman tersebut, sehingga saat user kembali melihat tabel produk atau katalog depan, datanya sudah 100% terbaru tanpa perlu refresh browser manual.
+
+### Interaktivitas Client Component (`AdminProductsClient.tsx`)
+
+Komponen UI dibangun dengan pola *Progressive Enhancement* menggunakan vanilla React hooks (tanpa library form eksternal yang berat, sesuai prinsip *Ponytail Mode* / YAGNI):
+- **Pencarian & Filter Real-time:** Menggunakan `useMemo` untuk memfilter array produk berdasarkan nama, slug, dan kategori secara instan di memori browser.
+- **Form Varian Dinamis:** Menggunakan state array `formVariants` di mana admin bisa menambah (`+ Tambah Varian`) atau menghapus baris varian harga sebelum disubmit.
+- **Daftar Fitur Newline:** Untuk memudahkan UMKM, input fitur dibuat berupa `textarea` di mana setiap baris baru (Enter) akan dipisah menjadi array string oleh kode: `formFeaturesText.split("\n").map(s => s.trim())`.
+- **Desain Premium UNA Project:** Menggunakan token dari `globals.css` seperti `gold-cta`, `motion-button`, dan font digital LED (`font-led` / VT323) untuk preview ikon produk, serta badge status hijau/merah dengan animasi *pulse* berkesan hidup.
+
+

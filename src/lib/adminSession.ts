@@ -36,3 +36,11 @@ export const verifyAdminSession = cache(async (): Promise<AdminProfile | null> =
     return null;
   }
 });
+
+export const getVerifiedAdminToken = cache(async (): Promise<string | null> => {
+  const admin = await verifyAdminSession();
+  if (!admin) {
+    return null;
+  }
+  return (await cookies()).get(ADMIN_SESSION_COOKIE)?.value ?? null;
+});
