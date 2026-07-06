@@ -1,11 +1,13 @@
-import { orderSteps } from "@/src/data/landing";
-import { createWhatsAppLink } from "@/src/lib/whatsapp";
+import { getPublicOrderSteps, getDynamicWhatsAppLink } from "@/src/lib/publicApi";
 import { Button } from "@/src/components/ui/Button";
 import { Icon } from "@/src/components/ui/Icon";
 import { SectionLabel } from "@/src/components/ui/SectionLabel";
 import { Container } from "@/src/components/layout/Container";
 
-export function OrderStepsSection() {
+export async function OrderStepsSection() {
+  const orderSteps = await getPublicOrderSteps();
+  const waLink = await getDynamicWhatsAppLink({ category: "Konsultasi" });
+
   return (
     <section id="order" className="relative overflow-hidden bg-una-deep py-12 text-white sm:py-14 lg:py-16">
       <div className="islamic-star-pattern absolute inset-0 opacity-[0.04]" />
@@ -48,10 +50,7 @@ export function OrderStepsSection() {
 
         <div className="mt-8 text-center">
           <Button
-            href={createWhatsAppLink({
-              message:
-                "Assalamualaikum, saya ingin konsultasi pemasangan JWS Digital UNA Project.",
-            })}
+            href={waLink}
             target="_blank"
             variant="gold"
           >

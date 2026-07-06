@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductMediaPlaceholder } from "@/src/components/products/ProductMediaPlaceholder";
 import { WhatsAppButton } from "@/src/components/ui/WhatsAppButton";
-import { products } from "@/src/data/products";
+import { getPublicProducts, getPublicProductBySlug } from "@/src/lib/publicApi";
 import { formatPrice } from "@/src/lib/formatPrice";
 
 type ProductDetailPageProps = {
@@ -12,11 +12,8 @@ type ProductDetailPageProps = {
   }>;
 };
 
-function getProductBySlug(slug: string) {
-  return products.find((product) => product.slug === slug);
-}
-
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const products = await getPublicProducts();
   return products.map((product) => ({
     slug: product.slug,
   }));
@@ -26,7 +23,7 @@ export async function generateMetadata({
   params,
 }: ProductDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getPublicProductBySlug(slug);
 
   if (!product) {
     return {
@@ -44,7 +41,7 @@ export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getPublicProductBySlug(slug);
 
   if (!product) {
     notFound();
@@ -157,7 +154,12 @@ export default async function ProductDetailPage({
               </p>
 
               <div className="mt-8">
-                <WhatsAppButton productName={product.name} fullWidth />
+                <WhatsAppButton
+                  productName={product.name}
+                  category="Produk"
+                  price={formatPrice(product.priceStartFrom)}
+                  fullWidth
+                />
               </div>
             </div>
           </aside>

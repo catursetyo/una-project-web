@@ -635,3 +635,48 @@ Agar nama template konsisten dan aman saat dipanggil sebagai parameter pengenal,
 
 Dengan rampungnya modul Template WhatsApp ini, **seluruh 5 modul Dasbor Admin UNA Project** (Produk, Testimoni, Tutorial, Langkah Pemesanan, dan Template WhatsApp) kini telah **100% termigrasi**!
 Semua halaman admin kini tidak lagi bergantung pada data mock statis di `src/data/`, melainkan beroperasi secara penuh menggunakan arsitektur **BFF (React Server Components + Next.js Server Actions)** yang berkomunikasi secara aman dengan **server Golang REST API** berperforma tinggi. Proyek UNA Project kini memiliki fondasi *full-stack* yang modern, tangguh, type-safe, dan siap dipelajari sebagai karya portofolio unggulan!
+
+## 24. Step 6: Integrasi Halaman Publik Depan ke Live Golang API & Pola Resiliensi BFF
+
+Setelah seluruh Dasbor Admin terhubung dengan server Golang, kita melangkah ke tahap krusial berikutnya: **mengintegrasikan halaman publik depan (`/`, `/products`, `/tutorial`, `/order`) serta helper `whatsapp.ts` ke endpoint publik Golang REST API (`GET /v1/...`)**.
+
+### Arsitektur Pengambilan Data Publik yang Tangguh (Resilient Public Data Fetching)
+
+Bagaimana cara menghubungkan halaman depan website ke backend API tanpa mengorbankan stabilitas? Apa yang terjadi jika server API sedang offline, mengalami gangguan jaringan, atau saat proses build statis (`next build`) dijalankan di mana server API belum aktif?
+Untuk menjawab tantangan ini, kita membangun modul sentral `src/lib/publicApi.ts` yang menerapkan **Pola Resiliensi & Fallback**:
+```ts
+export async function getPublicProducts(): Promise<Product[]> {
+  const apiUrl = normalizeApiUrl(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL);
+  if (!apiUrl) return fallbackProducts;
+
+  try {
+    const res = await fetch(`${apiUrl}/products`, {
+      next: { revalidate: 60 },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return fallbackProducts;
+    const json = await res.json();
+    if (json.success && json.data) {
+      // Filter hanya produk yang aktif
+      const items = (Array.isArray(json.data) ? json.data : json.data.items || []) as ApiProduct[];
+      const activeItems = items.filter((item) => item.is_active !== false);
+      if (activeItems.length > 0) return activeItems.map(transformApiProduct);
+    }
+  } catch (err) {
+    console.error("[publicApi] Failed to fetch products from API, using fallback:", err);
+  }
+  return fallbackProducts;
+}
+```
+- **Revalidate & Timeout**: Setiap request dibekali *cache revalidation* 60 detik dan *timeout* 5 detik agar tidak menggantung terlalu lama.
+- **Graceful Fallback**: Jika request gagal, server timeout, atau data kosong, fungsi tidak akan melempar error yang membuat layar pengguna blank/rusak (*white screen of death*). Sebaliknya, sistem secara mulus beralih menggunakan data statis dari `src/data/*` sebagai cadangan darurat! Ini adalah standar rekayasa tingkat tinggi untuk memastikan website UMKM memiliki ketersediaan 100% (*high availability*).
+
+### Transformasi Kontrak API ke UI Token (Data Adapter Pattern)
+
+Backend Golang menggunakan penamaan *snake_case* standar database (`short_description`, `price_start_from`, `image_url`), sedangkan UI Next.js kita menggunakan *camelCase* (`shortDescription`, `priceStartFrom`, `image`).
+Di dalam `publicApi.ts`, kita menerapkan **Data Adapter Pattern** melalui fungsi seperti `transformApiProduct` dan `transformApiTutorial`. Adapter ini menerjemahkan format backend ke format UI, sehingga ratusan baris kode komponen di `src/components/` tidak perlu diubah sama sekali!
+
+### Penyuntikan Pesan WhatsApp Dinamis di Server Components
+
+Tombol konsultasi WhatsApp (`WhatsAppButton.tsx`) kini dirancang sebagai **Async React Server Component (RSC)**.
+Saat halaman katalog atau detail produk diriset di server, komponen ini memanggil `getDynamicWhatsAppLink({ category, productName, price })` yang akan mencari template pesan default di database dan mengganti variabel `{product_name}` serta `{price}` secara langsung di level server. Hasilnya, pengunjung mendapatkan tautan WhatsApp yang sangat personal dan dinamis tanpa ada tambahan beban script JavaScript di browser klien!
