@@ -36,6 +36,30 @@ func (f fakeStore) AdminByID(_ context.Context, id string) (store.Admin, error) 
 	return f.admin, nil
 }
 
+// ponytail: stubs — auth tests don't touch products
+func (f fakeStore) ActiveProducts(context.Context, string, *bool) ([]store.Product, error) {
+	return nil, nil
+}
+func (f fakeStore) ActiveProductBySlug(context.Context, string) (store.Product, error) {
+	return store.Product{}, store.ErrProductNotFound
+}
+func (f fakeStore) AllProducts(context.Context, *bool, int, int) ([]store.Product, int, error) {
+	return nil, 0, nil
+}
+func (f fakeStore) ProductByID(context.Context, string) (store.Product, error) {
+	return store.Product{}, store.ErrProductNotFound
+}
+func (f fakeStore) VariantsByProductID(context.Context, string) ([]store.ProductVariant, error) {
+	return nil, nil
+}
+func (f fakeStore) CreateProduct(context.Context, store.Product, []store.ProductVariant) (string, error) {
+	return "", nil
+}
+func (f fakeStore) UpdateProduct(context.Context, string, store.Product, []store.ProductVariant) error {
+	return nil
+}
+func (f fakeStore) DeleteProduct(context.Context, string) error { return nil }
+
 func TestLoginAndMe(t *testing.T) {
 	hash, err := bcrypt.GenerateFromPassword([]byte("valid-password-123"), bcrypt.MinCost)
 	if err != nil {

@@ -286,3 +286,84 @@ Unit test mengunci:
 - reset login limiter;
 - flow HTTP login → JWT → `/auth/me`;
 - DTO `/auth/me` tidak membocorkan `password_hash`.
+
+## 13. Auth Middleware (requireAdmin)
+
+Sebelumnya JWT verification ditulis inline di handler `me()`. Sekarang di-extract menjadi middleware `requireAdmin` yang bisa dipakai semua endpoint admin.
+
+Alur:
+
+```text
+Request masuk
+  → recover (panic handler)
+    → securityHeaders (Cache-Control, nosniff)
+      → mux routing
+        → requireAdmin (JWT verify → admin_id di context)
+          → handler (baca adminID(r) dari context)
+```
+
+Yang dipelajari:
+
+- **Context value pattern**: middleware menulis data ke `context.WithValue`, handler membaca dengan `r.Context().Value()`. Ini cara idiomatic Go untuk meneruskan data antar middleware tanpa global state.
+- **Typed context key**: Go memakai tipe privat `contextKey` sebagai key agar package lain tidak bisa menimpa atau membaca secara tidak sengaja.
+- **Middleware chaining**: `s.requireAdmin(s.me)` mengembalikan `http.HandlerFunc` baru. Handler asli hanya dipanggil kalau JWT valid.
+- **YAGNI CORS**: karena arsitektur BFF (browser tidak pernah memanggil Go API langsung), CORS tidak diperlukan.
+
+## 14. Products CRUD Backend
+
+Resource CRUD pertama yang menjadi template untuk resource lainnya. Endpoint:
+
+```text
+GET    /v1/products                   publik — produk aktif + filter
+GET    /v1/products/{slug}            publik — detail + varian
+GET    /v1/admin/products             admin  — semua produk + paginasi
+GET    /v1/admin/products/{id}        admin  — detail + varian
+POST   /v1/admin/products             admin  — buat produk + varian
+PUT    /v1/admin/products/{id}        admin  — update produk + replace varian
+DELETE /v1/admin/products/{id}        admin  — hapus (cascade ke varian)
+```
+
+### Arsitektur Store Layer
+
+File `backend/internal/store/products.go` berisi query PostgreSQL. Semua SQL ditulis langsung (tanpa ORM) agar query terlihat eksplisit dan bisa dioptimasi.
+
+Pola penting:
+
+- **Transaction untuk parent+child**: `CreateProduct` dan `UpdateProduct` memakai `pool.Begin()` untuk memastikan produk dan variannya disimpan dalam satu transaksi atomik. Kalau insert varian gagal, produk juga tidak tersimpan.
+- **Replace-all strategy untuk varian**: saat update, semua varian lama dihapus lalu diganti dengan varian baru. Ini lebih sederhana daripada diff individual (bandingkan mana yang berubah/dihapus/ditambah). Untuk jumlah varian kecil (<10), ini optimal.
+- **Unique violation detection**: `isUniqueViolation` memeriksa PostgreSQL error code `23505` untuk menangkap slug duplikat dan mengembalikan `ErrSlugConflict`.
+- **Constant columns**: `productCols` mendefinisikan kolom SELECT sekali, dipakai di semua query. Ini menghindari perbedaan urutan kolom antara query dan `Scan()`.
+
+### Arsitektur Handler Layer
+
+File `backend/internal/api/products.go` berisi HTTP handler, validasi, dan konversi tipe.
+
+Pola penting:
+
+- **Separation of types**: `productJSON` dan `variantJSON` untuk response, `productInput` dan `variantInput` untuk request. Store types (`store.Product`) tidak pernah langsung di-marshal ke JSON.
+- **Validation before store**: handler memvalidasi input sebelum memanggil store. Error validasi dikembalikan sebagai field-level error (misal `{"slug": "required"}`) dengan status 422.
+- **Slug format check**: slug harus lowercase alphanumeric + hyphen, tidak boleh diawali/diakhiri hyphen. Ini mencegah URL yang aneh.
+- **Re-fetch after mutation**: setelah create/update, produk di-fetch ulang dari database untuk mendapatkan field yang di-generate (id, timestamps). Ini menambah 2 query tapi menjamin response akurat.
+- **Path values**: Go 1.22+ ServeMux mendukung `{slug}` dan `{id}` dalam pattern route. Handler membaca dengan `r.PathValue("slug")`.
+
+### Interface Pattern
+
+`Store` interface di `server.go` mendefinisikan semua method yang dibutuhkan server. `Postgres` struct di `store/` mengimplementasikannya. Di test, `fakeStore` mengimplementasikan interface yang sama dengan stub methods.
+
+```text
+Store interface (server.go)
+  ├── Postgres struct (store/postgres.go + store/products.go) — implementasi nyata
+  └── fakeStore (server_test.go) — implementasi test
+```
+
+Ini memungkinkan unit test handler tanpa database.
+
+### Validasi
+
+```bash
+cd backend
+go vet ./...   # static analysis — clean
+go test ./...  # api ✅, auth ✅
+go build ./cmd/api ./cmd/create-admin  # build — clean
+```
+

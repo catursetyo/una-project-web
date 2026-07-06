@@ -16,28 +16,36 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AdminStore interface {
+type Store interface {
 	Ping(context.Context) error
 	AdminByEmail(context.Context, string) (store.Admin, error)
 	AdminByID(context.Context, string) (store.Admin, error)
+	ActiveProducts(context.Context, string, *bool) ([]store.Product, error)
+	ActiveProductBySlug(context.Context, string) (store.Product, error)
+	AllProducts(context.Context, *bool, int, int) ([]store.Product, int, error)
+	ProductByID(context.Context, string) (store.Product, error)
+	VariantsByProductID(context.Context, string) ([]store.ProductVariant, error)
+	CreateProduct(context.Context, store.Product, []store.ProductVariant) (string, error)
+	UpdateProduct(context.Context, string, store.Product, []store.ProductVariant) error
+	DeleteProduct(context.Context, string) error
 }
 
 type Server struct {
-	store     AdminStore
+	store     Store
 	tokens    *auth.Tokens
 	limiter   *auth.LoginLimiter
 	dummyHash []byte
 	logger    *slog.Logger
 }
 
-func NewServer(adminStore AdminStore, tokens *auth.Tokens, logger *slog.Logger) (*Server, error) {
+func NewServer(st Store, tokens *auth.Tokens, logger *slog.Logger) (*Server, error) {
 	dummyHash, err := bcrypt.GenerateFromPassword([]byte("invalid-admin-password"), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Server{
-		store:     adminStore,
+		store:     st,
 		tokens:    tokens,
 		limiter:   auth.NewLoginLimiter(10, time.Minute),
 		dummyHash: dummyHash,
@@ -50,6 +58,18 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("GET /healthz", s.health)
 	mux.HandleFunc("POST /v1/auth/login", s.login)
 	mux.HandleFunc("GET /v1/auth/me", s.requireAdmin(s.me))
+
+	// Public products
+	mux.HandleFunc("GET /v1/products", s.listPublicProducts)
+	mux.HandleFunc("GET /v1/products/{slug}", s.getPublicProduct)
+
+	// Admin products (JWT required)
+	mux.HandleFunc("GET /v1/admin/products", s.requireAdmin(s.listAdminProducts))
+	mux.HandleFunc("GET /v1/admin/products/{id}", s.requireAdmin(s.getAdminProduct))
+	mux.HandleFunc("POST /v1/admin/products", s.requireAdmin(s.createProduct))
+	mux.HandleFunc("PUT /v1/admin/products/{id}", s.requireAdmin(s.updateProduct))
+	mux.HandleFunc("DELETE /v1/admin/products/{id}", s.requireAdmin(s.deleteProduct))
+
 	// ponytail: CORS tidak diperlukan — arsitektur BFF berarti browser
 	// tidak pernah memanggil Go API secara langsung, hanya Next.js server.
 	return s.recover(s.securityHeaders(mux))
