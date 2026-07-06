@@ -49,7 +49,9 @@ func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", s.health)
 	mux.HandleFunc("POST /v1/auth/login", s.login)
-	mux.HandleFunc("GET /v1/auth/me", s.me)
+	mux.HandleFunc("GET /v1/auth/me", s.requireAdmin(s.me))
+	// ponytail: CORS tidak diperlukan — arsitektur BFF berarti browser
+	// tidak pernah memanggil Go API secara langsung, hanya Next.js server.
 	return s.recover(s.securityHeaders(mux))
 }
 
@@ -117,23 +119,41 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// requireAdmin verifies JWT from Authorization header and injects admin ID
+// into request context. All /admin/* handlers use this middleware.
+func (s *Server) requireAdmin(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		rawToken, ok := bearerToken(r.Header.Get("Authorization"))
+		if !ok {
+			writeError(w, http.StatusUnauthorized, "ERR_UNAUTHORIZED", "Authentication required")
+			return
+		}
+		claims, err := s.tokens.Verify(rawToken)
+		if err != nil {
+			writeError(w, http.StatusUnauthorized, "ERR_UNAUTHORIZED", "Authentication required")
+			return
+		}
+		ctx := context.WithValue(r.Context(), adminIDKey, claims.Subject)
+		next(w, r.WithContext(ctx))
+	}
+}
+
+type contextKey string
+
+const adminIDKey contextKey = "admin_id"
+
+// adminID reads the authenticated admin ID from request context.
+// Only valid inside handlers wrapped with requireAdmin.
+func adminID(r *http.Request) string {
+	id, _ := r.Context().Value(adminIDKey).(string)
+	return id
+}
+
 func (s *Server) me(w http.ResponseWriter, r *http.Request) {
-	rawToken, ok := bearerToken(r.Header.Get("Authorization"))
-	if !ok {
-		writeError(w, http.StatusUnauthorized, "ERR_UNAUTHORIZED", "Authentication required")
-		return
-	}
-
-	claims, err := s.tokens.Verify(rawToken)
-	if err != nil {
-		writeError(w, http.StatusUnauthorized, "ERR_UNAUTHORIZED", "Authentication required")
-		return
-	}
-
-	admin, err := s.store.AdminByID(r.Context(), claims.Subject)
+	admin, err := s.store.AdminByID(r.Context(), adminID(r))
 	if err != nil {
 		if !errors.Is(err, store.ErrAdminNotFound) {
-			s.logger.Error("admin session query failed", "admin_id", claims.Subject, "error", err)
+			s.logger.Error("admin session query failed", "admin_id", adminID(r), "error", err)
 		}
 		writeError(w, http.StatusUnauthorized, "ERR_UNAUTHORIZED", "Authentication required")
 		return
