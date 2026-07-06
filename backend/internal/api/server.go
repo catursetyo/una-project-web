@@ -34,6 +34,14 @@ type Store interface {
 	CreateTestimonial(context.Context, *store.Testimonial) error
 	UpdateTestimonial(context.Context, *store.Testimonial) error
 	DeleteTestimonial(context.Context, string) error
+	ListPublicTutorials(context.Context) ([]store.Tutorial, error)
+	GetPublicTutorialBySlug(context.Context, string) (store.Tutorial, error)
+	ListAdminTutorials(context.Context) ([]store.Tutorial, error)
+	GetTutorialByID(context.Context, string) (store.Tutorial, error)
+	StepsByTutorialID(context.Context, string) ([]store.TutorialStep, error)
+	CreateTutorial(context.Context, store.Tutorial, []store.TutorialStep) (string, error)
+	UpdateTutorial(context.Context, string, store.Tutorial, []store.TutorialStep) error
+	DeleteTutorial(context.Context, string) error
 }
 
 type Server struct {
@@ -85,6 +93,17 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("POST /v1/admin/testimonials", s.requireAdmin(s.createTestimonial))
 	mux.HandleFunc("PUT /v1/admin/testimonials/{id}", s.requireAdmin(s.updateTestimonial))
 	mux.HandleFunc("DELETE /v1/admin/testimonials/{id}", s.requireAdmin(s.deleteTestimonial))
+
+	// Public tutorials
+	mux.HandleFunc("GET /v1/tutorials", s.listPublicTutorials)
+	mux.HandleFunc("GET /v1/tutorials/{slug}", s.getPublicTutorial)
+
+	// Admin tutorials (JWT required)
+	mux.HandleFunc("GET /v1/admin/tutorials", s.requireAdmin(s.listAdminTutorials))
+	mux.HandleFunc("GET /v1/admin/tutorials/{id}", s.requireAdmin(s.getAdminTutorial))
+	mux.HandleFunc("POST /v1/admin/tutorials", s.requireAdmin(s.createTutorial))
+	mux.HandleFunc("PUT /v1/admin/tutorials/{id}", s.requireAdmin(s.updateTutorial))
+	mux.HandleFunc("DELETE /v1/admin/tutorials/{id}", s.requireAdmin(s.deleteTutorial))
 
 	// ponytail: CORS tidak diperlukan — arsitektur BFF berarti browser
 	// tidak pernah memanggil Go API secara langsung, hanya Next.js server.

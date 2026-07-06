@@ -455,3 +455,37 @@ Alasannya adalah agar respons JSON error yang dihasilkan konsisten dengan standa
 }
 ```
 Konsistensi ini membuat frontend Next.js nantinya bisa menggunakan satu hook atau komponen error handling yang sama untuk seluruh form admin.
+
+## 17. Remaining Resources Backend - Part 2: Tutorials & Steps CRUD (Parent-Child Transaction)
+
+Pada tahap lanjutan **Step 4** ini, kita mengimplementasikan modul **Tutorials (`tutorials` + `tutorial_steps`)** di server Golang REST API.
+
+### Relasi Parent-Child dalam Transaksi Atomik
+
+Berbeda dengan Testimoni yang merupakan *single-table resource*, modul **Tutorials** memiliki relasi satu-ke-banyak (*one-to-many*) dengan tabel `tutorial_steps`. Setiap tutorial dapat memiliki beberapa langkah panduan (step 1, step 2, dst).
+Oleh karena itu, kita kembali menerapkan pola **database transaction (`tx.Begin(ctx)`)** seperti pada pembuatan produk dan varian harganya:
+1. Memulai transaksi database (`tx`).
+2. Meng-insert baris ke tabel `tutorials` dan mendapatkan UUID baru (`RETURNING id::text`).
+3. Meng-loop array `steps` dan meng-insert setiap langkah ke tabel `tutorial_steps` dengan mengaitkan `tutorial_id` ke UUID tersebut.
+4. Melakukan `tx.Commit(ctx)`. Jika salah satu langkah gagal disimpan, seluruh tutorial akan di-rollback sehingga database tidak pernah menyimpan data yang setengah jadi (*orphaned records*).
+
+### Strategi "Replace All Steps" pada Update (`UpdateTutorial`)
+
+Sesuai prinsip *Ponytail Mode* (YAGNI), ketika admin memperbarui tutorial beserta daftar langkah-langkahnya, kita tidak menulis algoritma rumit untuk mencari langkah mana yang diedit, ditambah, atau dihapus satu per satu (*array diffing*). 
+Sebagai gantinya, di dalam transaksi atomik, kita mengeksekusi:
+```sql
+DELETE FROM tutorial_steps WHERE tutorial_id = $1;
+```
+Lalu langsung meng-insert ulang seluruh daftar langkah yang dikirim dari form admin (`insertTutorialSteps`). Strategi ini 100% aman karena berjalan di dalam transaksi atomik (jika insert baru gagal, penghapusan lama otomatis dibatalkan oleh database) dan membuat kode jauh lebih bersih, ringkas, serta bebas bug!
+
+### Pemanfaatan `ON DELETE CASCADE` pada Database
+
+Pada method `DeleteTutorial(ctx, id)`, kita cukup mengeksekusi satu perintah SQL sederhana:
+```sql
+DELETE FROM tutorials WHERE id::uuid = $1;
+```
+Kita tidak perlu menulis perintah untuk menghapus baris di tabel `tutorial_steps` secara manual. Mengapa? Karena pada saat kita merancang skema PostgreSQL (`001_init.sql`), foreign key `tutorial_id` sudah dideklarasikan dengan klausul:
+```sql
+tutorial_id UUID NOT NULL REFERENCES tutorials(id) ON DELETE CASCADE
+```
+Klausul `ON DELETE CASCADE` memerintahkan PostgreSQL untuk otomatis menyapu bersih seluruh baris anak di tabel `tutorial_steps` begitu baris induknya di tabel `tutorials` dihapus!

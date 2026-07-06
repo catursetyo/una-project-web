@@ -74,6 +74,26 @@ func (f fakeStore) CreateTestimonial(context.Context, *store.Testimonial) error 
 func (f fakeStore) UpdateTestimonial(context.Context, *store.Testimonial) error { return nil }
 func (f fakeStore) DeleteTestimonial(context.Context, string) error            { return nil }
 
+// ponytail: stubs — auth tests don't touch tutorials
+func (f fakeStore) ListPublicTutorials(context.Context) ([]store.Tutorial, error) { return nil, nil }
+func (f fakeStore) GetPublicTutorialBySlug(context.Context, string) (store.Tutorial, error) {
+	return store.Tutorial{}, store.ErrTutorialNotFound
+}
+func (f fakeStore) ListAdminTutorials(context.Context) ([]store.Tutorial, error) { return nil, nil }
+func (f fakeStore) GetTutorialByID(context.Context, string) (store.Tutorial, error) {
+	return store.Tutorial{}, store.ErrTutorialNotFound
+}
+func (f fakeStore) StepsByTutorialID(context.Context, string) ([]store.TutorialStep, error) {
+	return nil, nil
+}
+func (f fakeStore) CreateTutorial(context.Context, store.Tutorial, []store.TutorialStep) (string, error) {
+	return "", nil
+}
+func (f fakeStore) UpdateTutorial(context.Context, string, store.Tutorial, []store.TutorialStep) error {
+	return nil
+}
+func (f fakeStore) DeleteTutorial(context.Context, string) error { return nil }
+
 func TestLoginAndMe(t *testing.T) {
 	hash, err := bcrypt.GenerateFromPassword([]byte("valid-password-123"), bcrypt.MinCost)
 	if err != nil {
