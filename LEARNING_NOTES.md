@@ -418,4 +418,40 @@ Komponen UI dibangun dengan pola *Progressive Enhancement* menggunakan vanilla R
 - **Daftar Fitur Newline:** Untuk memudahkan UMKM, input fitur dibuat berupa `textarea` di mana setiap baris baru (Enter) akan dipisah menjadi array string oleh kode: `formFeaturesText.split("\n").map(s => s.trim())`.
 - **Desain Premium UNA Project:** Menggunakan token dari `globals.css` seperti `gold-cta`, `motion-button`, dan font digital LED (`font-led` / VT323) untuk preview ikon produk, serta badge status hijau/merah dengan animasi *pulse* berkesan hidup.
 
+## 16. Remaining Resources Backend - Part 1: Testimonials CRUD (Golang REST API)
 
+Pada tahap awal **Step 4** ini, kita mulai mengimplementasikan *backend resources* yang tersisa secara bertahap (satu per satu sesuai pola yang sama), dimulai dari modul **Testimoni (`testimonials`)**.
+
+### Pola Arsitektur Konsisten (Store -> Interface -> Handler)
+
+Kita mempertahankan arsitektur bersih yang sama dengan modul produk:
+1. **Store Layer (`internal/store/testimonials.go`)**: Mendefinisikan struct `Testimonial` dan mengeksekusi query raw SQL menggunakan `pgxpool`. Terdapat 6 method utama:
+   - `ListPublicTestimonials`: Mengambil testimoni aktif (`WHERE is_active = true`) diurutkan berdasarkan `order_index ASC, created_at DESC`.
+   - `ListAdminTestimonials`: Mengambil seluruh testimoni (aktif maupun nonaktif) untuk dasbor admin.
+   - `GetTestimonialByID`, `CreateTestimonial`, `UpdateTestimonial`, dan `DeleteTestimonial`.
+2. **Interface Contract (`internal/api/server.go`)**: Mendaftarkan keenam method tersebut ke dalam interface `Store`, dan mendaftarkan rute HTTP di `Handler()`:
+   - `GET /v1/testimonials` (Publik)
+   - `GET /v1/admin/testimonials` & CRUD lainnya (Dilindungi oleh middleware `requireAdmin` / JWT Auth).
+3. **HTTP Handlers (`internal/api/testimonials.go`)**: Menangani konversi JSON DTO, pembacaan path parameter (`r.PathValue("id")`), dan validasi input.
+
+### Perbedaan dengan Products CRUD (Single-Table Resource)
+
+Berbeda dengan produk yang memiliki struktur *parent-child* (`products` dan `product_variants`) yang mewajibkan penggunaan database transaction (`tx.Begin(ctx)`), tabel `testimonials` adalah entitas tunggal (*single-table resource*). 
+Oleh karena itu, operasi insert, update, dan delete dapat langsung dieksekusi menggunakan `p.pool.QueryRow` atau `p.pool.Exec` tanpa perlu membuka transaksi atomik eksplisit. Ini menjaga kode tetap ringkas dan performan sesuai prinsip *Ponytail Mode* (YAGNI).
+
+### Keseragaman Format Error Validasi (`map[string]any`)
+
+Dalam fungsi `validateTestimonialInput`, kita mengembalikan tipe data `map[string]any` untuk menampung daftar error (misal: judul kosong atau rating di luar angka 1-5).
+Alasannya adalah agar respons JSON error yang dihasilkan konsisten dengan standar kontrak UNA Project:
+```json
+{
+  "success": false,
+  "error_code": "ERR_VALIDATION",
+  "message": "Validation failed",
+  "errors": {
+    "title": "required",
+    "rating": "must be between 1 and 5"
+  }
+}
+```
+Konsistensi ini membuat frontend Next.js nantinya bisa menggunakan satu hook atau komponen error handling yang sama untuk seluruh form admin.

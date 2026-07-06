@@ -60,6 +60,20 @@ func (f fakeStore) UpdateProduct(context.Context, string, store.Product, []store
 }
 func (f fakeStore) DeleteProduct(context.Context, string) error { return nil }
 
+// ponytail: stubs — auth tests don't touch testimonials
+func (f fakeStore) ListPublicTestimonials(context.Context) ([]store.Testimonial, error) {
+	return nil, nil
+}
+func (f fakeStore) ListAdminTestimonials(context.Context) ([]store.Testimonial, error) {
+	return nil, nil
+}
+func (f fakeStore) GetTestimonialByID(context.Context, string) (store.Testimonial, error) {
+	return store.Testimonial{}, store.ErrTestimonialNotFound
+}
+func (f fakeStore) CreateTestimonial(context.Context, *store.Testimonial) error { return nil }
+func (f fakeStore) UpdateTestimonial(context.Context, *store.Testimonial) error { return nil }
+func (f fakeStore) DeleteTestimonial(context.Context, string) error            { return nil }
+
 func TestLoginAndMe(t *testing.T) {
 	hash, err := bcrypt.GenerateFromPassword([]byte("valid-password-123"), bcrypt.MinCost)
 	if err != nil {
