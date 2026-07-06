@@ -788,11 +788,15 @@ go vet ./...              lulus
 PostgreSQL migration      lulus
 GET /healthz              200
 GET /v1/order-steps       200, 7 langkah benar
+GET /v1/auth/me           200 dengan JWT admin lokal sementara
+GET /admin/*              200 untuk 6 route dashboard terautentikasi
 ```
 
 Database development berisi 14 produk, 23 varian, 3 testimoni, 2 tutorial, 9 tutorial step, 7 order step, dan 3 template WhatsApp.
 
-Browser automation lokal belum dapat dijalankan karena runner tidak memberi izin membuka port `3000` sebelum timeout. Production build dan type-check internal Next.js tetap lulus. Pemeriksaan manual yang disarankan adalah membuka seluruh modul admin, scroll sampai tombol terakhir, lalu mengulang pada lebar 375 px dan desktop.
+Smoke test terautentikasi menjalankan PostgreSQL, Golang API, dan Next.js secara bersamaan. Admin lokal sementara berhasil login, `/auth/me` memverifikasi profil, lalu `/admin`, `/admin/products`, `/admin/testimonials`, `/admin/tutorials`, `/admin/order-steps`, dan `/admin/whatsapp-templates` seluruhnya merender profil session dengan status `200`. Akun sementara dihapus setelah test.
+
+Browser automation visual belum dapat dijalankan karena CLI browser tidak terpasang dan eksekusi package sementara ditolak oleh sandbox. Karena itu, validasi scroll fisik pada viewport 375 px dan desktop tetap perlu dilakukan manual; HTTP render, server log, production build, dan type-check Next.js sudah lulus.
 
 ### Yang Perlu Dipahami
 
