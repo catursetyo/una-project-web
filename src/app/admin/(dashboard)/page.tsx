@@ -2,7 +2,7 @@ import Link from "next/link";
 import { adminSections, dashboardStats } from "@/src/data/admin";
 
 export default function AdminDashboardPage() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = process.env.API_URL;
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -69,19 +69,19 @@ export default function AdminDashboardPage() {
             Status integrasi
           </p>
           <h2 className="mt-3 text-xl font-black">
-            {apiUrl ? "URL API sudah tersedia" : "API belum terhubung"}
+            {apiUrl ? "API dan sesi terhubung" : "API belum terhubung"}
           </h2>
           <p className="mt-3 text-sm leading-6 text-white/65">
             {apiUrl
-              ? `Konfigurasi aktif: ${apiUrl}`
-              : "Tambahkan NEXT_PUBLIC_API_URL setelah REST API Golang siap. Sampai saat itu dashboard memakai data lokal sebagai pratinjau."}
+              ? "Identitas admin sudah diverifikasi melalui endpoint /auth/me. Konten masih memakai data lokal sampai endpoint CRUD dihubungkan."
+              : "Tambahkan API_URL pada environment server. Sampai saat itu dashboard menolak akses dan tidak memalsukan sesi."}
           </p>
           <div className="mt-5 border-t border-white/10 pt-5">
             <p className="text-sm font-bold text-white">Tahap integrasi berikutnya</p>
             <ol className="mt-3 space-y-3 text-sm leading-5 text-white/65">
-              <li>1. Hubungkan endpoint autentikasi.</li>
-              <li>2. Simpan JWT di cookie httpOnly.</li>
-              <li>3. Aktifkan request CRUD terproteksi.</li>
+              <li>1. Hubungkan endpoint list admin.</li>
+              <li>2. Aktifkan mutation dengan verifikasi sesi.</li>
+              <li>3. Ganti fallback lokal setelah API stabil.</li>
             </ol>
           </div>
         </aside>

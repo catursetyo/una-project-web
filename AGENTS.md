@@ -22,7 +22,7 @@ The project remakes the old UNA Project Google Sites website into a modern websi
 * Auto-murotal features
 * Product installation and setup service
 
-The current goal is to restyle and improve the existing website using the provided visual reference: a premium dark green and gold landing page design with a simulated LED/JWS display, product catalog cards, murotal section, order steps, testimonials, final CTA, and footer.
+The current goal is to maintain the premium dark green and gold website, complete the Admin Dashboard, and connect it to the documented backend contract.
 
 This is not just a website completion task. This is also a learning project. Every change must help the developer understand the project structure, component flow, and design implementation.
 
@@ -64,6 +64,8 @@ Before writing or editing code, read these files if they exist:
 
 ```txt
 AGENTS.md
+docs/README.md
+docs/WEB_SECURITY.md
 docs/DESIGN.md
 docs/PRODUCT.md
 README.md
@@ -257,10 +259,12 @@ Berikan langkah validasi.
 
 The current goal is to implement Phase 6: **Decoupled Backend & Admin Dashboard**.
 
-We have completed the frontend restyling and dead code cleanup. Now we are building a production-grade full-stack architecture using:
+We have completed the frontend restyling and are building a pragmatic monorepo using:
 * **Frontend UI**: Next.js App Router (deployed on Vercel)
 * **Backend API**: Golang REST API (Echo / Fiber / net/http, deployed on Google Cloud Run)
 * **Database**: PostgreSQL (hosted on Supabase Free Tier)
+
+The Next.js frontend stays at the repository root. The Golang API belongs in `backend/` when implemented. Production hosts are `unaproject.my.id` for public pages and `admin.unaproject.my.id` for the admin dashboard on the same Vercel project.
 
 Features to implement on the Admin Dashboard (`/admin/*`):
 1. **Product Management**: CRUD for products, prices, variants, images, specs, and features.
@@ -270,6 +274,7 @@ Features to implement on the Admin Dashboard (`/admin/*`):
 5. **WhatsApp Chat Templates Management**: Customize dynamic message patterns (e.g. `{product_name}`) for WhatsApp CTAs.
 
 Do not add unnecessary microservices or complex CMS tools. Keep the architecture clean, type-safe, and educational.
+Read `docs/WEB_SECURITY.md` before changing auth, admin access, API boundaries, uploads, secrets, or deployment.
 
 ---
 
@@ -281,10 +286,8 @@ The homepage should be structured like this:
 Header / Navbar
 Hero Section
 Stats Strip
-Trust Badges
 Why / Keunggulan Section
 Product Catalog Preview
-Auto-Murotal Feature Section
 Order Steps Section
 Testimonials Section
 Final CTA Section
@@ -298,7 +301,6 @@ Use section IDs for navigation:
 #home
 #produk
 #keunggulan
-#murotal
 #testimoni
 #kontak
 ```
@@ -323,10 +325,8 @@ src/components/
 ├── sections/
 │   ├── HeroSection.tsx
 │   ├── StatsStrip.tsx
-│   ├── TrustBadges.tsx
 │   ├── WhySection.tsx
 │   ├── ProductCatalogSection.tsx
-│   ├── MurotalSection.tsx
 │   ├── OrderStepsSection.tsx
 │   ├── TestimonialsSection.tsx
 │   └── FinalCtaSection.tsx
@@ -360,7 +360,6 @@ src/data/products.ts
 src/data/features.ts
 src/data/testimonials.ts
 src/data/navigation.ts
-src/data/trustBadges.ts
 ```
 
 Do not hardcode repeated product cards directly in JSX.
@@ -467,14 +466,10 @@ Avoid complicated mobile menu at first. A simple responsive layout is acceptable
 
 The hero should include:
 
-* Label: `JAM WAKTU SHOLAT DIGITAL • AKURASI GPS`
-* Main heading: `Waktu sholat yang menyala presisi di masjid Anda`
-* Highlight word: `menyala presisi`
-* Short description
-* Primary CTA: `Pesan via WhatsApp`
-* Secondary CTA: `Lihat Katalog`
-* Trust items
+* Main heading: `UNA Project`
+* Short subtitle
 * Large JWS display mockup
+* Animated down-arrow navigation at the bottom of the hero viewport
 
 ### JwsDisplayMockup
 
@@ -486,10 +481,7 @@ It should include:
 * Dark LED screen
 * Dot matrix background
 * Large digital time
-* Date line
-* Prayer time grid
 * Running text/marquee strip
-* Optional `GPS Synced` indicator
 
 This component may be a client component only if it uses live time or browser timers.
 
@@ -507,7 +499,7 @@ The catalog section should:
 * Use product cards with dark LED preview top and white content body
 * Include price and optional murotal variant label
 * Include CTA arrow button
-* Include “Minta Katalog Lengkap” CTA
+* Include “Lihat Katalog Lengkap” CTA linking to `/product`
 
 ### ProductCard
 
@@ -522,19 +514,6 @@ Each card should include:
 * Small circular arrow CTA
 
 Do not put all product content inside ProductCard. Pass product data through props.
-
-### MurotalSection
-
-This section should use a dark green gradient and explain auto-murotal.
-
-Include:
-
-* Section label
-* Heading
-* Description
-* Benefits list
-* Gold CTA
-* Audio-wave style visual card
 
 ### OrderStepsSection
 
@@ -697,15 +676,13 @@ Use this refactor order:
 
 * Create new HeroSection
 * Create JwsDisplayMockup
-* Add CTA and trust items
+* Add title, subtitle, running text, and viewport scroll cue
 
 ### Phase 4 — Content Sections
 
 * StatsStrip
-* TrustBadges
 * WhySection
 * ProductCatalogSection
-* MurotalSection
 * OrderStepsSection
 * TestimonialsSection
 * FinalCtaSection
@@ -756,7 +733,6 @@ style: add UNA Project design tokens
 feat: add redesigned header
 feat: add hero section with JWS display mockup
 feat: add product catalog section
-feat: add auto murotal section
 feat: add order steps section
 feat: add testimonial section
 feat: add final CTA and footer

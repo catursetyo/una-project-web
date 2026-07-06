@@ -104,7 +104,34 @@ Login request:
 }
 ```
 
+Login response:
+
+```json
+{
+  "success": true,
+  "data": {
+    "token": "signed-jwt",
+    "expires_in": 28800
+  }
+}
+```
+
+Respons `GET /auth/me` hanya mengirim DTO aman:
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "admin-uuid",
+    "email": "admin@unaproject.my.id",
+    "name": "UNA Admin"
+  }
+}
+```
+
 Frontend tidak boleh menyimpan token di `localStorage`. Route server Next.js menerima token dari API lalu menyimpannya sebagai cookie `httpOnly`, `Secure` di production, dan `SameSite=Lax` atau lebih ketat.
+
+Browser tidak memanggil endpoint auth/admin Golang secara langsung. Server Action atau Route Handler pada `admin.unaproject.my.id` bertindak sebagai BFF, menyimpan JWT pada cookie host-only, dan meneruskan Bearer token dari server.
 
 ## Protected Admin Endpoints
 

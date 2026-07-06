@@ -18,7 +18,15 @@ flowchart LR
 | Golang API | Auth, authorization, validasi, business rule, transaksi | Rendering UI |
 | PostgreSQL | Persistence, constraint, relasi, index | Format respons HTTP |
 
-Repository ini saat ini adalah frontend Next.js. Jangan menaruh `DATABASE_URL` atau query SQL runtime di frontend.
+Repository memakai monorepo sederhana tanpa Turborepo/Nx:
+
+```text
+src/                 frontend Next.js
+backend/             Golang API dan migration (ditambahkan saat implementasi dimulai)
+docs/                kontrak lintas frontend/backend
+```
+
+Frontend tetap di root agar deployment Vercel saat ini tidak perlu dipindah. Jangan menaruh `DATABASE_URL` atau query SQL runtime di frontend.
 
 ## Alur Publik
 
@@ -37,6 +45,8 @@ Pilih Server Component untuk data yang tidak membutuhkan browser state. Gunakan 
 4. Request admin server-side membaca cookie dan menambahkan Bearer token ke API.
 5. API memverifikasi JWT sebelum handler admin dijalankan.
 6. UI hanya menampilkan sukses setelah API mengonfirmasi mutation.
+
+Dashboard dipublikasikan melalui `admin.unaproject.my.id`, sedangkan website publik berada di `unaproject.my.id`. Keduanya memakai deployment Next.js yang sama dan cookie admin tetap host-only.
 
 ## Aturan Keamanan
 

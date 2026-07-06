@@ -46,6 +46,7 @@ Website harus:
 
 ### Area admin
 
+- Host production: `admin.unaproject.my.id`.
 - Ringkasan konten.
 - CRUD produk dan varian.
 - CRUD testimoni.

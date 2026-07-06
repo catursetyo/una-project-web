@@ -22,6 +22,7 @@ Jika dokumen dan implementasi berbeda, jangan menebak. Jelaskan perbedaannya, la
 | Fetch data atau integrasi admin | [`API_SPECIFICATION.md`](API_SPECIFICATION.md), [`BACKEND_ARCHITECTURE.md`](BACKEND_ARCHITECTURE.md) |
 | Model data atau perubahan persistence | [`DATABASE_SCHEMA.md`](DATABASE_SCHEMA.md), [`API_SPECIFICATION.md`](API_SPECIFICATION.md) |
 | Environment atau deployment | [`DEPLOYMENT_GUIDE.md`](DEPLOYMENT_GUIDE.md) |
+| Auth, admin, API, upload, secret, atau security header | [`WEB_SECURITY.md`](WEB_SECURITY.md) |
 
 ## Workflow Wajib
 
@@ -36,12 +37,13 @@ Jika dokumen dan implementasi berbeda, jangan menebak. Jelaskan perbedaannya, la
 
 ## Batas Tanggung Jawab Repository
 
-Repository ini berisi frontend Next.js. Target arsitektur menyebut backend Golang dan PostgreSQL sebagai sistem terpisah; keberadaan keduanya tidak boleh diasumsikan.
+Repository ini memakai monorepo sederhana: frontend Next.js tetap di root, sedangkan backend Golang ditempatkan di `backend/` ketika mulai diimplementasikan. Backend belum boleh diasumsikan tersedia hanya karena kontraknya sudah didokumentasikan.
 
 - Gunakan data lokal selama API belum tersedia.
 - Jangan membuat CRUD seolah berhasil bila persistence belum terhubung.
 - Jangan menyimpan JWT di `localStorage`; integrasi auth harus memakai cookie `httpOnly`, `Secure`, dan `SameSite` yang sesuai.
 - Jangan menaruh `DATABASE_URL`, `JWT_SECRET`, atau credential lain pada variabel `NEXT_PUBLIC_*`.
+- Domain publik adalah `unaproject.my.id`; dashboard berada di `admin.unaproject.my.id` pada deployment Next.js yang sama.
 - Perubahan deployment atau data produksi membutuhkan izin eksplisit user.
 
 ## Definition of Done

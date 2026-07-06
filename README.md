@@ -2,7 +2,7 @@
 
 Remake modern website dan katalog digital UNA Project untuk produk jam waktu sholat digital, running text LED, JWS RGB, Android TV, dan layanan instalasi. 
 
-Proyek ini berevolusi dari landing page statis menjadi **Full-Stack Decoupled Web Application** (Next.js Frontend di Vercel + Golang REST API Backend di Google Cloud Run + PostgreSQL di Supabase) yang dilengkapi dengan Admin Dashboard untuk manajemen konten UMKM.
+Proyek ini berevolusi menjadi monorepo sederhana: Next.js di root, Golang REST API di `backend/` saat mulai diimplementasikan, dan PostgreSQL di Supabase. Website publik menggunakan `unaproject.my.id`, sedangkan dashboard menggunakan `admin.unaproject.my.id` pada project Vercel yang sama.
 
 ## Menjalankan Proyek (Frontend)
 
@@ -26,6 +26,7 @@ npm run start  # menjalankan production build
 
 ```txt
 docs/                  Dokumentasi produk, arsitektur backend, dan design system
+backend/               Golang API dan migration (belum diimplementasikan)
 src/app/               Route dan layout Next.js (termasuk /admin untuk dashboard)
 src/components/layout/ Komponen layout global
 src/components/products/ Komponen domain katalog produk
@@ -46,6 +47,7 @@ Panduan lengkap mengenai produk, desain visual, arsitektur backend, dan deployme
 - [Backend Architecture](docs/BACKEND_ARCHITECTURE.md) — Filosofi dan diagram arsitektur terpisah (Next.js + Golang)
 - [Database Schema & ERD](docs/DATABASE_SCHEMA.md) — Skema PostgreSQL, ERD, dan SQL DDL
 - [REST API Specification](docs/API_SPECIFICATION.md) — Spesifikasi endpoint publik dan terproteksi (/admin)
-- [Deployment Guide](docs/DEPLOYMENT_GUIDE.md) — Panduan deploy gratis (Supabase, Cloud Run, Vercel)
+- [Deployment Guide](docs/DEPLOYMENT_GUIDE.md) — Panduan deployment Supabase, Cloud Run, dan Vercel
+- [Web Security](docs/WEB_SECURITY.md) — Aturan auth, session, secret, subdomain, dan hardening
 
 Gunakan npm; proyek ini menyimpan dependency lock di `package-lock.json`.

@@ -33,8 +33,8 @@ export function AdminCollectionPage({ section }: AdminCollectionPageProps) {
         <span aria-hidden="true" className="mt-2 size-2 shrink-0 rounded-full bg-amber-500" />
         <p>
           Data di bawah berasal dari file lokal. Tombol tambah, edit, dan hapus
-          akan aktif setelah <code className="font-bold">NEXT_PUBLIC_API_URL</code>,
-          autentikasi cookie, dan endpoint Golang tersedia.
+          akan aktif setelah endpoint CRUD Golang tersedia dan setiap mutation
+          memverifikasi sesi admin pada server.
         </p>
       </div>
 

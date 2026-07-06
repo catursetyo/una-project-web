@@ -1,12 +1,39 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { login } from "@/src/app/admin/actions";
 import { LogoMark } from "@/src/components/ui/LogoMark";
+import { verifyAdminSession } from "@/src/lib/adminSession";
 
-export default function AdminLoginPage() {
+const loginErrors: Record<string, string> = {
+  configuration: "API backend belum dikonfigurasi.",
+  credentials: "Email atau password tidak valid.",
+  invalid: "Periksa kembali format email dan password.",
+  unavailable: "Layanan login sedang tidak tersedia. Coba beberapa saat lagi.",
+};
+
+type AdminLoginPageProps = {
+  searchParams: Promise<{ error?: string }>;
+};
+
+export default async function AdminLoginPage({ searchParams }: AdminLoginPageProps) {
+  const [admin, { error }] = await Promise.all([
+    verifyAdminSession(),
+    searchParams,
+  ]);
+  const apiConfigured = Boolean(process.env.API_URL);
+  const publicSiteUrl = process.env.PUBLIC_SITE_URL ?? "https://unaproject.my.id";
+
+  if (admin) {
+    redirect("/admin");
+  }
+
+  const errorMessage = error ? loginErrors[error] : undefined;
+
   return (
     <main className="grid min-h-screen bg-[#fafaf5] lg:grid-cols-[0.85fr_1.15fr]">
       <section className="flex flex-col justify-between bg-una-deep p-6 text-white sm:p-10 lg:p-14">
         <Link
-          href="/"
+          href={publicSiteUrl}
           className="flex w-fit items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-una-gold"
         >
           <LogoMark size="md" />
@@ -36,11 +63,28 @@ export default function AdminLoginPage() {
             Masuk ke akun
           </h2>
           <p className="mt-3 text-sm leading-6 text-una-muted">
-            Form sudah mengikuti struktur login, tetapi autentikasi belum aktif
-            karena backend Golang belum tersedia di repositori ini.
+            Masukkan akun admin UNA Project. Kredensial diproses server-side
+            dan tidak disimpan di localStorage.
           </p>
 
-          <form className="mt-7 space-y-5">
+          {!apiConfigured ? (
+            <p className="mt-5 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+              Login belum dapat digunakan sampai environment server
+              <code className="ml-1 font-bold">API_URL</code> tersedia.
+            </p>
+          ) : null}
+
+          {errorMessage ? (
+            <p
+              id="login-error"
+              role="alert"
+              className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800"
+            >
+              {errorMessage}
+            </p>
+          ) : null}
+
+          <form action={login} className="mt-7 space-y-5">
             <div>
               <label htmlFor="email" className="text-sm font-bold text-una-ink">
                 Email
@@ -50,7 +94,10 @@ export default function AdminLoginPage() {
                 name="email"
                 type="email"
                 autoComplete="email"
-                placeholder="admin@unaproject.com"
+                placeholder="admin@unaproject.my.id"
+                required
+                maxLength={254}
+                aria-describedby={errorMessage ? "login-error" : undefined}
                 className="mt-2 min-h-12 w-full rounded-lg border border-black/15 bg-white px-4 text-sm outline-none transition focus:border-una-teal focus:ring-3 focus:ring-una-teal/15"
               />
             </div>
@@ -64,28 +111,21 @@ export default function AdminLoginPage() {
                 type="password"
                 autoComplete="current-password"
                 placeholder="Masukkan password"
+                required
+                maxLength={128}
+                aria-describedby={errorMessage ? "login-error" : undefined}
                 className="mt-2 min-h-12 w-full rounded-lg border border-black/15 bg-white px-4 text-sm outline-none transition focus:border-una-teal focus:ring-3 focus:ring-una-teal/15"
               />
             </div>
 
             <button
-              type="button"
-              disabled
-              title="Aktif setelah endpoint POST /auth/login terhubung"
-              className="min-h-12 w-full cursor-not-allowed rounded-lg bg-[#e2b64d] px-5 text-sm font-black text-una-gold-ink opacity-55"
+              type="submit"
+              disabled={!apiConfigured}
+              className="min-h-12 w-full rounded-lg bg-[#e2b64d] px-5 text-sm font-black text-una-gold-ink transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-una-teal disabled:cursor-not-allowed disabled:opacity-50"
             >
               Masuk
             </button>
           </form>
-
-          <div className="mt-6 border-t border-black/8 pt-5 text-center">
-            <Link
-              href="/admin"
-              className="inline-flex min-h-10 items-center text-sm font-bold text-una-teal hover:text-una-deep"
-            >
-              Buka pratinjau dashboard →
-            </Link>
-          </div>
         </div>
       </section>
     </main>

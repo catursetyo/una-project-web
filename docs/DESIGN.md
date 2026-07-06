@@ -116,6 +116,7 @@ Heading hanya `Testimoni`. Selama media asli belum tersedia, gunakan placeholder
 
 ## Kontrak Dashboard Admin
 
+- Dashboard production diakses melalui `admin.unaproject.my.id`; link kembali ke website harus menuju `https://unaproject.my.id`.
 - Sidebar/topbar: deep green; workspace: cream/soft; surface: putih dengan border halus.
 - Table memakai HTML `<table>` dan horizontal scroll pada mobile.
 - Status memakai badge `Aktif`, `Draft`, dan `Unggulan`.

@@ -6,9 +6,16 @@ Deployment mengubah sistem eksternal. Jangan deploy, membuat project cloud, menj
 
 | Komponen | Target | Konfigurasi rahasia |
 | --- | --- | --- |
-| Frontend Next.js | Vercel | Tidak membutuhkan secret database |
+| Website + dashboard Next.js | Satu project Vercel | Tidak membutuhkan secret database |
 | Golang REST API | Google Cloud Run atau target yang disetujui user | `DATABASE_URL`, `JWT_SECRET` |
 | PostgreSQL | Supabase/PostgreSQL yang disetujui user | Credential database |
+
+Domain production:
+
+```text
+unaproject.my.id          website publik
+admin.unaproject.my.id    dashboard admin
+```
 
 Free tier dapat berubah. Jangan menjanjikan biaya nol tanpa memeriksa kebijakan provider saat deployment dilakukan.
 
@@ -17,10 +24,12 @@ Free tier dapat berubah. Jangan menjanjikan biaya nol tanpa memeriksa kebijakan 
 ### Frontend
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8080/v1
+API_URL=http://localhost:8080/v1
+ADMIN_HOST=admin.localhost
+PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-`NEXT_PUBLIC_API_URL` boleh terlihat browser. Jangan menaruh token atau credential pada prefix `NEXT_PUBLIC_`.
+`API_URL` dibaca server-side oleh Server Component/Action. Jangan menaruh token atau credential pada prefix `NEXT_PUBLIC_`.
 
 ### Backend
 
@@ -28,7 +37,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8080/v1
 DATABASE_URL=postgresql://...
 JWT_SECRET=...
 PORT=8080
-ALLOWED_ORIGINS=http://localhost:3000
+ALLOWED_ORIGINS=http://localhost:3000,http://admin.localhost:3000
 ```
 
 Gunakan secret manager/provider environment settings. Jangan commit file `.env` berisi nilai nyata.
@@ -40,8 +49,9 @@ Gunakan secret manager/provider environment settings. Jangan commit file `.env` 
 3. Terapkan migration database.
 4. Deploy backend dan verifikasi health/public endpoint.
 5. Atur URL backend pada frontend.
-6. Deploy frontend.
-7. Jalankan smoke test publik dan admin.
+6. Atur domain `unaproject.my.id` dan `admin.unaproject.my.id` pada project Vercel yang sama.
+7. Deploy frontend.
+8. Jalankan smoke test publik dan admin.
 
 Jangan melanjutkan ke tahap berikutnya jika tahap sebelumnya gagal.
 
@@ -64,6 +74,7 @@ Periksa minimal:
 - public API tidak menampilkan draft;
 - login valid dan invalid bekerja tanpa membocorkan detail akun;
 - route admin menolak sesi kosong/kedaluwarsa;
+- root `admin.unaproject.my.id` mengarah ke `/admin` dan link kembali menuju `unaproject.my.id`;
 - create/update/delete merefleksikan data setelah refresh;
 - CTA WhatsApp menghasilkan pesan yang benar;
 - tidak ada error console atau request 5xx.
@@ -75,6 +86,8 @@ Periksa minimal:
 - Cloud Run boleh menerima request publik hanya karena endpoint public diperlukan; endpoint admin tetap wajib dilindungi JWT.
 - Batasi CORS ke domain deployment yang digunakan.
 - Cookie auth production wajib `HttpOnly` dan `Secure`.
+- Jangan set atribut `Domain` pada cookie admin; biarkan host-only untuk `admin.unaproject.my.id`.
+- Ikuti [`WEB_SECURITY.md`](WEB_SECURITY.md) sebelum membuka akses dashboard production.
 
 ## Rollback
 
