@@ -38,6 +38,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+!backend/.env.example
 
 # vercel
 .vercel
@@ -69,8 +71,21 @@ coverage.html
 /main
 /server
 /api-server
+backend/api
+backend/create-admin
 tmp/
 .air.toml
+
+# docker secrets & overrides
+docker-compose.override.yml
+compose.override.yml
+*.secret
+secrets/
+
+# common secret files
+id_rsa
+id_ed25519
+*.crt
 
 # database & supabase local dev
 .supabase/temp/
