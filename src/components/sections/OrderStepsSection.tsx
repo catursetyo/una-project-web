@@ -1,11 +1,11 @@
-import { getPublicOrderSteps, getDynamicWhatsAppLink } from "@/src/lib/publicApi";
+import { getDynamicWhatsAppLink } from "@/src/lib/publicApi";
+import { orderSteps } from "@/src/data/landing";
 import { Button } from "@/src/components/ui/Button";
 import { Icon } from "@/src/components/ui/Icon";
 import { SectionLabel } from "@/src/components/ui/SectionLabel";
 import { Container } from "@/src/components/layout/Container";
 
 export async function OrderStepsSection() {
-  const orderSteps = await getPublicOrderSteps();
   const waLink = await getDynamicWhatsAppLink({ category: "Konsultasi" });
 
   return (

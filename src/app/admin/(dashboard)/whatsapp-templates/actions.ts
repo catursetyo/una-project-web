@@ -61,6 +61,8 @@ export async function createWhatsAppTemplateAction(data: WhatsAppTemplateInputDa
     revalidatePath("/admin/whatsapp-templates");
     revalidatePath("/admin");
     revalidatePath("/");
+    revalidatePath("/order");
+    revalidatePath("/products/[slug]", "page");
     return { success: true, message: "Template WhatsApp baru berhasil dibuat!" };
   } catch {
     return { success: false, error: "Gagal terhubung ke server backend." };
@@ -109,6 +111,8 @@ export async function updateWhatsAppTemplateAction(id: string, data: WhatsAppTem
     revalidatePath("/admin/whatsapp-templates");
     revalidatePath("/admin");
     revalidatePath("/");
+    revalidatePath("/order");
+    revalidatePath("/products/[slug]", "page");
     return { success: true, message: "Template WhatsApp berhasil diperbarui!" };
   } catch {
     return { success: false, error: "Gagal terhubung ke server backend." };
@@ -146,6 +150,8 @@ export async function deleteWhatsAppTemplateAction(id: string): Promise<ActionRe
     revalidatePath("/admin/whatsapp-templates");
     revalidatePath("/admin");
     revalidatePath("/");
+    revalidatePath("/order");
+    revalidatePath("/products/[slug]", "page");
     return { success: true, message: "Template WhatsApp berhasil dihapus!" };
   } catch {
     return { success: false, error: "Gagal terhubung ke server backend." };

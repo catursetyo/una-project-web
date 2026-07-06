@@ -8,9 +8,9 @@ export type TestimonialInputData = {
   title: string;
   description: string;
   rating: number;
-  customer?: string;
-  role?: string;
   image_url?: string;
+  image_alt: string;
+  role_location?: string;
   is_active: boolean;
   order_index: number;
 };

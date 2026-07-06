@@ -37,10 +37,10 @@ Jika dokumen dan implementasi berbeda, jangan menebak. Jelaskan perbedaannya, la
 
 ## Batas Tanggung Jawab Repository
 
-Repository ini memakai monorepo sederhana: frontend Next.js tetap di root dan backend Golang berada di `backend/`. Endpoint auth sudah diimplementasikan; endpoint konten/CRUD belum boleh diasumsikan tersedia.
+Repository ini memakai monorepo sederhana: frontend Next.js tetap di root dan backend Golang berada di `backend/`. Endpoint auth, public content, dan CRUD admin sudah tersedia.
 
-- Gunakan data lokal selama API belum tersedia.
-- Jangan membuat CRUD seolah berhasil bila persistence belum terhubung.
+- PostgreSQL adalah sumber data utama ketika `API_URL` tersedia; data lokal hanya fallback saat API tidak dapat dijangkau.
+- Homepage memakai tiga langkah promosi lokal; tabel `order_steps` hanya mengatur tujuh langkah pada halaman `/order`.
 - Jangan menyimpan JWT di `localStorage`; integrasi auth harus memakai cookie `httpOnly`, `Secure`, dan `SameSite` yang sesuai.
 - Jangan menaruh `DATABASE_URL`, `JWT_SECRET`, atau credential lain pada variabel `NEXT_PUBLIC_*`.
 - Domain publik adalah `unaproject.my.id`; dashboard berada di `admin.unaproject.my.id` pada deployment Next.js yang sama.

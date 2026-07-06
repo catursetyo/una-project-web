@@ -76,6 +76,14 @@ go build ./cmd/api ./cmd/create-admin
 
 Image Cloud Run menggunakan `backend/Dockerfile`. Jalankan migration dan `cmd/create-admin` sebelum menerima login production; keduanya tidak dijalankan otomatis saat container start.
 
+Urutan migration untuk database baru:
+
+```bash
+cd backend
+psql "$DATABASE_URL" -f migrations/001_init.sql
+psql "$DATABASE_URL" -f migrations/002_seed_frontend_content.sql
+```
+
 ## Smoke Test
 
 Periksa minimal:

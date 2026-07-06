@@ -1,5 +1,7 @@
 # Learning Notes
 
+> Catatan ini bersifat kronologis. Bagian 25 adalah status implementasi terbaru dan mengoreksi keputusan lama yang sudah direfaktor.
+
 ## 1. Kondisi Arsitektur Saat Ini
 
 Project menggunakan monorepo sederhana:
@@ -10,7 +12,7 @@ backend/             lokasi Golang API ketika mulai dibuat
 docs/                kontrak produk, API, database, deployment, dan security
 ```
 
-Frontend tetap di root agar project Vercel yang sudah berjalan tidak perlu dipindahkan. Folder `backend/` belum dibuat karena backend Golang memang belum diimplementasikan; dokumentasi tidak boleh dianggap sebagai backend yang sudah aktif.
+Frontend tetap di root agar project Vercel yang sudah berjalan tidak perlu dipindahkan. Backend Golang aktif berada di `backend/` dan menyediakan auth, endpoint publik, serta CRUD admin.
 
 Domain production:
 
@@ -137,7 +139,7 @@ Pengecekan layout bukan authorization final. Nantinya setiap Server Action CRUD 
 - Sidebar menampilkan email session dan tombol logout.
 - Logout menghapus cookie melalui Server Action lalu kembali ke login.
 - Status integrasi tidak lagi menampilkan URL API ke UI.
-- Tombol CRUD masih dinonaktifkan karena endpoint dan persistence belum tersedia; UI tidak memalsukan keberhasilan mutation.
+- Lima modul admin sudah memakai endpoint Golang dan Server Actions; mutation tetap memverifikasi session pada setiap request.
 
 ## 8. Parser Boundary dan Test
 
@@ -167,10 +169,11 @@ Nilai credential asli tidak dibuat atau dimasukkan ke repository.
 
 ## 10. Batasan yang Masih Ada
 
-- Database Supabase dan credential lokal tetap harus disiapkan oleh developer.
+- Database Supabase production dan credential deployment tetap harus disiapkan oleh developer.
 - Login baru dapat bekerja setelah migration dijalankan dan akun admin dibuat.
-- Data dashboard masih berasal dari file lokal.
-- Create, update, delete, upload media, rate limiting, dan audit log belum diimplementasikan.
+- Upload file belum tersedia; kolom media masih menerima URL.
+- Rate limiter login masih per-instance, sehingga production multi-instance sebaiknya memakai limiter terdistribusi bila trafik membutuhkannya.
+- Audit log mutation dan CSP belum diimplementasikan.
 - CSP ditunda sampai daftar origin production final.
 
 Urutan lanjutan yang aman:
@@ -179,9 +182,9 @@ Urutan lanjutan yang aman:
 2. Verifikasi login lokal dari `admin.localhost:3000`.
 3. Deploy API dan atur `API_URL` server-only pada Vercel.
 4. Verifikasi login dan cookie pada `admin.unaproject.my.id`.
-5. Hubungkan endpoint list admin.
-6. Implementasikan mutation satu resource terlebih dahulu, dimulai dari produk.
-7. Tambahkan upload setelah storage dan validasi file ditentukan.
+5. Verifikasi seluruh mutation pada database staging.
+6. Tambahkan upload setelah storage dan validasi file ditentukan.
+7. Tambahkan audit log ketika dashboard mulai dipakai lebih dari satu admin.
 
 ## 11. Cara Verifikasi
 
@@ -496,7 +499,7 @@ Pada tahap ketiga **Step 4** ini, kita mengimplementasikan modul **Order Steps (
 
 ### Mengapa Bulk Update (`PUT /v1/admin/order-steps`) Bukannya CRUD Satu Per Satu?
 
-Langkah pemesanan adalah alur kerja singkat (biasanya terdiri dari 3–4 langkah seperti *"01 Konsultasi via WhatsApp"*, *"02 Pilih Tipe & Ukuran"*, *"03 Instalasi & Aktivasi"*) yang ditampilkan di halaman depan website. 
+Langkah pemesanan pada tabel `order_steps` adalah alur transaksi rinci yang ditampilkan khusus di halaman `/order`. Tiga langkah ringkas pada homepage tetap merupakan konten landing page lokal dan tidak diubah dari dashboard.
 Saat admin ingin mengubah alur transaksi ini, hampir selalu mereka mengubah urutan, memperbaiki teks, atau menambah/menghapus beberapa langkah sekaligus dalam satu layar antarmuka. 
 Membuat endpoint CRUD satu per satu (POST satu langkah, PUT satu langkah, DELETE satu langkah) sangat tidak efisien untuk *user experience* admin dan rentan membuat nomor urutan pemesanan terputus atau tidak konsisten di tengah proses editing.
 
@@ -521,7 +524,7 @@ if stepNum == "" {
     stepNum = fmt.Sprintf("%02d", i+1)
 }
 ```
-Jika `step_number` kosong, sistem otomatis membuatkan nomor urut berformat 2 digit sesuai posisinya di dalam array! Ini menjaga tampilan kartu langkah di landing page tetap rapi dan konsisten secara visual.
+Jika `step_number` kosong, sistem otomatis membuatkan nomor urut berformat 2 digit sesuai posisinya di dalam array. Ini menjaga kartu langkah halaman Transaksi tetap konsisten.
 
 ## 19. Remaining Resources Backend - Part 4: WhatsApp Chat Templates CRUD & Dynamic Messaging
 
@@ -569,11 +572,9 @@ if (json.success && json.data) {
 ```
 Teknik ini disebut **Defensive Parsing**. Mengapa ini penting dalam arsitektur mikroservice atau modular? Karena sebagian endpoint API mengembalikan array langsung (`data: [...]`), sementara sebagian lain mengembalikan objek berpaginasi (`data: { items: [...], total: ... }`). Dengan satu baris kode sederhana ini, UI kita menjadi sangat tangguh (*resilient*) dan kebal terhadap perbedaan struktur balasan dari server backend!
 
-### Peningkatan UX dengan Star Rating & Status Pulse Badge
+### Penyesuaian dengan UI Publik
 
-Pada komponen client (`AdminTestimonialsClient.tsx`), kita menerapkan prinsip desain premium UNA Project (*visual excellence*):
-1. **Konversi Angka ke Ikon Bintang**: Angka rating (1–5) dari database tidak ditampilkan mentah sebagai teks, melainkan di-transformasi menjadi jejeran bintang emas (`★`) menggunakan `Array.from({ length: item.rating })`.
-2. **Badge Status Hidup**: Badge status "Aktif" dilengkapi dengan indikator titik hijau beranimasi *pulse* (`animate-pulse`). Ini memberikan micro-animation halus yang membuat dasbor terasa hidup, profesional, dan menyenangkan untuk digunakan oleh admin UMKM!
+UI publik menampilkan dokumentasi berupa gambar/placeholder, judul, dan keterangan singkat. Form admin karena itu memakai `image_url` dan `image_alt`, bukan identitas pelanggan atau rating yang tidak digunakan oleh desain publik.
 
 ## 21. Step 5 - Part 2: Migrasi UI Dasbor Tutorial (`/admin/tutorials`) & Dynamic Step Form Editor
 
@@ -606,10 +607,10 @@ Pada tahap ketiga Step 5 ini, kita mengintegrasikan Dasbor **Langkah Pemesanan (
 
 ### Pola Bulk Update / Simpan Urutan Simultan di Frontend
 
-Berbeda dengan dasbor lain yang menggunakan pola Create/Edit per item, urutan langkah pemesanan di landing page memiliki ketergantungan posisi (menggeser langkah 1 ke bawah otomatis mengubah posisi langkah 2 ke atas).
+Berbeda dengan dasbor lain yang menggunakan pola Create/Edit per item, urutan langkah pemesanan di halaman `/order` memiliki ketergantungan posisi (menggeser langkah 1 ke bawah otomatis mengubah posisi langkah 2 ke atas).
 Oleh karena itu, di komponen client (`AdminOrderStepsClient.tsx`), kita menerapkan desain **Bulk Reordering**:
-- Admin dapat menekan tombol `⬆️ Naik` atau `⬇️ Turun` pada setiap kartu langkah. Fungsi `handleMoveUp` dan `handleMoveDown` akan menukar posisi elemen dalam array `steps` sekaligus menghitung ulang nilai `order_index` (1, 2, 3, dst).
-- Saat tombol **"Simpan Seluruh Urutan & Perubahan"** ditekan, seluruh array dikirim serentak ke `replaceAllOrderStepsAction`. Di backend Go, transaksi atomik menghapus seluruh langkah lama dan menyisipkan urutan baru yang telah disempurnakan tanpa risiko duplikasi atau urutan terputus!
+- Admin dapat menekan tombol `Naik` atau `Turun` pada setiap langkah. Fungsi `handleMoveUp` dan `handleMoveDown` menukar posisi elemen sekaligus menghitung ulang `order_index`.
+- Saat tombol **"Simpan perubahan"** ditekan, seluruh array dikirim serentak ke `replaceAllOrderStepsAction`. Di backend Go, transaksi atomik mengganti urutan lama tanpa menyisakan data setengah tersimpan.
 
 ### Fleksibilitas Nomor Tampil (`step_number`) vs Urutan Fisik (`order_index`)
 
@@ -646,7 +647,7 @@ Bagaimana cara menghubungkan halaman depan website ke backend API tanpa mengorba
 Untuk menjawab tantangan ini, kita membangun modul sentral `src/lib/publicApi.ts` yang menerapkan **Pola Resiliensi & Fallback**:
 ```ts
 export async function getPublicProducts(): Promise<Product[]> {
-  const apiUrl = normalizeApiUrl(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL);
+  const apiUrl = normalizeApiUrl(process.env.API_URL);
   if (!apiUrl) return fallbackProducts;
 
   try {
@@ -660,7 +661,7 @@ export async function getPublicProducts(): Promise<Product[]> {
       // Filter hanya produk yang aktif
       const items = (Array.isArray(json.data) ? json.data : json.data.items || []) as ApiProduct[];
       const activeItems = items.filter((item) => item.is_active !== false);
-      if (activeItems.length > 0) return activeItems.map(transformApiProduct);
+      return activeItems.map(transformApiProduct);
     }
   } catch (err) {
     console.error("[publicApi] Failed to fetch products from API, using fallback:", err);
@@ -669,7 +670,7 @@ export async function getPublicProducts(): Promise<Product[]> {
 }
 ```
 - **Revalidate & Timeout**: Setiap request dibekali *cache revalidation* 60 detik dan *timeout* 5 detik agar tidak menggantung terlalu lama.
-- **Graceful Fallback**: Jika request gagal, server timeout, atau data kosong, fungsi tidak akan melempar error yang membuat layar pengguna blank/rusak (*white screen of death*). Sebaliknya, sistem secara mulus beralih menggunakan data statis dari `src/data/*` sebagai cadangan darurat! Ini adalah standar rekayasa tingkat tinggi untuk memastikan website UMKM memiliki ketersediaan 100% (*high availability*).
+- **Graceful Fallback**: Data lokal hanya dipakai jika API tidak tersedia, timeout, atau response tidak valid. Response API yang valid tetapi kosong tetap dianggap sumber kebenaran; ini penting agar admin dapat menonaktifkan seluruh item tanpa data lama muncul kembali.
 
 ### Transformasi Kontrak API ke UI Token (Data Adapter Pattern)
 
@@ -680,3 +681,128 @@ Di dalam `publicApi.ts`, kita menerapkan **Data Adapter Pattern** melalui fungsi
 
 Tombol konsultasi WhatsApp (`WhatsAppButton.tsx`) kini dirancang sebagai **Async React Server Component (RSC)**.
 Saat halaman katalog atau detail produk diriset di server, komponen ini memanggil `getDynamicWhatsAppLink({ category, productName, price })` yang akan mencari template pesan default di database dan mengganti variabel `{product_name}` serta `{price}` secara langsung di level server. Hasilnya, pengunjung mendapatkan tautan WhatsApp yang sangat personal dan dinamis tanpa ada tambahan beban script JavaScript di browser klien!
+
+## 25. Sinkronisasi Konten, Perbaikan Admin, dan Cleanup (Status Terbaru)
+
+### Tujuan dan Alur Data
+
+Perubahan ini menyelaraskan data frontend, kontrak Golang, PostgreSQL, dan UI admin tanpa dependency baru:
+
+```text
+PostgreSQL
+  → Golang REST API
+    → Next.js Server Component / Server Action
+      → halaman publik dan dashboard admin
+```
+
+Data TypeScript lama hanya menjadi fallback halaman publik ketika API gagal dijangkau. Response API yang valid tetapi kosong tetap dihormati agar admin dapat menonaktifkan seluruh item tanpa konten lama muncul kembali.
+
+### Migration Konten Frontend ke Backend
+
+`backend/migrations/002_seed_frontend_content.sql` memindahkan konten awal berikut:
+
+- 14 produk dan 23 varian;
+- 3 dokumentasi testimoni;
+- 2 tutorial dan 9 tutorial step;
+- 7 langkah transaksi;
+- 3 template WhatsApp untuk Konsultasi, Produk, dan Dukungan.
+
+Produk dan tutorial memakai key unik `slug`, sedangkan template memakai `template_name`, sehingga migration dapat menggunakan `ON CONFLICT`. Child rows seperti varian dan tutorial step diganti berdasarkan parent agar seed tidak bercampur dengan versi lama.
+
+Docker Compose sekarang me-mount seluruh folder `backend/migrations/`, bukan hanya `001_init.sql`. Database baru otomatis menjalankan schema lalu seed berdasarkan urutan nama file. Untuk Supabase, kedua migration tetap dijalankan manual dan berurutan agar deployment tidak melakukan perubahan schema tersembunyi saat container start.
+
+### Pemisahan Order Steps Homepage dan Transaksi
+
+Ada dua konten berbeda:
+
+```text
+Homepage
+  src/data/landing.ts
+  3 langkah ringkas untuk alur promosi
+
+Halaman /order
+  PostgreSQL order_steps
+  7 langkah transaksi lengkap yang dapat diubah admin
+```
+
+`OrderStepsSection` homepage tidak lagi memanggil endpoint `/order-steps`. Halaman `/order` memakai `getTransactionOrderSteps()`, sedangkan `src/data/transaction.ts` menyediakan tujuh langkah yang sama sebagai fallback. Mutation admin hanya merevalidasi `/order`, bukan homepage.
+
+Kontennya mengikuti referensi: Pilih Produk, Konsultasi Kebutuhan, Konfirmasi Ukuran dan Harga, Pembayaran DP, Proses Produksi, Instalasi atau Pengiriman, serta Garansi dan After-Sales.
+
+### Perbaikan Kontrak Testimoni
+
+Sebelumnya UI mengirim `customer` dan `role`, sedangkan Go API menerima `image_alt` dan `role_location`. Decoder backend menolak field JSON yang tidak dikenal, sehingga submit testimoni dapat gagal dengan status `400`.
+
+Kontrak TypeScript dan form sekarang mengikuti API: `title`, `description`, `image_url`, `image_alt`, `rating`, `role_location`, `is_active`, dan `order_index`. UI admin menonjolkan gambar, alt text, judul, dan keterangan karena itulah yang dipakai desain publik. Bagian publik kembali memakai judul `Testimoni` tanpa identitas customer atau review bintang buatan.
+
+### Flow Admin yang Lebih Ringkas
+
+`src/lib/adminApi.ts` memusatkan read flow lima halaman admin:
+
+1. mengambil token yang sudah diverifikasi;
+2. menormalisasi `API_URL` server-only;
+3. mengirim Bearer token ke endpoint admin;
+4. memberi timeout delapan detik dan `cache: no-store`;
+5. menormalisasi response array biasa atau object berpaginasi.
+
+Ini menghapus pengulangan fetch dari lima `page.tsx`. Mutation tetap berada di Server Actions masing-masing modul karena pesan validasi dan revalidation berbeda per resource.
+
+Client CRUD tidak lagi menyalin `initialProducts`, `initialTestimonials`, `initialTutorials`, dan `initialTemplates` ke state permanen. Komponen membaca props terbaru secara langsung, sehingga hasil mutation yang memanggil `revalidatePath()` muncul setelah Server Component dirender ulang.
+
+Revalidation produk mencakup homepage, `/product`, `/products`, dan seluruh `/products/[slug]`. Template WhatsApp merevalidasi homepage, `/order`, dan detail produk. Order steps hanya merevalidasi `/order`.
+
+### Perbaikan Layout dan UI Dashboard
+
+Bug dashboard terpotong berasal dari shell yang mengandalkan `h-screen` tanpa overflow area yang konsisten. Perbaikannya:
+
+- shell memakai `min-h-dvh` dan `w-full`;
+- sidebar desktop memakai `h-dvh` dengan `overflow-y-auto`;
+- kolom konten memakai `min-w-0`, `min-h-dvh`, dan `overflow-x-clip`;
+- tabel tetap memiliki `overflow-x-auto` sendiri;
+- seluruh modul memakai batas lebar konten yang konsisten;
+- modal memakai `max-h-[90dvh]` agar dapat discroll pada layar pendek.
+
+Dashboard tidak lagi menampilkan angka "data lokal" yang sudah tidak benar. Tampilan diganti menjadi daftar lima modul backend yang lebih padat. Tombol admin dibuat konsisten, rounding berlebihan dikurangi, pulse dekoratif dihapus, dan editor order-step tidak lagi meminta ikon yang tidak digunakan halaman `/order`.
+
+### File dan Kode yang Dihapus
+
+Kode berikut dihapus karena lima route admin sudah memiliki implementasi spesifik:
+
+- `src/app/admin/(dashboard)/[section]/page.tsx`;
+- `src/components/admin/AdminCollectionPage.tsx`;
+- `src/types/admin.ts`;
+- mapping row lokal produk, testimoni, tutorial, order-step, dan WhatsApp dari `src/data/admin.ts`.
+
+`src/data/admin.ts` sekarang hanya menyimpan navigasi dan deskripsi modul. Refactor UI admin menghapus jauh lebih banyak kode daripada yang ditambahkan.
+
+### Verifikasi
+
+Hasil validasi pada 6 Juli 2026:
+
+```text
+npm test                 lulus, 2 test
+npm run lint             lulus
+npm run build            lulus, 29 halaman
+go test ./...             lulus
+go vet ./...              lulus
+PostgreSQL migration      lulus
+GET /healthz              200
+GET /v1/order-steps       200, 7 langkah benar
+```
+
+Database development berisi 14 produk, 23 varian, 3 testimoni, 2 tutorial, 9 tutorial step, 7 order step, dan 3 template WhatsApp.
+
+Browser automation lokal belum dapat dijalankan karena runner tidak memberi izin membuka port `3000` sebelum timeout. Production build dan type-check internal Next.js tetap lulus. Pemeriksaan manual yang disarankan adalah membuka seluruh modul admin, scroll sampai tombol terakhir, lalu mengulang pada lebar 375 px dan desktop.
+
+### Yang Perlu Dipahami
+
+- Migration memindahkan data awal secara dapat ditinjau; bukan copy-paste manual ke dashboard.
+- Fallback hanya untuk kegagalan transport/API; data kosong valid tetap keputusan backend.
+- Homepage order steps dan transaction order steps adalah dua domain konten berbeda.
+- `min-w-0` penting pada child CSS Grid agar tabel tidak memaksa kolom melewati viewport.
+- Props Server Component harus tetap menjadi sumber list setelah revalidation; menyalinnya sekali ke `useState` membuat UI stale.
+- Menghapus route generik lama lebih aman daripada mempertahankan dua implementasi admin yang bersaing.
+
+### Latihan Manual
+
+Ubah judul langkah ke-7 melalui `/admin/order-steps`, simpan, lalu bandingkan `/order` dan homepage. Hanya `/order` yang boleh berubah. Latihan ini menunjukkan boundary data, Server Action, revalidation, dan fallback.

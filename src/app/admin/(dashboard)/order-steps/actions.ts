@@ -58,7 +58,7 @@ export async function replaceAllOrderStepsAction(steps: OrderStepInputData[]): P
 
     revalidatePath("/admin/order-steps");
     revalidatePath("/admin");
-    revalidatePath("/");
+    revalidatePath("/order");
     return { success: true, message: "Urutan alur pemesanan berhasil diperbarui!" };
   } catch {
     return { success: false, error: "Gagal terhubung ke server backend." };

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { WhatsAppButton } from "@/src/components/ui/WhatsAppButton";
-import { getPublicOrderSteps } from "@/src/lib/publicApi";
+import { getTransactionOrderSteps } from "@/src/lib/publicApi";
 
 export const metadata: Metadata = {
   title: "Cara Pesan | UNA Project",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function OrderPage() {
-  const orderSteps = await getPublicOrderSteps();
+  const orderSteps = await getTransactionOrderSteps();
 
   return (
     <section className="bg-background">

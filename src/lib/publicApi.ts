@@ -6,8 +6,21 @@ import type { ApiOrderStep } from "@/src/types/orderStep";
 import type { ApiWhatsAppTemplate } from "@/src/types/whatsappTemplate";
 import { products as fallbackProducts } from "@/src/data/products";
 import { tutorials as fallbackTutorials } from "@/src/data/tutorials";
-import { testimonials as fallbackTestimonials, orderSteps as fallbackOrderSteps } from "@/src/data/landing";
+import { testimonials as fallbackTestimonials } from "@/src/data/landing";
+import { transactionSteps } from "@/src/data/transaction";
 import { createWhatsAppLink } from "@/src/lib/whatsapp";
+
+function publicApiUrl() {
+  return normalizeApiUrl(process.env.API_URL);
+}
+
+const reportedFailures = new Set<string>();
+
+function reportFailure(resource: string) {
+  if (reportedFailures.has(resource)) return;
+  reportedFailures.add(resource);
+  console.warn(`[publicApi] ${resource} API unavailable; using fallback.`);
+}
 
 function transformApiProduct(api: ApiProduct): Product {
   return {
@@ -46,7 +59,7 @@ function transformApiTutorial(api: ApiTutorial): Tutorial {
 }
 
 export async function getPublicProducts(): Promise<Product[]> {
-  const apiUrl = normalizeApiUrl(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL);
+  const apiUrl = publicApiUrl();
   if (!apiUrl) return fallbackProducts;
 
   try {
@@ -59,12 +72,10 @@ export async function getPublicProducts(): Promise<Product[]> {
     if (json.success && json.data) {
       const items = (Array.isArray(json.data) ? json.data : json.data.items || []) as ApiProduct[];
       const activeItems = items.filter((item) => item.is_active !== false);
-      if (activeItems.length > 0) {
-        return activeItems.map(transformApiProduct);
-      }
+      return activeItems.map(transformApiProduct);
     }
-  } catch (err) {
-    console.error("[publicApi] Failed to fetch products from API, using fallback:", err);
+  } catch {
+    reportFailure("products");
   }
   return fallbackProducts;
 }
@@ -78,14 +89,11 @@ export type PublicTestimonial = {
   title: string;
   description: string;
   imageAlt: string;
-  rating?: number;
-  customer?: string;
-  role?: string;
   imageUrl?: string;
 };
 
 export async function getPublicTestimonials(): Promise<PublicTestimonial[]> {
-  const apiUrl = normalizeApiUrl(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL);
+  const apiUrl = publicApiUrl();
   if (!apiUrl) return fallbackTestimonials;
 
   try {
@@ -98,26 +106,21 @@ export async function getPublicTestimonials(): Promise<PublicTestimonial[]> {
     if (json.success && json.data) {
       const items = (Array.isArray(json.data) ? json.data : json.data.items || []) as ApiTestimonial[];
       const activeItems = items.filter((item) => item.is_active !== false);
-      if (activeItems.length > 0) {
-        return activeItems.map((api) => ({
-          title: api.title,
-          description: api.description,
-          imageAlt: api.customer || api.title,
-          rating: api.rating,
-          customer: api.customer,
-          role: api.role,
-          imageUrl: api.image_url,
-        }));
-      }
+      return activeItems.map((api) => ({
+        title: api.title,
+        description: api.description,
+        imageAlt: api.image_alt,
+        imageUrl: api.image_url,
+      }));
     }
-  } catch (err) {
-    console.error("[publicApi] Failed to fetch testimonials from API, using fallback:", err);
+  } catch {
+    reportFailure("testimonials");
   }
   return fallbackTestimonials;
 }
 
 export async function getPublicTutorials(): Promise<Tutorial[]> {
-  const apiUrl = normalizeApiUrl(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL);
+  const apiUrl = publicApiUrl();
   if (!apiUrl) return fallbackTutorials;
 
   try {
@@ -130,12 +133,10 @@ export async function getPublicTutorials(): Promise<Tutorial[]> {
     if (json.success && json.data) {
       const items = (Array.isArray(json.data) ? json.data : json.data.items || []) as ApiTutorial[];
       const activeItems = items.filter((item) => item.is_active !== false);
-      if (activeItems.length > 0) {
-        return activeItems.map(transformApiTutorial);
-      }
+      return activeItems.map(transformApiTutorial);
     }
-  } catch (err) {
-    console.error("[publicApi] Failed to fetch tutorials from API, using fallback:", err);
+  } catch {
+    reportFailure("tutorials");
   }
   return fallbackTutorials;
 }
@@ -146,36 +147,34 @@ export type PublicOrderStep = {
   description: string;
 };
 
-export async function getPublicOrderSteps(): Promise<PublicOrderStep[]> {
-  const apiUrl = normalizeApiUrl(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL);
-  if (!apiUrl) return fallbackOrderSteps;
+export async function getTransactionOrderSteps(): Promise<PublicOrderStep[]> {
+  const apiUrl = publicApiUrl();
+  if (!apiUrl) return [...transactionSteps];
 
   try {
     const res = await fetch(`${apiUrl}/order-steps`, {
       next: { revalidate: 60 },
       signal: AbortSignal.timeout(5000),
     });
-    if (!res.ok) return fallbackOrderSteps;
+    if (!res.ok) return [...transactionSteps];
     const json = await res.json();
     if (json.success && json.data) {
       const items = (Array.isArray(json.data) ? json.data : json.data.items || []) as ApiOrderStep[];
       const activeItems = items.filter((item) => item.is_active !== false);
-      if (activeItems.length > 0) {
-        return activeItems.map((s) => ({
-          number: s.step_number,
-          title: s.title,
-          description: s.description,
-        }));
-      }
+      return activeItems.map((s) => ({
+        number: s.step_number,
+        title: s.title,
+        description: s.description,
+      }));
     }
-  } catch (err) {
-    console.error("[publicApi] Failed to fetch order steps from API, using fallback:", err);
+  } catch {
+    reportFailure("order steps");
   }
-  return fallbackOrderSteps;
+  return [...transactionSteps];
 }
 
 export async function getPublicWhatsAppTemplates(): Promise<ApiWhatsAppTemplate[]> {
-  const apiUrl = normalizeApiUrl(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL);
+  const apiUrl = publicApiUrl();
   if (!apiUrl) return [];
 
   try {
@@ -189,8 +188,8 @@ export async function getPublicWhatsAppTemplates(): Promise<ApiWhatsAppTemplate[
       const items = (Array.isArray(json.data) ? json.data : json.data.items || []) as ApiWhatsAppTemplate[];
       return items.filter((item) => item.is_active !== false);
     }
-  } catch (err) {
-    console.error("[publicApi] Failed to fetch whatsapp templates from API:", err);
+  } catch {
+    reportFailure("WhatsApp templates");
   }
   return [];
 }
@@ -226,7 +225,7 @@ export async function getDynamicWhatsAppLink(options?: {
     if (options?.category) {
       msg = msg.replace(/\{category\}/g, options.category);
     }
-    return `https://wa.me/6281234567890?text=${encodeURIComponent(msg.trim())}`;
+    return createWhatsAppLink({ message: msg.trim() });
   }
 
   return createWhatsAppLink(options?.productName);

@@ -14,7 +14,7 @@ type AdminTutorialsClientProps = {
 };
 
 export function AdminTutorialsClient({ initialTutorials }: AdminTutorialsClientProps) {
-  const [tutorials] = useState<ApiTutorial[]>(initialTutorials);
+  const tutorials = initialTutorials;
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("ALL");
 
@@ -201,7 +201,7 @@ export function AdminTutorialsClient({ initialTutorials }: AdminTutorialsClientP
   }
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-7xl space-y-6">
       {/* Header section */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -213,7 +213,7 @@ export function AdminTutorialsClient({ initialTutorials }: AdminTutorialsClientP
         <button
           type="button"
           onClick={openCreateModal}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-una-gold px-4 py-2.5 text-sm font-bold text-una-gold-ink shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-una-gold px-4 py-2.5 text-sm font-black text-una-gold-ink transition-colors hover:bg-una-gold-light"
         >
           <span>+</span> Tambah Tutorial
         </button>
@@ -321,7 +321,7 @@ export function AdminTutorialsClient({ initialTutorials }: AdminTutorialsClientP
                       >
                         <span
                           className={`size-1.5 rounded-full ${
-                            item.is_active ? "bg-emerald-500 animate-pulse" : "bg-stone-400"
+                            item.is_active ? "bg-emerald-500" : "bg-stone-400"
                           }`}
                         />
                         {item.is_active ? "Aktif" : "Nonaktif"}
@@ -356,7 +356,7 @@ export function AdminTutorialsClient({ initialTutorials }: AdminTutorialsClientP
       {/* Create / Edit Modal */}
       {isFormModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl border border-stone-100">
+          <div className="max-h-[90dvh] w-full max-w-3xl overflow-y-auto rounded-xl bg-white p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-stone-100 pb-4">
               <h2 className="text-xl font-bold text-una-deep">
                 {editingItem ? "Edit Tutorial" : "Tambah Tutorial Baru"}
@@ -582,7 +582,7 @@ export function AdminTutorialsClient({ initialTutorials }: AdminTutorialsClientP
       {/* Delete Modal */}
       {isDeleteModalOpen && deletingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl border border-stone-100">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
             <h3 className="text-lg font-bold text-una-deep">Hapus Tutorial</h3>
             <p className="mt-2 text-sm text-una-muted">
               Apakah Anda yakin ingin menghapus tutorial{" "}

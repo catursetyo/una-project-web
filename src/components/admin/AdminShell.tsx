@@ -13,8 +13,8 @@ export function AdminShell({ admin, children }: AdminShellProps) {
   const publicSiteUrl = process.env.PUBLIC_SITE_URL ?? "https://unaproject.my.id";
 
   return (
-    <div className="min-h-screen bg-[#fafaf5] text-una-ink lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
-      <aside className="bg-una-deep px-4 py-4 text-white sm:px-6 lg:sticky lg:top-0 lg:h-screen lg:px-5 lg:py-6">
+    <div className="min-h-dvh w-full flex-1 bg-[#f7f7f2] text-una-ink lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
+      <aside className="bg-una-deep px-4 py-4 text-white sm:px-6 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:px-5 lg:py-6">
         <div className="flex items-center justify-between gap-4 lg:block">
           <Link
             href="/admin"
@@ -57,7 +57,7 @@ export function AdminShell({ admin, children }: AdminShellProps) {
         </div>
       </aside>
 
-      <div className="min-w-0">
+      <div className="min-h-dvh min-w-0 overflow-x-clip">
         <header className="sticky top-0 z-20 flex min-h-16 items-center justify-between gap-4 border-b border-black/8 bg-[#fafaf5]/95 px-4 backdrop-blur-sm sm:px-6 lg:px-8">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.14em] text-una-teal">
@@ -78,7 +78,7 @@ export function AdminShell({ admin, children }: AdminShellProps) {
           </div>
         </header>
 
-        <main className="px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+        <main className="min-w-0 px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
           {children}
         </main>
       </div>

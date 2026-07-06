@@ -2,7 +2,7 @@
 
 Gunakan dokumen ini saat menghubungkan Next.js dengan backend Golang. Jangan mengubah path, casing, atau bentuk respons hanya di salah satu sisi.
 
-Status: endpoint health dan authentication sudah tersedia di `backend/`; endpoint konten dan CRUD masih berupa kontrak target.
+Status: endpoint health, authentication, public content, dan CRUD admin sudah diimplementasikan di `backend/`.
 
 ## Konvensi
 
@@ -59,7 +59,8 @@ Respons gagal:
 | GET | `/products/:slug` | Detail produk aktif dan variannya |
 | GET | `/testimonials` | Testimoni aktif berdasarkan `order_index` |
 | GET | `/tutorials` | Tutorial aktif beserta langkahnya |
-| GET | `/order-steps` | Alur pemesanan aktif |
+| GET | `/order-steps` | Tujuh langkah transaksi aktif untuk halaman `/order` |
+| GET | `/whatsapp-templates` | Seluruh template pesan aktif |
 | GET | `/whatsapp-templates/:name` | Template pesan aktif berdasarkan nama |
 
 Contoh produk:

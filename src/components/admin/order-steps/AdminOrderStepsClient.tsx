@@ -6,6 +6,7 @@ import {
   replaceAllOrderStepsAction,
   type OrderStepInputData,
 } from "@/src/app/admin/(dashboard)/order-steps/actions";
+import { transactionSteps } from "@/src/data/transaction";
 
 type AdminOrderStepsClientProps = {
   initialSteps: ApiOrderStep[];
@@ -15,32 +16,14 @@ export function AdminOrderStepsClient({ initialSteps }: AdminOrderStepsClientPro
   const [steps, setSteps] = useState<ApiOrderStep[]>(
     initialSteps.length > 0
       ? initialSteps
-      : [
-          {
-            step_number: "01",
-            title: "Konsultasi via WhatsApp",
-            description: "Ceritakan kebutuhan tempat, ukuran ruang, anggaran, dan fitur yang diinginkan.",
-            icon_name: "phone",
-            is_active: true,
-            order_index: 1,
-          },
-          {
-            step_number: "02",
-            title: "Pilih Tipe & Ukuran",
-            description: "UNA Project bantu rekomendasikan tipe JWS yang sesuai lengkap dengan estimasi harga.",
-            icon_name: "panel",
-            is_active: true,
-            order_index: 2,
-          },
-          {
-            step_number: "03",
-            title: "Instalasi & Aktivasi",
-            description: "Produk dipasang, GPS disetel, dan pengguna dipandu sampai paham pengoperasian dasar.",
-            icon_name: "gps",
-            is_active: true,
-            order_index: 3,
-          },
-        ]
+      : transactionSteps.map((step, index) => ({
+          step_number: step.number,
+          title: step.title,
+          description: step.description,
+          icon_name: "default",
+          is_active: true,
+          order_index: index + 1,
+        })),
   );
 
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -129,19 +112,19 @@ export function AdminOrderStepsClient({ initialSteps }: AdminOrderStepsClientPro
   }
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6">
       {/* Header section */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-una-deep">Manajemen Alur Pemesanan</h1>
+          <h1 className="text-2xl font-black text-una-deep">Manajemen Alur Pemesanan</h1>
           <p className="text-sm text-una-muted">
-            Atur urutan, ikon, judul, dan keterangan langkah transaksi yang ditampilkan di landing page.
+            Atur langkah transaksi pada halaman /order. Tiga langkah di homepage tetap dikelola di kode frontend.
           </p>
         </div>
         <button
           type="button"
           onClick={handleAddStep}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-una-gold px-4 py-2.5 text-sm font-bold text-una-gold-ink shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-una-gold px-4 py-2.5 text-sm font-black text-una-gold-ink transition-colors hover:bg-una-gold-light"
         >
           <span>+</span> Tambah Langkah Baru
         </button>
@@ -169,20 +152,20 @@ export function AdminOrderStepsClient({ initialSteps }: AdminOrderStepsClientPro
 
       {/* Steps Editor Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-4">
+        <div className="space-y-3">
           {steps.length === 0 ? (
-            <div className="rounded-3xl border border-dashed border-stone-300 bg-stone-50 p-12 text-center text-una-muted">
+            <div className="rounded-xl border border-dashed border-stone-300 bg-stone-50 p-12 text-center text-una-muted">
               Belum ada langkah pemesanan. Klik &quot;+ Tambah Langkah Baru&quot; di atas.
             </div>
           ) : (
             steps.map((step, idx) => (
               <div
                 key={idx}
-                className="relative overflow-hidden rounded-3xl bg-white p-6 shadow-sm border border-stone-100 transition-all hover:border-una-gold/40"
+                className="rounded-xl border border-stone-200 bg-white p-5 transition-colors hover:border-una-gold/60"
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-stone-100 pb-4">
                   <div className="flex items-center gap-3">
-                    <span className="grid size-8 place-items-center rounded-xl bg-una-gold text-sm font-black text-una-gold-ink">
+                    <span className="grid size-8 place-items-center rounded-lg bg-una-gold text-sm font-black text-una-gold-ink">
                       #{idx + 1}
                     </span>
                     <span className="text-sm font-bold text-una-deep">
@@ -197,7 +180,7 @@ export function AdminOrderStepsClient({ initialSteps }: AdminOrderStepsClientPro
                       onClick={() => handleMoveUp(idx)}
                       className="rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1.5 text-xs font-bold text-una-deep hover:bg-stone-100 disabled:opacity-30"
                     >
-                      ⬆️ Naik
+                      Naik
                     </button>
                     <button
                       type="button"
@@ -205,7 +188,7 @@ export function AdminOrderStepsClient({ initialSteps }: AdminOrderStepsClientPro
                       onClick={() => handleMoveDown(idx)}
                       className="rounded-lg border border-stone-200 bg-stone-50 px-2.5 py-1.5 text-xs font-bold text-una-deep hover:bg-stone-100 disabled:opacity-30"
                     >
-                      ⬇️ Turun
+                      Turun
                     </button>
                     <button
                       type="button"
@@ -217,7 +200,7 @@ export function AdminOrderStepsClient({ initialSteps }: AdminOrderStepsClientPro
                   </div>
                 </div>
 
-                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-[10rem_1fr]">
                   {/* Step Number */}
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-una-deep">
@@ -234,26 +217,8 @@ export function AdminOrderStepsClient({ initialSteps }: AdminOrderStepsClientPro
                     />
                   </div>
 
-                  {/* Icon Name */}
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-una-deep">
-                      Ikon Visual <span className="text-rose-500">*</span>
-                    </label>
-                    <select
-                      value={step.icon_name || "default"}
-                      onChange={(e) => handleChange(idx, "icon_name", e.target.value)}
-                      className="mt-1.5 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2 text-sm font-semibold text-una-deep focus:border-una-gold focus:bg-white focus:outline-none"
-                    >
-                      <option value="phone">📱 Phone / WhatsApp (phone)</option>
-                      <option value="panel">🖥️ Panel LED (panel)</option>
-                      <option value="gps">🛰️ GPS Akurasi (gps)</option>
-                      <option value="audio">🔊 Audio Murottal (audio)</option>
-                      <option value="default">💡 Default Icon (default)</option>
-                    </select>
-                  </div>
-
                   {/* Is Active Toggle */}
-                  <div className="flex items-center gap-3 sm:mt-6">
+                  <div className="flex items-center gap-3 sm:mt-6 sm:justify-end">
                     <input
                       type="checkbox"
                       id={`active-${idx}`}
@@ -310,13 +275,13 @@ export function AdminOrderStepsClient({ initialSteps }: AdminOrderStepsClientPro
           )}
         </div>
 
-        <div className="sticky bottom-6 z-20 flex items-center justify-end rounded-2xl bg-white/90 p-4 shadow-xl backdrop-blur-md border border-stone-200/80">
+        <div className="sticky bottom-4 z-20 flex items-center justify-end rounded-xl border border-stone-200 bg-white/95 p-3 shadow-sm backdrop-blur-md">
           <button
             type="submit"
             disabled={isPending || steps.length === 0}
-            className="rounded-xl bg-una-gold px-8 py-3 text-sm font-black uppercase tracking-wider text-una-gold-ink shadow-lg hover:brightness-105 disabled:opacity-50 transition-all"
+            className="min-h-11 rounded-lg bg-una-gold px-6 py-2.5 text-sm font-black text-una-gold-ink transition-colors hover:bg-una-gold-light disabled:opacity-50"
           >
-            {isPending ? "Menyimpan Urutan..." : "💾 Simpan Seluruh Urutan & Perubahan"}
+            {isPending ? "Menyimpan..." : "Simpan perubahan"}
           </button>
         </div>
       </form>

@@ -30,15 +30,15 @@ Frontend tetap di root agar deployment Vercel saat ini tidak perlu dipindah. Jan
 
 Status implementasi backend saat ini:
 
-- tersedia: `/healthz`, `/v1/auth/login`, `/v1/auth/me`, JWT, bcrypt, PostgreSQL admin store, migration, dan CLI create-admin;
-- belum tersedia: endpoint produk, testimoni, tutorial, alur pemesanan, template WhatsApp, dan upload.
+- tersedia: health, auth, public content, seluruh CRUD admin, PostgreSQL store, migration schema/seed, dan CLI create-admin;
+- belum tersedia: upload file/media dan audit log mutation.
 
 ## Alur Publik
 
 1. Next.js mengambil public endpoint.
 2. API hanya mengembalikan record `is_active = true` sesuai `order_index`.
 3. Frontend memetakan JSON `snake_case` menjadi type UI.
-4. Jika API belum tersedia, data lokal boleh menjadi fallback yang dinyatakan jelas.
+4. Jika API gagal dijangkau, data lokal boleh menjadi fallback. Array kosong yang valid dari API tidak boleh diganti fallback.
 
 Pilih Server Component untuk data yang tidak membutuhkan browser state. Gunakan Client Component hanya untuk interaksi, timer, atau browser API.
 
@@ -59,19 +59,21 @@ Dashboard dipublikasikan melalui `admin.unaproject.my.id`, sedangkan website pub
 - JWT secret hanya berada di secret manager/environment backend.
 - Cookie production: `HttpOnly`, `Secure`, dan `SameSite=Lax` atau lebih ketat.
 - Validasi authorization di API, bukan hanya menyembunyikan tombol.
-- Batasi CORS ke origin frontend yang diperlukan.
+- Browser memakai BFF Next.js dan tidak memanggil API admin secara langsung, sehingga CORS tidak perlu diaktifkan saat ini.
 - Gunakan generic error untuk login agar tidak membocorkan email terdaftar.
 - Jangan memasukkan token, password, database URL, atau PII ke log.
 
-## Struktur Backend Minimum
+## Struktur Backend
 
-Jika backend dibuat pada repository terpisah, mulai dari struktur paling kecil yang memisahkan HTTP, business rule, dan persistence:
+Struktur aktif memisahkan HTTP, auth, konfigurasi, dan persistence tanpa framework tambahan:
 
 ```txt
-cmd/api/main.go
-internal/http/
-internal/service/
-internal/repository/
+cmd/api/
+cmd/create-admin/
+internal/api/
+internal/auth/
+internal/config/
+internal/store/
 migrations/
 ```
 

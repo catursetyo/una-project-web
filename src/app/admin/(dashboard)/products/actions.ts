@@ -75,6 +75,9 @@ export async function createProductAction(data: ProductInputData): Promise<Actio
     revalidatePath("/admin/products");
     revalidatePath("/admin");
     revalidatePath("/");
+    revalidatePath("/product");
+    revalidatePath("/products");
+    revalidatePath("/products/[slug]", "page");
     return { success: true, message: "Produk baru berhasil dibuat!" };
   } catch {
     return { success: false, error: "Gagal terhubung ke server backend." };
@@ -123,6 +126,9 @@ export async function updateProductAction(id: string, data: ProductInputData): P
     revalidatePath("/admin/products");
     revalidatePath("/admin");
     revalidatePath("/");
+    revalidatePath("/product");
+    revalidatePath("/products");
+    revalidatePath("/products/[slug]", "page");
     return { success: true, message: "Produk berhasil diperbarui!" };
   } catch {
     return { success: false, error: "Gagal terhubung ke server backend." };
@@ -160,6 +166,9 @@ export async function deleteProductAction(id: string): Promise<ActionResponse> {
     revalidatePath("/admin/products");
     revalidatePath("/admin");
     revalidatePath("/");
+    revalidatePath("/product");
+    revalidatePath("/products");
+    revalidatePath("/products/[slug]", "page");
     return { success: true, message: "Produk berhasil dihapus!" };
   } catch {
     return { success: false, error: "Gagal terhubung ke server backend." };

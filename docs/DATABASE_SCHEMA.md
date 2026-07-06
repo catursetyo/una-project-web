@@ -1,6 +1,6 @@
 # Kontrak Database untuk AI Agent
 
-Dokumen ini menjelaskan baseline PostgreSQL untuk backend UNA Project. Migration executable berada di `backend/migrations/001_init.sql`; keduanya harus diperbarui bersama. Jangan mengedit database production secara manual atau destruktif tanpa izin user dan backup.
+Dokumen ini menjelaskan baseline PostgreSQL untuk backend UNA Project. Schema executable berada di `backend/migrations/001_init.sql` dan konten awal berada di `002_seed_frontend_content.sql`. Jangan mengedit database production secara manual atau destruktif tanpa izin user dan backup.
 
 ## Relasi
 
@@ -174,6 +174,7 @@ CREATE INDEX idx_order_steps_active_order ON order_steps(is_active, order_index)
 - Penghapusan kolom/tabel memerlukan konfirmasi user dan rencana backup.
 - Seed admin tidak boleh menyimpan password plaintext; hasil hash saja.
 - Backend harus mengatur `updated_at` saat update hingga trigger khusus memang diperlukan.
+- `order_steps` hanya mengatur tujuh langkah pada halaman `/order`; tiga langkah homepage tetap berada di frontend.
 
 ## Aturan Data
 

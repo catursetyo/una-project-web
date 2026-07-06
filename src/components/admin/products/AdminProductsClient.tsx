@@ -15,7 +15,7 @@ type AdminProductsClientProps = {
 };
 
 export function AdminProductsClient({ initialProducts }: AdminProductsClientProps) {
-  const [products] = useState<ApiProduct[]>(initialProducts);
+  const products = initialProducts;
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("ALL");
   
@@ -231,7 +231,7 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
           <div className="flex items-center gap-2">
             <span
               className={`size-2.5 rounded-full ${
-                feedback.type === "success" ? "bg-emerald-600 animate-pulse" : "bg-red-600"
+                feedback.type === "success" ? "bg-emerald-600" : "bg-red-600"
               }`}
             />
             <span>{feedback.text}</span>
@@ -252,7 +252,7 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
           <div className="flex items-center gap-2">
             <p className="text-sm font-bold text-una-teal">Modul Real-Time API</p>
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[0.65rem] font-black uppercase tracking-wider text-emerald-800">
-              <span className="size-1.5 rounded-full bg-emerald-600 animate-pulse" />
+              <span className="size-1.5 rounded-full bg-emerald-600" />
               Golang Connected
             </span>
           </div>

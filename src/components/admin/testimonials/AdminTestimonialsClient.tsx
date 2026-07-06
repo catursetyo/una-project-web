@@ -14,7 +14,7 @@ type AdminTestimonialsClientProps = {
 };
 
 export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonialsClientProps) {
-  const [testimonials] = useState<ApiTestimonial[]>(initialTestimonials);
+  const testimonials = initialTestimonials;
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<"ALL" | "ACTIVE" | "INACTIVE">("ALL");
 
@@ -33,10 +33,8 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
   // Form state
   const [formTitle, setFormTitle] = useState("");
   const [formDescription, setFormDescription] = useState("");
-  const [formRating, setFormRating] = useState<number>(5);
-  const [formCustomer, setFormCustomer] = useState("");
-  const [formRole, setFormRole] = useState("");
   const [formImageUrl, setFormImageUrl] = useState("");
+  const [formImageAlt, setFormImageAlt] = useState("");
   const [formOrderIndex, setFormOrderIndex] = useState<number>(1);
   const [formIsActive, setFormIsActive] = useState(true);
 
@@ -46,7 +44,7 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
       const matchQuery =
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (item.customer && item.customer.toLowerCase().includes(searchQuery.toLowerCase()));
+        item.image_alt.toLowerCase().includes(searchQuery.toLowerCase());
       const matchStatus =
         filterStatus === "ALL" ||
         (filterStatus === "ACTIVE" && item.is_active) ||
@@ -59,10 +57,8 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
     setEditingItem(null);
     setFormTitle("");
     setFormDescription("");
-    setFormRating(5);
-    setFormCustomer("");
-    setFormRole("");
     setFormImageUrl("");
+    setFormImageAlt("");
     setFormOrderIndex(testimonials.length + 1);
     setFormIsActive(true);
     setFieldErrors({});
@@ -74,10 +70,8 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
     setEditingItem(item);
     setFormTitle(item.title);
     setFormDescription(item.description);
-    setFormRating(item.rating || 5);
-    setFormCustomer(item.customer || "");
-    setFormRole(item.role || "");
     setFormImageUrl(item.image_url || "");
+    setFormImageAlt(item.image_alt);
     setFormOrderIndex(item.order_index);
     setFormIsActive(item.is_active);
     setFieldErrors({});
@@ -99,10 +93,10 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
     const payload: TestimonialInputData = {
       title: formTitle.trim(),
       description: formDescription.trim(),
-      rating: Number(formRating) || 5,
-      customer: formCustomer.trim() || undefined,
-      role: formRole.trim() || undefined,
+      rating: editingItem?.rating ?? 5,
       image_url: formImageUrl.trim() || undefined,
+      image_alt: formImageAlt.trim() || `Dokumentasi ${formTitle.trim()}`,
+      role_location: editingItem?.role_location,
       order_index: Number(formOrderIndex) || 1,
       is_active: formIsActive,
     };
@@ -138,19 +132,19 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
   }
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-7xl space-y-6">
       {/* Header section */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-una-deep">Manajemen Testimoni</h1>
+          <h1 className="text-2xl font-black text-una-deep">Manajemen Testimoni</h1>
           <p className="text-sm text-una-muted">
-            Kelola dokumentasi pemasangan, ulasan pelanggan, dan urutan tampil di website depan.
+            Kelola gambar dokumentasi dan keterangan singkat yang tampil pada bagian Testimoni.
           </p>
         </div>
         <button
           type="button"
           onClick={openCreateModal}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-una-gold px-4 py-2.5 text-sm font-bold text-una-gold-ink shadow-md transition-transform hover:scale-[1.02] active:scale-[0.98]"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-una-gold px-4 py-2.5 text-sm font-black text-una-gold-ink transition-colors hover:bg-una-gold-light"
         >
           <span>+</span> Tambah Testimoni
         </button>
@@ -177,11 +171,11 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
       )}
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-sm border border-stone-100 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-3 rounded-xl border border-stone-200 bg-white p-4 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <input
             type="text"
-            placeholder="Cari judul atau nama pelanggan..."
+            placeholder="Cari judul atau keterangan gambar..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2 text-sm text-una-deep placeholder:text-stone-400 focus:border-una-gold focus:bg-white focus:outline-none"
@@ -202,15 +196,14 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
       </div>
 
       {/* Table Section */}
-      <div className="overflow-hidden rounded-2xl bg-white shadow-sm border border-stone-100">
+      <div className="overflow-hidden rounded-xl border border-stone-200 bg-white">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-stone-100 bg-stone-50/75 text-xs font-bold uppercase tracking-wider text-una-muted">
                 <th className="px-6 py-4">No.</th>
-                <th className="px-6 py-4">Judul & Ulasan</th>
-                <th className="px-6 py-4">Pelanggan</th>
-                <th className="px-6 py-4">Rating</th>
+                <th className="px-6 py-4">Judul & Keterangan</th>
+                <th className="px-6 py-4">Media</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4 text-right">Aksi</th>
               </tr>
@@ -218,7 +211,7 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
             <tbody className="divide-y divide-stone-100 text-sm">
               {filteredItems.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-una-muted">
+                  <td colSpan={5} className="px-6 py-12 text-center text-una-muted">
                     Tidak ada data testimoni yang sesuai.
                   </td>
                 </tr>
@@ -235,21 +228,12 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      {item.customer ? (
-                        <div>
-                          <div className="font-semibold text-una-deep">{item.customer}</div>
-                          {item.role && <div className="text-xs text-una-muted">{item.role}</div>}
-                        </div>
-                      ) : (
-                        <span className="text-xs italic text-stone-400">Umum</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-1 text-amber-500">
-                        {Array.from({ length: item.rating || 5 }).map((_, i) => (
-                          <span key={i}>★</span>
-                        ))}
-                      </div>
+                      <span className="block max-w-64 text-xs text-una-muted">
+                        {item.image_url ? "Gambar tersimpan" : "Placeholder gambar"}
+                      </span>
+                      <span className="mt-1 block max-w-64 truncate text-xs text-stone-400">
+                        {item.image_alt}
+                      </span>
                     </td>
                     <td className="px-6 py-4">
                       <span
@@ -261,7 +245,7 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
                       >
                         <span
                           className={`size-1.5 rounded-full ${
-                            item.is_active ? "bg-emerald-500 animate-pulse" : "bg-stone-400"
+                            item.is_active ? "bg-emerald-500" : "bg-stone-400"
                           }`}
                         />
                         {item.is_active ? "Aktif" : "Nonaktif"}
@@ -296,7 +280,7 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
       {/* Create / Edit Modal */}
       {isFormModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl border border-stone-100">
+          <div className="max-h-[90dvh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-stone-100 pb-4">
               <h2 className="text-xl font-bold text-una-deep">
                 {editingItem ? "Edit Testimoni" : "Tambah Testimoni Baru"}
@@ -348,79 +332,43 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
                 )}
               </div>
 
-              {/* Customer and Role */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-una-deep">
-                    Nama Pelanggan (Opsional)
+                    URL Foto Pemasangan (Opsional)
                   </label>
                   <input
-                    type="text"
-                    value={formCustomer}
-                    onChange={(e) => setFormCustomer(e.target.value)}
-                    placeholder="Contoh: H. Abdullah"
+                    type="url"
+                    value={formImageUrl}
+                    onChange={(e) => setFormImageUrl(e.target.value)}
+                    placeholder="https://contoh.com/foto-masjid.jpg"
                     className="mt-1.5 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-una-deep focus:border-una-gold focus:bg-white focus:outline-none"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-una-deep">
-                    Peran / Jabatan / Kota (Opsional)
+                    Teks Alternatif Gambar
                   </label>
                   <input
                     type="text"
-                    value={formRole}
-                    onChange={(e) => setFormRole(e.target.value)}
-                    placeholder="Contoh: Ketua DKM / Bandung"
+                    maxLength={255}
+                    value={formImageAlt}
+                    onChange={(e) => setFormImageAlt(e.target.value)}
+                    placeholder="Dokumentasi pemasangan JWS Digital"
                     className="mt-1.5 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-una-deep focus:border-una-gold focus:bg-white focus:outline-none"
                   />
                 </div>
               </div>
 
-              {/* Rating and Order Index */}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-una-deep">
-                    Rating Bintang (1 - 5)
-                  </label>
-                  <select
-                    value={formRating}
-                    onChange={(e) => setFormRating(Number(e.target.value))}
-                    className="mt-1.5 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm font-semibold text-una-deep focus:border-una-gold focus:bg-white focus:outline-none"
-                  >
-                    <option value={5}>★★★★★ (5 Bintang)</option>
-                    <option value={4}>★★★★☆ (4 Bintang)</option>
-                    <option value={3}>★★★☆☆ (3 Bintang)</option>
-                    <option value={2}>★★☆☆☆ (2 Bintang)</option>
-                    <option value={1}>★☆☆☆☆ (1 Bintang)</option>
-                  </select>
-                  {fieldErrors.rating && (
-                    <p className="mt-1 text-xs font-semibold text-rose-500">{fieldErrors.rating}</p>
-                  )}
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-una-deep">
-                    Urutan Tampil
-                  </label>
-                  <input
-                    type="number"
-                    min={1}
-                    value={formOrderIndex}
-                    onChange={(e) => setFormOrderIndex(Number(e.target.value))}
-                    className="mt-1.5 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-una-deep focus:border-una-gold focus:bg-white focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Image URL */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-una-deep">
-                  URL Foto Pemasangan (Opsional)
+                  Urutan Tampil
                 </label>
                 <input
-                  type="url"
-                  value={formImageUrl}
-                  onChange={(e) => setFormImageUrl(e.target.value)}
-                  placeholder="https://contoh.com/foto-masjid.jpg"
+                  type="number"
+                  min={1}
+                  value={formOrderIndex}
+                  onChange={(e) => setFormOrderIndex(Number(e.target.value))}
                   className="mt-1.5 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-una-deep focus:border-una-gold focus:bg-white focus:outline-none"
                 />
               </div>
@@ -464,7 +412,7 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
       {/* Delete Modal */}
       {isDeleteModalOpen && deletingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl border border-stone-100">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
             <h3 className="text-lg font-bold text-una-deep">Hapus Testimoni</h3>
             <p className="mt-2 text-sm text-una-muted">
               Apakah Anda yakin ingin menghapus testimoni{" "}
