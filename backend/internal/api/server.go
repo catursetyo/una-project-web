@@ -42,6 +42,16 @@ type Store interface {
 	CreateTutorial(context.Context, store.Tutorial, []store.TutorialStep) (string, error)
 	UpdateTutorial(context.Context, string, store.Tutorial, []store.TutorialStep) error
 	DeleteTutorial(context.Context, string) error
+	ListPublicOrderSteps(context.Context) ([]store.OrderStep, error)
+	ListAdminOrderSteps(context.Context) ([]store.OrderStep, error)
+	ReplaceAllOrderSteps(context.Context, []store.OrderStep) error
+	ListPublicWhatsAppTemplates(context.Context) ([]store.WhatsAppTemplate, error)
+	GetPublicWhatsAppTemplateByName(context.Context, string) (store.WhatsAppTemplate, error)
+	ListAdminWhatsAppTemplates(context.Context) ([]store.WhatsAppTemplate, error)
+	GetWhatsAppTemplateByID(context.Context, string) (store.WhatsAppTemplate, error)
+	CreateWhatsAppTemplate(context.Context, *store.WhatsAppTemplate) error
+	UpdateWhatsAppTemplate(context.Context, *store.WhatsAppTemplate) error
+	DeleteWhatsAppTemplate(context.Context, string) error
 }
 
 type Server struct {
@@ -104,6 +114,24 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("POST /v1/admin/tutorials", s.requireAdmin(s.createTutorial))
 	mux.HandleFunc("PUT /v1/admin/tutorials/{id}", s.requireAdmin(s.updateTutorial))
 	mux.HandleFunc("DELETE /v1/admin/tutorials/{id}", s.requireAdmin(s.deleteTutorial))
+
+	// Public order steps
+	mux.HandleFunc("GET /v1/order-steps", s.listPublicOrderSteps)
+
+	// Admin order steps (JWT required)
+	mux.HandleFunc("GET /v1/admin/order-steps", s.requireAdmin(s.listAdminOrderSteps))
+	mux.HandleFunc("PUT /v1/admin/order-steps", s.requireAdmin(s.replaceAllOrderSteps))
+
+	// Public whatsapp templates
+	mux.HandleFunc("GET /v1/whatsapp-templates", s.listPublicWhatsAppTemplates)
+	mux.HandleFunc("GET /v1/whatsapp-templates/{name}", s.getPublicWhatsAppTemplate)
+
+	// Admin whatsapp templates (JWT required)
+	mux.HandleFunc("GET /v1/admin/whatsapp-templates", s.requireAdmin(s.listAdminWhatsAppTemplates))
+	mux.HandleFunc("GET /v1/admin/whatsapp-templates/{id}", s.requireAdmin(s.getAdminWhatsAppTemplate))
+	mux.HandleFunc("POST /v1/admin/whatsapp-templates", s.requireAdmin(s.createWhatsAppTemplate))
+	mux.HandleFunc("PUT /v1/admin/whatsapp-templates/{id}", s.requireAdmin(s.updateWhatsAppTemplate))
+	mux.HandleFunc("DELETE /v1/admin/whatsapp-templates/{id}", s.requireAdmin(s.deleteWhatsAppTemplate))
 
 	// ponytail: CORS tidak diperlukan — arsitektur BFF berarti browser
 	// tidak pernah memanggil Go API secara langsung, hanya Next.js server.

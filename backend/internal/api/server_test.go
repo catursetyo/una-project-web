@@ -94,6 +94,32 @@ func (f fakeStore) UpdateTutorial(context.Context, string, store.Tutorial, []sto
 }
 func (f fakeStore) DeleteTutorial(context.Context, string) error { return nil }
 
+// ponytail: stubs — auth tests don't touch order steps
+func (f fakeStore) ListPublicOrderSteps(context.Context) ([]store.OrderStep, error) { return nil, nil }
+func (f fakeStore) ListAdminOrderSteps(context.Context) ([]store.OrderStep, error)  { return nil, nil }
+func (f fakeStore) ReplaceAllOrderSteps(context.Context, []store.OrderStep) error   { return nil }
+
+// ponytail: stubs — auth tests don't touch whatsapp templates
+func (f fakeStore) ListPublicWhatsAppTemplates(context.Context) ([]store.WhatsAppTemplate, error) {
+	return nil, nil
+}
+func (f fakeStore) GetPublicWhatsAppTemplateByName(context.Context, string) (store.WhatsAppTemplate, error) {
+	return store.WhatsAppTemplate{}, store.ErrWhatsAppTemplateNotFound
+}
+func (f fakeStore) ListAdminWhatsAppTemplates(context.Context) ([]store.WhatsAppTemplate, error) {
+	return nil, nil
+}
+func (f fakeStore) GetWhatsAppTemplateByID(context.Context, string) (store.WhatsAppTemplate, error) {
+	return store.WhatsAppTemplate{}, store.ErrWhatsAppTemplateNotFound
+}
+func (f fakeStore) CreateWhatsAppTemplate(context.Context, *store.WhatsAppTemplate) error {
+	return nil
+}
+func (f fakeStore) UpdateWhatsAppTemplate(context.Context, *store.WhatsAppTemplate) error {
+	return nil
+}
+func (f fakeStore) DeleteWhatsAppTemplate(context.Context, string) error { return nil }
+
 func TestLoginAndMe(t *testing.T) {
 	hash, err := bcrypt.GenerateFromPassword([]byte("valid-password-123"), bcrypt.MinCost)
 	if err != nil {

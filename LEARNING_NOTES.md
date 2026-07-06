@@ -489,3 +489,62 @@ Kita tidak perlu menulis perintah untuk menghapus baris di tabel `tutorial_steps
 tutorial_id UUID NOT NULL REFERENCES tutorials(id) ON DELETE CASCADE
 ```
 Klausul `ON DELETE CASCADE` memerintahkan PostgreSQL untuk otomatis menyapu bersih seluruh baris anak di tabel `tutorial_steps` begitu baris induknya di tabel `tutorials` dihapus!
+
+## 18. Remaining Resources Backend - Part 3: Order Steps Bulk Update (Golang REST API)
+
+Pada tahap ketiga **Step 4** ini, kita mengimplementasikan modul **Order Steps (`order_steps`)** di server Golang REST API.
+
+### Mengapa Bulk Update (`PUT /v1/admin/order-steps`) Bukannya CRUD Satu Per Satu?
+
+Langkah pemesanan adalah alur kerja singkat (biasanya terdiri dari 3–4 langkah seperti *"01 Konsultasi via WhatsApp"*, *"02 Pilih Tipe & Ukuran"*, *"03 Instalasi & Aktivasi"*) yang ditampilkan di halaman depan website. 
+Saat admin ingin mengubah alur transaksi ini, hampir selalu mereka mengubah urutan, memperbaiki teks, atau menambah/menghapus beberapa langkah sekaligus dalam satu layar antarmuka. 
+Membuat endpoint CRUD satu per satu (POST satu langkah, PUT satu langkah, DELETE satu langkah) sangat tidak efisien untuk *user experience* admin dan rentan membuat nomor urutan pemesanan terputus atau tidak konsisten di tengah proses editing.
+
+### Strategi "Replace All in One Transaction" (`ReplaceAllOrderSteps`)
+
+Sesuai filosofi *Ponytail Mode* (YAGNI / solusi paling simpel dan efektif), ketika admin menekan tombol *"Simpan Alur Pemesanan"*, frontend akan mengirimkan seluruh array langkah baru dalam satu request JSON ke `PUT /v1/admin/order-steps`.
+Di layer database (`internal/store/order_steps.go`), kita mengeksekusi operasi tersebut di dalam satu transaksi atomik (`tx.Begin(ctx)`):
+1. Membuka database transaction (`tx`).
+2. Menghapus seluruh baris lama di tabel `order_steps`:
+   ```sql
+   DELETE FROM order_steps;
+   ```
+3. Meng-loop array `steps` yang dikirim admin dan meng-insert kembali setiap langkah secara berurutan.
+4. Melakukan `tx.Commit(ctx)`. Jika terjadi kesalahan jaringan atau validasi saat menyimpan langkah ke-2, database akan otomatis melakukan *rollback*, sehingga alur pemesanan lama tetap utuh tanpa kerusakan!
+
+### Fallback Pintar untuk Penyelarasan Nomor (`step_number`)
+
+Untuk memudahkan admin UMKM yang mungkin lupa mengisi format nomor langkah (seperti angka `"01"` atau `"02"`), kode store kita dilengkapi dengan logika fallback pintar menggunakan fungsi standar Go `fmt.Sprintf`:
+```go
+stepNum := s.StepNumber
+if stepNum == "" {
+    stepNum = fmt.Sprintf("%02d", i+1)
+}
+```
+Jika `step_number` kosong, sistem otomatis membuatkan nomor urut berformat 2 digit sesuai posisinya di dalam array! Ini menjaga tampilan kartu langkah di landing page tetap rapi dan konsisten secara visual.
+
+## 19. Remaining Resources Backend - Part 4: WhatsApp Chat Templates CRUD & Dynamic Messaging
+
+Pada tahap akhir **Step 4** ini, kita mengimplementasikan modul **WhatsApp Templates (`whatsapp_templates`)** di server Golang REST API, yang juga menandai selesainya seluruh arsitektur backend utama UNA Project!
+
+### Peran Dynamic Messaging (`message_pattern`) dalam Bisnis UMKM
+
+Website UNA Project memiliki banyak titik konversi WhatsApp (di tombol hero, kartu katalog produk, tombol floating di pojok kanan bawah, hingga halaman detail). 
+Agar admin tidak perlu menulis ulang teks pesan di setiap kode frontend, kita menyediakan fitur manajemen template pesan WhatsApp. Admin dapat menyimpan pola pesan dinamis seperti:
+```text
+Halo UNA Project, saya tertarik dengan produk {product_name}. Bisa minta spesifikasi lengkap dan estimasi harganya?
+```
+Nantinya, kode frontend cukup mengambil pola pesan ini dari API, mengganti *placeholder* `{product_name}` dengan nama produk yang sedang di-klik user, dan menghasilkan tautan `https://wa.me/628...` yang dinamis dan profesional!
+
+### Penegakan Aturan "Single Default per Category" di Dalam Transaksi
+
+Bagaimana jika admin menetapkan suatu template sebagai default (`is_default = true`) untuk kategori `"produk"`? Agar tidak ada lebih dari satu template yang berstatus default di kategori yang sama, pada method `CreateWhatsAppTemplate` dan `UpdateWhatsAppTemplate` di store layer, kita membuka transaksi atomik (`tx.Begin(ctx)`) dan menjalankan perintah:
+```sql
+UPDATE whatsapp_templates SET is_default = false WHERE category = $1;
+```
+Sebelum kita meng-insert atau meng-update template baru! Dengan cara ini, database secara otomatis mereset status default pada template lama di kategori tersebut, sehingga selalu terjamin hanya ada maksimal 1 template default yang aktif per kategori.
+
+### Tonggak Penting: Seluruh Backend API Step 4 Selesai! 🎉
+
+Dengan selesainya modul WhatsApp Templates ini, server Golang REST API kita kini telah siap melayani 5 modul utama (Products, Testimonials, Tutorials, Order Steps, dan WhatsApp Templates) dengan arsitektur yang sangat bersih, konsisten, performan, dan aman (dilindungi oleh JWT Auth & bcrypt).
+Seluruh kode backend telah diverifikasi dengan kompilasi (`go build`), static analysis (`go vet`), serta unit testing (`go test ./...`), menghasilkan sistem yang robust dan siap dihubungkan ke UI Dasbor Admin Next.js pada **Step 5**!
