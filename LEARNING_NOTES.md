@@ -548,3 +548,29 @@ Sebelum kita meng-insert atau meng-update template baru! Dengan cara ini, databa
 
 Dengan selesainya modul WhatsApp Templates ini, server Golang REST API kita kini telah siap melayani 5 modul utama (Products, Testimonials, Tutorials, Order Steps, dan WhatsApp Templates) dengan arsitektur yang sangat bersih, konsisten, performan, dan aman (dilindungi oleh JWT Auth & bcrypt).
 Seluruh kode backend telah diverifikasi dengan kompilasi (`go build`), static analysis (`go vet`), serta unit testing (`go test ./...`), menghasilkan sistem yang robust dan siap dihubungkan ke UI Dasbor Admin Next.js pada **Step 5**!
+
+## 20. Step 5 - Part 1: Migrasi UI Dasbor Testimoni (`/admin/testimonials`) ke Golang Backend
+
+Memasuki **Step 5**, kita mulai menghubungkan halaman-halaman Dasbor Admin Next.js yang tersisa ke server Golang REST API yang telah kita bangun, dimulai dari modul **Testimoni (`/admin/testimonials`)**.
+
+### Penerapan Pola Arsitektur BFF (Backend-for-Frontend) pada Testimoni
+
+Sesuai pola referensi dari Dasbor Produk, halaman `/admin/testimonials` kini menggunakan kombinasi **React Server Component (`page.tsx`)** dan **Server Actions (`actions.ts`)**:
+- **RSC Page (`page.tsx`)**: Mengambil token JWT secara aman dari *httpOnly cookie* (`getVerifiedAdminToken()`), lalu melakukan `fetch` ke endpoint `${apiUrl}/admin/testimonials` di sisi server sebelum halaman di-render ke browser.
+- **Server Actions (`actions.ts`)**: Menangani operasi Create, Update, dan Delete dari form client. Browser tidak pernah memanggil server Go secara langsung; Next.js bertindak sebagai proksi yang menyisipkan token Authorization dan memetakan kode status HTTP (422 untuk validasi form, 404 jika tidak ditemukan) ke format respons JSON standar yang mudah dipahami komponen React.
+
+### Resiliensi Parsing JSON Respons (`Defensive Parsing`)
+
+Pada `page.tsx`, kita menulis logika parsing data sebagai berikut:
+```ts
+if (json.success && json.data) {
+  testimonials = (Array.isArray(json.data) ? json.data : json.data.items || []) as ApiTestimonial[];
+}
+```
+Teknik ini disebut **Defensive Parsing**. Mengapa ini penting dalam arsitektur mikroservice atau modular? Karena sebagian endpoint API mengembalikan array langsung (`data: [...]`), sementara sebagian lain mengembalikan objek berpaginasi (`data: { items: [...], total: ... }`). Dengan satu baris kode sederhana ini, UI kita menjadi sangat tangguh (*resilient*) dan kebal terhadap perbedaan struktur balasan dari server backend!
+
+### Peningkatan UX dengan Star Rating & Status Pulse Badge
+
+Pada komponen client (`AdminTestimonialsClient.tsx`), kita menerapkan prinsip desain premium UNA Project (*visual excellence*):
+1. **Konversi Angka ke Ikon Bintang**: Angka rating (1–5) dari database tidak ditampilkan mentah sebagai teks, melainkan di-transformasi menjadi jejeran bintang emas (`★`) menggunakan `Array.from({ length: item.rating })`.
+2. **Badge Status Hidup**: Badge status "Aktif" dilengkapi dengan indikator titik hijau beranimasi *pulse* (`animate-pulse`). Ini memberikan micro-animation halus yang membuat dasbor terasa hidup, profesional, dan menyenangkan untuk digunakan oleh admin UMKM!
