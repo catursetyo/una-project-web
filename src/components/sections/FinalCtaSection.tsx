@@ -1,10 +1,12 @@
-import { createWhatsAppLink } from "@/src/lib/whatsapp";
+import { getDynamicWhatsAppLink } from "@/src/lib/publicApi";
 import { Button } from "@/src/components/ui/Button";
 import { Icon } from "@/src/components/ui/Icon";
 import { SectionLabel } from "@/src/components/ui/SectionLabel";
 import { Container } from "@/src/components/layout/Container";
 
-export function FinalCtaSection() {
+export async function FinalCtaSection() {
+  const waLink = await getDynamicWhatsAppLink({ category: "Konsultasi" });
+
   return (
     <section className="relative overflow-hidden bg-una-deep py-12 text-white sm:py-14 lg:py-16">
       <div className="islamic-star-pattern absolute inset-0 opacity-[0.04]" />
@@ -22,10 +24,7 @@ export function FinalCtaSection() {
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
             <Button
-              href={createWhatsAppLink({
-                message:
-                  "Assalamualaikum, saya ingin konsultasi pemasangan JWS Digital UNA Project.",
-              })}
+              href={waLink}
               target="_blank"
               variant="gold"
             >

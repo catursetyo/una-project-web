@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { WhatsAppButton } from "@/src/components/ui/WhatsAppButton";
+import { getTransactionOrderSteps } from "@/src/lib/publicApi";
 
 export const metadata: Metadata = {
   title: "Cara Pesan | UNA Project",
@@ -8,45 +9,9 @@ export const metadata: Metadata = {
     "Panduan alur transaksi manual UNA Project mulai dari pilih produk, konsultasi, pembayaran DP, produksi, instalasi, hingga after-sales.",
 };
 
-const orderSteps = [
-  {
-    title: "Pilih Produk",
-    description:
-      "Lihat katalog produk dan tentukan jenis kebutuhan awal, misalnya jam waktu sholat, running text LED, atau produk custom.",
-  },
-  {
-    title: "Konsultasi Kebutuhan",
-    description:
-      "Diskusikan lokasi pemasangan, ukuran, fitur, warna tampilan, serta kebutuhan informasi yang ingin ditampilkan.",
-  },
-  {
-    title: "Konfirmasi Ukuran dan Harga",
-    description:
-      "UNA Project membantu menghitung estimasi harga berdasarkan ukuran, bahan, fitur, dan kebutuhan pemasangan.",
-  },
-  {
-    title: "Pembayaran DP",
-    description:
-      "Setelah spesifikasi disepakati, customer melakukan pembayaran DP sebagai tanda mulai proses produksi.",
-  },
-  {
-    title: "Proses Produksi",
-    description:
-      "Produk dibuat sesuai spesifikasi yang sudah disepakati. Lama produksi menyesuaikan tingkat custom dan antrean pekerjaan.",
-  },
-  {
-    title: "Instalasi atau Pengiriman",
-    description:
-      "Produk dikirim atau dipasang sesuai kesepakatan. Untuk produk tertentu, proses setting awal dapat dibantu.",
-  },
-  {
-    title: "Garansi dan After-Sales",
-    description:
-      "Setelah produk diterima, customer tetap bisa berkonsultasi untuk penggunaan, setting, dan kendala dasar.",
-  },
-];
+export default async function OrderPage() {
+  const orderSteps = await getTransactionOrderSteps();
 
-export default function OrderPage() {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
@@ -106,7 +71,7 @@ export default function OrderPage() {
           </p>
 
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <WhatsAppButton />
+            <WhatsAppButton category="Konsultasi" />
             <Link
               href="/product"
               className="motion-button inline-flex items-center justify-center rounded-xl border-2 border-primary px-5 py-3.5 text-sm font-black tracking-[0.08em] text-primary hover:bg-primary hover:text-white sm:text-base"

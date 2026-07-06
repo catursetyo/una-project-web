@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ProductCatalog } from "@/src/components/products/ProductCatalog";
-import { products } from "@/src/data/products";
+import { getPublicProducts } from "@/src/lib/publicApi";
 
 export const metadata: Metadata = {
   title: "Katalog Produk | UNA Project",
@@ -8,11 +8,12 @@ export const metadata: Metadata = {
     "Katalog produk UNA Project untuk jam waktu sholat digital, running text LED, dan produk custom.",
 };
 
-const categories = Array.from(
-  new Set(products.map((product) => product.category)),
-);
+export default async function ProductsPage() {
+  const products = await getPublicProducts();
+  const categories = Array.from(
+    new Set(products.map((product) => product.category)),
+  );
 
-export default function ProductsPage() {
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">

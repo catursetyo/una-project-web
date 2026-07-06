@@ -5,8 +5,7 @@ export function FloatingWhatsApp() {
   return (
     <a
       href={createWhatsAppLink({
-        message:
-          "Assalamualaikum, saya ingin tanya produk Jam Waktu Sholat Digital UNA Project.",
+        message: "Halo UNA Project, saya ingin konsultasi produk UNA Project.",
       })}
       target="_blank"
       rel="noreferrer"

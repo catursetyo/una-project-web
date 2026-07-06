@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { TutorialMediaPlaceholder } from "@/src/components/tutorials/TutorialMediaPlaceholder";
-import { tutorials } from "@/src/data/tutorials";
+import { getPublicTutorials } from "@/src/lib/publicApi";
 
 export const metadata: Metadata = {
   title: "Tutorial Setting | UNA Project",
@@ -8,7 +8,9 @@ export const metadata: Metadata = {
     "Panduan setting jam waktu sholat dan running text digital UNA Project.",
 };
 
-export default function TutorialPage() {
+export default async function TutorialPage() {
+  const tutorials = await getPublicTutorials();
+
   return (
     <section className="bg-background">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">

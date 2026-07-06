@@ -47,8 +47,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <a
             href={createWhatsAppLink({
-              message:
-                "Assalamualaikum, saya ingin tanya produk JWS Digital UNA Project.",
+              message: "Halo UNA Project, saya ingin konsultasi produk UNA Project.",
             })}
             target="_blank"
             rel="noreferrer"
@@ -88,8 +87,7 @@ export function Navbar() {
           ))}
           <a
             href={createWhatsAppLink({
-              message:
-                "Assalamualaikum, saya ingin konsultasi pemasangan JWS Digital UNA Project.",
+              message: "Halo UNA Project, saya ingin konsultasi produk UNA Project.",
             })}
             target="_blank"
             rel="noreferrer"

@@ -1,8 +1,8 @@
-import { products } from "@/src/data/products";
 import { ProductCard } from "@/src/components/products/ProductCard";
 import { Button } from "@/src/components/ui/Button";
 import { SectionLabel } from "@/src/components/ui/SectionLabel";
 import { Container } from "@/src/components/layout/Container";
+import { getPublicProducts } from "@/src/lib/publicApi";
 import type { Product } from "@/src/types/product";
 
 const selectedProductSlugs = [
@@ -14,11 +14,14 @@ const selectedProductSlugs = [
   "lisensi-key-activation-jws-android-tv",
 ];
 
-const catalogProducts = selectedProductSlugs
-  .map((slug) => products.find((product) => product.slug === slug))
-  .filter((product): product is Product => Boolean(product));
+export async function ProductCatalogSection() {
+  const allProducts = await getPublicProducts();
+  const catalogProducts = selectedProductSlugs
+    .map((slug) => allProducts.find((product) => product.slug === slug))
+    .filter((product): product is Product => Boolean(product));
 
-export function ProductCatalogSection() {
+  const displayProducts = catalogProducts.length > 0 ? catalogProducts : allProducts.slice(0, 6);
+
   return (
     <section id="produk" className="bg-una-soft py-12 sm:py-14 lg:py-16">
       <Container>
@@ -43,7 +46,7 @@ export function ProductCatalogSection() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {catalogProducts.map((product, index) => (
+          {displayProducts.map((product, index) => (
             <ProductCard
               key={product.slug}
               product={product}

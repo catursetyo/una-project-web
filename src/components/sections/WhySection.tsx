@@ -1,11 +1,13 @@
 import { whyFeatures } from "@/src/data/landing";
-import { createWhatsAppLink } from "@/src/lib/whatsapp";
+import { getDynamicWhatsAppLink } from "@/src/lib/publicApi";
 import { Button } from "@/src/components/ui/Button";
 import { Icon } from "@/src/components/ui/Icon";
 import { SectionLabel } from "@/src/components/ui/SectionLabel";
 import { Container } from "@/src/components/layout/Container";
 
-export function WhySection() {
+export async function WhySection() {
+  const waLink = await getDynamicWhatsAppLink({ category: "Konsultasi" });
+
   return (
     <section id="keunggulan" className="bg-white py-12 sm:py-14 lg:py-16">
       <Container>
@@ -21,10 +23,7 @@ export function WhySection() {
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Button
-                href={createWhatsAppLink({
-                  message:
-                    "Halo UNA Project, saya ingin konsultasi JWS Digital.",
-                })}
+                href={waLink}
                 target="_blank"
                 variant="dark"
               >

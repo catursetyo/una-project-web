@@ -1,33 +1,75 @@
-# Product Brief
+# Konteks Produk untuk AI Agent
 
-## Register
+Gunakan dokumen ini untuk menentukan apakah sebuah perubahan membantu tujuan UNA Project. Jangan mengubah arah produk tanpa instruksi user.
 
-brand
+## Produk
 
-## Users
+UNA Project adalah website katalog dan layanan untuk:
 
-Pengunjung utama adalah pengurus masjid, mushola, sekolah, kantor, toko, dan instansi kecil yang membutuhkan display waktu atau informasi harian. Mereka biasanya datang untuk memahami tipe produk, kisaran harga, fitur pemasangan, dan cara konsultasi sebelum menghubungi UNA Project lewat WhatsApp.
+- jam waktu sholat digital;
+- running text LED;
+- JWS RGB panel;
+- JWS Android/Google TV;
+- seven segment digital clock;
+- fitur auto-murotal;
+- instalasi dan pengaturan perangkat.
 
-## Product Purpose
+## Pengguna
 
-UNA Project Web adalah landing page dan katalog modern untuk produk jam waktu sholat digital, running text LED, JWS RGB panel, JWS Android TV, seven segment digital clock, fitur auto-murotal, serta layanan instalasi. Website ini menggantikan pola Google Sites lama dengan pengalaman yang lebih rapi, premium, mudah dipindai, dan membantu calon customer mengambil langkah konsultasi.
+### Pengunjung publik
 
-## Brand Personality
+Pengurus masjid, mushola, sekolah, kantor, toko, dan instansi kecil. Mereka perlu memahami pilihan produk, harga mulai, fitur, cara transaksi, dan jalur konsultasi WhatsApp.
 
-Presisi, amanah, teknis, dan ramah. Brand harus terasa seperti UMKM spesialis display digital Islami yang profesional: cukup premium untuk dipercaya pengurus masjid, tetapi tetap mudah didekati oleh customer yang belum paham spesifikasi teknis.
+### Admin internal
 
-## Anti-references
+Pengurus UNA Project yang mengelola produk, varian, testimoni, tutorial, alur pemesanan, dan template WhatsApp tanpa mengubah kode.
 
-Jangan terlihat seperti SaaS landing page generik, toko online massal, dashboard admin, atau halaman Google Sites lama yang penuh blok teks. Hindari arah visual yang terlalu playful, terlalu dekoratif, terlalu e-commerce kompleks, atau terlalu jauh dari identitas produk fisik LED/JWS.
+## Tujuan Pengalaman
 
-## Design Principles
+Website harus:
 
-1. Tampilkan produk fisik secara terasa nyata melalui simulasi LED, mockup JWS, preview panel, dan detail spesifikasi yang mudah dipindai.
-2. Jadikan WhatsApp sebagai jalur aksi utama tanpa menyembunyikan informasi katalog, harga mulai, dan alur pemesanan.
-3. Bangun rasa percaya dengan bahasa yang jelas, struktur landing page yang rapi, dan visual premium dark green serta gold sesuai konteks masjid.
-4. Pecah UI besar menjadi komponen kecil dan data-driven agar proyek mudah dipelajari, dijelaskan, dan dikembangkan sebagai portfolio.
-5. Jaga halaman tetap responsif dan ringan; desain harus membantu customer membaca produk, bukan sekadar terlihat ramai.
+1. Membuat produk fisik dan perbedaannya mudah dipahami.
+2. Menampilkan harga mulai tanpa menjanjikan harga final yang belum dikonsultasikan.
+3. Menjadikan WhatsApp jalur konversi utama.
+4. Membangun kepercayaan melalui bahasa jelas, dokumentasi pemasangan, dan desain yang rapi.
+5. Tetap ringan dan nyaman di mobile.
 
-## Accessibility & Inclusion
+## Struktur Produk
 
-Gunakan semantic HTML, kontras teks yang terbaca, heading order yang logis, link dan CTA yang deskriptif, serta state fokus yang jelas. Animasi harus menghormati reduced motion, layout harus aman di mobile, dan elemen interaktif tidak boleh dibuat dari clickable `div`.
+### Area publik
+
+- Landing page.
+- Katalog dan detail produk.
+- Alur transaksi.
+- Tutorial.
+- CTA WhatsApp.
+
+### Area admin
+
+- Host production: `admin.unaproject.my.id`.
+- Ringkasan konten.
+- CRUD produk dan varian.
+- CRUD testimoni.
+- CRUD tutorial dan langkahnya.
+- Pengaturan alur pemesanan.
+- CRUD template pesan WhatsApp.
+
+Jika backend belum tersedia, dashboard hanya boleh menyatakan data sebagai pratinjau lokal dan tidak boleh memalsukan persistence.
+
+## Prioritas Keputusan
+
+Saat dua solusi sama-sama valid, pilih yang:
+
+1. Lebih mudah dipahami pengunjung nonteknis.
+2. Menggunakan pola yang sudah ada di repository.
+3. Membuat data produk tetap data-driven.
+4. Menambah paling sedikit JavaScript dan dependency.
+5. Mudah dijelaskan sebagai project portfolio.
+
+## Batas Scope
+
+Jangan menambahkan login customer, cart, checkout, payment gateway, marketplace, CMS pihak ketiga, atau microservice baru kecuali user memintanya.
+
+## Nada Bahasa
+
+Gunakan Bahasa Indonesia yang profesional, ramah, dan konkret. Hindari klaim seperti “termurah”, “nomor satu”, atau “100% sempurna” tanpa bukti.

@@ -23,6 +23,12 @@
 # misc
 .DS_Store
 *.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+service-account*.json
+gcloud-service-key*.json
 
 # debug
 npm-debug.log*
@@ -32,15 +38,71 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+!backend/.env.example
 
 # vercel
 .vercel
 
-# local agent tooling
+# local agent & AI tooling
 .agents/
 .codex/
 .impeccable/
+.gemini/
+.claude/
+.cursor/
+.brain/
+.aider*
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# golang (backend & build artifacts)
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.prof
+coverage.out
+coverage.html
+/main
+/server
+/api-server
+backend/api
+backend/create-admin
+tmp/
+.air.toml
+
+# docker secrets & overrides
+docker-compose.override.yml
+compose.override.yml
+*.secret
+secrets/
+
+# common secret files
+id_rsa
+id_ed25519
+*.crt
+
+# database & supabase local dev
+.supabase/temp/
+.supabase/.temp/
+.supabase/storage/
+.supabase/dump/
+*.dump
+*.sql.gz
+*.sqlite
+*.db
+
+# IDE & OS files
+.idea/
+*.swp
+*.swo
+*~
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+._*
