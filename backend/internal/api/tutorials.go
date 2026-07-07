@@ -107,6 +107,9 @@ func validateTutorialInput(in *tutorialInput) map[string]any {
 		errs["short_description"] = "maximum 255 characters"
 	}
 
+	if len(in.Steps) == 0 {
+		errs["steps"] = "at least one step required"
+	}
 	for i, s := range in.Steps {
 		s.Title = strings.TrimSpace(s.Title)
 		s.Description = strings.TrimSpace(s.Description)
@@ -128,7 +131,13 @@ func (s *Server) listPublicTutorials(w http.ResponseWriter, r *http.Request) {
 
 	result := make([]tutorialJSON, 0, len(items))
 	for _, t := range items {
-		result = append(result, toTutorialJSON(t, nil))
+		steps, err := s.store.StepsByTutorialID(r.Context(), t.ID)
+		if err != nil {
+			s.logger.Error("get public tutorial steps failed", "tutorial_id", t.ID, "error", err)
+			writeError(w, http.StatusInternalServerError, "ERR_INTERNAL", "Internal server error")
+			return
+		}
+		result = append(result, toTutorialJSON(t, steps))
 	}
 	writeJSON(w, http.StatusOK, response{Success: true, Data: result})
 }
@@ -171,7 +180,13 @@ func (s *Server) listAdminTutorials(w http.ResponseWriter, r *http.Request) {
 
 	result := make([]tutorialJSON, 0, len(items))
 	for _, t := range items {
-		result = append(result, toTutorialJSON(t, nil))
+		steps, err := s.store.StepsByTutorialID(r.Context(), t.ID)
+		if err != nil {
+			s.logger.Error("get admin tutorial steps failed", "tutorial_id", t.ID, "error", err)
+			writeError(w, http.StatusInternalServerError, "ERR_INTERNAL", "Internal server error")
+			return
+		}
+		result = append(result, toTutorialJSON(t, steps))
 	}
 	writeJSON(w, http.StatusOK, response{Success: true, Data: result})
 }

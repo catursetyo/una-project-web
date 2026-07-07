@@ -89,7 +89,13 @@ func (s *Server) listPublicProducts(w http.ResponseWriter, r *http.Request) {
 
 	result := make([]productJSON, 0, len(products))
 	for _, p := range products {
-		result = append(result, toProductJSON(p, nil))
+		variants, err := s.store.VariantsByProductID(r.Context(), p.ID)
+		if err != nil {
+			s.logger.Error("get public product variants failed", "product_id", p.ID, "error", err)
+			writeError(w, http.StatusInternalServerError, "ERR_INTERNAL", "Internal server error")
+			return
+		}
+		result = append(result, toProductJSON(p, variants))
 	}
 	writeJSON(w, http.StatusOK, response{Success: true, Data: result})
 }
@@ -147,7 +153,13 @@ func (s *Server) listAdminProducts(w http.ResponseWriter, r *http.Request) {
 
 	items := make([]productJSON, 0, len(products))
 	for _, p := range products {
-		items = append(items, toProductJSON(p, nil))
+		variants, err := s.store.VariantsByProductID(r.Context(), p.ID)
+		if err != nil {
+			s.logger.Error("get admin product variants failed", "product_id", p.ID, "error", err)
+			writeError(w, http.StatusInternalServerError, "ERR_INTERNAL", "Internal server error")
+			return
+		}
+		items = append(items, toProductJSON(p, variants))
 	}
 	writeJSON(w, http.StatusOK, response{
 		Success: true,
@@ -210,8 +222,18 @@ func (s *Server) createProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Re-fetch untuk mengembalikan data lengkap dengan field yang di-generate DB
-	product, _ := s.store.ProductByID(r.Context(), id)
-	variants, _ := s.store.VariantsByProductID(r.Context(), id)
+	product, err := s.store.ProductByID(r.Context(), id)
+	if err != nil {
+		s.logger.Error("get created product failed", "id", id, "error", err)
+		writeError(w, http.StatusInternalServerError, "ERR_INTERNAL", "Internal server error")
+		return
+	}
+	variants, err := s.store.VariantsByProductID(r.Context(), id)
+	if err != nil {
+		s.logger.Error("get created product variants failed", "id", id, "error", err)
+		writeError(w, http.StatusInternalServerError, "ERR_INTERNAL", "Internal server error")
+		return
+	}
 	writeJSON(w, http.StatusCreated, response{
 		Success: true, Message: "Product created", Data: toProductJSON(product, variants),
 	})
@@ -247,8 +269,18 @@ func (s *Server) updateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	product, _ := s.store.ProductByID(r.Context(), id)
-	variants, _ := s.store.VariantsByProductID(r.Context(), id)
+	product, err := s.store.ProductByID(r.Context(), id)
+	if err != nil {
+		s.logger.Error("get updated product failed", "id", id, "error", err)
+		writeError(w, http.StatusInternalServerError, "ERR_INTERNAL", "Internal server error")
+		return
+	}
+	variants, err := s.store.VariantsByProductID(r.Context(), id)
+	if err != nil {
+		s.logger.Error("get updated product variants failed", "id", id, "error", err)
+		writeError(w, http.StatusInternalServerError, "ERR_INTERNAL", "Internal server error")
+		return
+	}
 	writeJSON(w, http.StatusOK, response{
 		Success: true, Message: "Product updated", Data: toProductJSON(product, variants),
 	})
@@ -314,6 +346,9 @@ func validateProductInput(input productInput) map[string]any {
 	}
 	if input.PriceStartFrom < 0 {
 		errs["price_start_from"] = "must be zero or positive"
+	}
+	if len(input.Variants) == 0 {
+		errs["variants"] = "at least one variant required"
 	}
 	for i, v := range input.Variants {
 		prefix := "variants[" + strconv.Itoa(i) + "]."

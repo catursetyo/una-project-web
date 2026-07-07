@@ -17,7 +17,11 @@ import (
 )
 
 type fakeStore struct {
-	admin store.Admin
+	admin         store.Admin
+	products      []store.Product
+	variants      map[string][]store.ProductVariant
+	tutorials     []store.Tutorial
+	tutorialSteps map[string][]store.TutorialStep
 }
 
 func (f fakeStore) Ping(context.Context) error { return nil }
@@ -38,19 +42,22 @@ func (f fakeStore) AdminByID(_ context.Context, id string) (store.Admin, error) 
 
 // ponytail: stubs — auth tests don't touch products
 func (f fakeStore) ActiveProducts(context.Context, string, *bool) ([]store.Product, error) {
-	return nil, nil
+	return f.products, nil
 }
 func (f fakeStore) ActiveProductBySlug(context.Context, string) (store.Product, error) {
 	return store.Product{}, store.ErrProductNotFound
 }
 func (f fakeStore) AllProducts(context.Context, *bool, int, int) ([]store.Product, int, error) {
-	return nil, 0, nil
+	return f.products, len(f.products), nil
 }
 func (f fakeStore) ProductByID(context.Context, string) (store.Product, error) {
 	return store.Product{}, store.ErrProductNotFound
 }
-func (f fakeStore) VariantsByProductID(context.Context, string) ([]store.ProductVariant, error) {
-	return nil, nil
+func (f fakeStore) VariantsByProductID(_ context.Context, productID string) ([]store.ProductVariant, error) {
+	if f.variants == nil {
+		return nil, nil
+	}
+	return f.variants[productID], nil
 }
 func (f fakeStore) CreateProduct(context.Context, store.Product, []store.ProductVariant) (string, error) {
 	return "", nil
@@ -75,16 +82,23 @@ func (f fakeStore) UpdateTestimonial(context.Context, *store.Testimonial) error 
 func (f fakeStore) DeleteTestimonial(context.Context, string) error             { return nil }
 
 // ponytail: stubs — auth tests don't touch tutorials
-func (f fakeStore) ListPublicTutorials(context.Context) ([]store.Tutorial, error) { return nil, nil }
+func (f fakeStore) ListPublicTutorials(context.Context) ([]store.Tutorial, error) {
+	return f.tutorials, nil
+}
 func (f fakeStore) GetPublicTutorialBySlug(context.Context, string) (store.Tutorial, error) {
 	return store.Tutorial{}, store.ErrTutorialNotFound
 }
-func (f fakeStore) ListAdminTutorials(context.Context) ([]store.Tutorial, error) { return nil, nil }
+func (f fakeStore) ListAdminTutorials(context.Context) ([]store.Tutorial, error) {
+	return f.tutorials, nil
+}
 func (f fakeStore) GetTutorialByID(context.Context, string) (store.Tutorial, error) {
 	return store.Tutorial{}, store.ErrTutorialNotFound
 }
-func (f fakeStore) StepsByTutorialID(context.Context, string) ([]store.TutorialStep, error) {
-	return nil, nil
+func (f fakeStore) StepsByTutorialID(_ context.Context, tutorialID string) ([]store.TutorialStep, error) {
+	if f.tutorialSteps == nil {
+		return nil, nil
+	}
+	return f.tutorialSteps[tutorialID], nil
 }
 func (f fakeStore) CreateTutorial(context.Context, store.Tutorial, []store.TutorialStep) (string, error) {
 	return "", nil
@@ -183,5 +197,110 @@ func TestLoginAndMe(t *testing.T) {
 	}
 	if strings.Contains(meResponse.Body.String(), "password_hash") {
 		t.Fatal("safe admin DTO leaked password_hash")
+	}
+}
+
+func TestPublicProductsIncludeVariants(t *testing.T) {
+	tokens, err := auth.NewTokens(
+		"01234567890123456789012345678901",
+		"una-project-api",
+		"una-project-admin",
+		time.Hour,
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	server, err := NewServer(fakeStore{
+		products: []store.Product{{
+			ID:               "product-1",
+			Slug:             "jws-test",
+			Name:             "JWS Test",
+			Category:         "Jam Waktu Sholat",
+			ShortDescription: "Short",
+			Description:      "Long",
+			PriceStartFrom:   1000,
+			IsActive:         true,
+			OrderIndex:       1,
+		}},
+		variants: map[string][]store.ProductVariant{
+			"product-1": {{Name: "Versi biasa", Price: 1000, OrderIndex: 1}},
+		},
+	}, tokens, slog.New(slog.NewTextHandler(io.Discard, nil)))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	request := httptest.NewRequest(http.MethodGet, "/v1/products", nil)
+	response := httptest.NewRecorder()
+	server.Handler().ServeHTTP(response, request)
+	if response.Code != http.StatusOK {
+		t.Fatalf("products status = %d, body = %s", response.Code, response.Body.String())
+	}
+
+	var payload struct {
+		Data []struct {
+			Variants []struct {
+				Name string `json:"name"`
+			} `json:"variants"`
+		} `json:"data"`
+	}
+	if err := json.Unmarshal(response.Body.Bytes(), &payload); err != nil {
+		t.Fatal(err)
+	}
+	if len(payload.Data) != 1 || len(payload.Data[0].Variants) != 1 {
+		t.Fatalf("expected product variants in list response, got %+v", payload.Data)
+	}
+}
+
+func TestPublicTutorialsIncludeSteps(t *testing.T) {
+	tokens, err := auth.NewTokens(
+		"01234567890123456789012345678901",
+		"una-project-api",
+		"una-project-admin",
+		time.Hour,
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	server, err := NewServer(fakeStore{
+		tutorials: []store.Tutorial{{
+			ID:               "tutorial-1",
+			Slug:             "setting-jws",
+			Title:            "Setting JWS",
+			Category:         "Pengaturan JWS",
+			ShortDescription: "Panduan singkat",
+			IsActive:         true,
+			OrderIndex:       1,
+			CreatedAt:        time.Now(),
+		}},
+		tutorialSteps: map[string][]store.TutorialStep{
+			"tutorial-1": {{StepNumber: 1, Title: "Nyalakan perangkat", Description: "Hubungkan adaptor."}},
+		},
+	}, tokens, slog.New(slog.NewTextHandler(io.Discard, nil)))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	request := httptest.NewRequest(http.MethodGet, "/v1/tutorials", nil)
+	response := httptest.NewRecorder()
+	server.Handler().ServeHTTP(response, request)
+	if response.Code != http.StatusOK {
+		t.Fatalf("tutorials status = %d, body = %s", response.Code, response.Body.String())
+	}
+
+	var payload struct {
+		Data []struct {
+			Steps []struct {
+				Title string `json:"title"`
+			} `json:"steps"`
+		} `json:"data"`
+	}
+	if err := json.Unmarshal(response.Body.Bytes(), &payload); err != nil {
+		t.Fatal(err)
+	}
+	if len(payload.Data) != 1 || len(payload.Data[0].Steps) != 1 {
+		t.Fatalf("expected tutorial steps in list response, got %+v", payload.Data)
 	}
 }
