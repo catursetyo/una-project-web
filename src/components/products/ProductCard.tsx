@@ -71,10 +71,10 @@ export function ProductCard({
       data-scroll-reveal="scale"
       data-scroll-delay={revealDelay}
       aria-label={`Lihat detail ${product.name}`}
-      className={`scroll-reveal group flex h-full flex-col overflow-hidden rounded-lg border border-black/10 bg-white transition-colors hover:bg-una-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-una-gold ${className}`}
+      className={`scroll-reveal group flex h-full flex-col overflow-hidden rounded-lg border border-black/10 bg-white transition-[background-color,transform,box-shadow] duration-200 ease-out hover:bg-una-cream active:scale-[0.985] active:shadow-inner focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-una-gold ${className}`}
     >
       {product.image ? (
-        <div className="relative aspect-[16/9] overflow-hidden rounded-t-lg bg-una-deep">
+        <div className="relative aspect-[16/9] overflow-hidden rounded-t-lg bg-una-deep transition-transform duration-200 ease-out group-active:scale-[0.97]">
           <img
             src={product.image}
             alt={product.name}

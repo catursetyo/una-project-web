@@ -12,7 +12,7 @@ export function MiniLedPreview({
   value = "12:45",
 }: MiniLedPreviewProps) {
   return (
-    <div className="relative flex aspect-[16/9] items-center justify-center overflow-hidden rounded-t-lg bg-una-deep">
+    <div className="relative flex aspect-[16/9] items-center justify-center overflow-hidden rounded-t-lg bg-una-deep transition-transform duration-200 ease-out group-active:scale-[0.97]">
       <div className="led-dot-grid absolute inset-0 opacity-70" />
       <span className="absolute left-3 top-3 rounded-full border border-una-gold/30 bg-white/10 px-2.5 py-1 text-[0.58rem] font-black uppercase tracking-[0.1em] text-una-gold-light">
         {tag}
