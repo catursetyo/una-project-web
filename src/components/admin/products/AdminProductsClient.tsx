@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { formatPrice } from "@/src/lib/formatPrice";
 import type { ApiProduct, ApiProductVariant } from "@/src/types/product";
 import {
@@ -15,7 +16,11 @@ type AdminProductsClientProps = {
   initialProducts: ApiProduct[];
 };
 
+const CUSTOM_CATEGORY_VALUE = "__custom_category__";
+const DEFAULT_PRODUCT_CATEGORIES = ["Jam Waktu Sholat", "Lisensi Aplikasi", "Jam Digital", "Seven Segment"];
+
 export function AdminProductsClient({ initialProducts }: AdminProductsClientProps) {
+  const router = useRouter();
   const products = initialProducts;
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("ALL");
@@ -52,7 +57,7 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
 
   // Unique categories for filter
   const categories = useMemo(() => {
-    const cats = new Set(products.map((p) => p.category));
+    const cats = new Set([...DEFAULT_PRODUCT_CATEGORIES, ...products.map((p) => p.category)]);
     return Array.from(cats);
   }, [products]);
 
@@ -215,6 +220,7 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
       if (res.success) {
         setIsFormModalOpen(false);
         setFeedback({ type: "success", text: res.message || "Berhasil disimpan!" });
+        router.refresh();
       } else {
         setFeedback({ type: "error", text: res.error || "Gagal menyimpan produk." });
         if (res.errors) {
@@ -237,6 +243,7 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
         setIsDeleteModalOpen(false);
         setDeletingProduct(null);
         setFeedback({ type: "success", text: res.message || "Produk berhasil dihapus!" });
+        router.refresh();
       } else {
         setFeedback({ type: "error", text: res.error || "Gagal menghapus produk." });
       }
@@ -539,14 +546,34 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
                   <label className="block text-xs font-bold uppercase tracking-wider text-una-muted">
                     Kategori <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
+                  <select
                     required
-                    value={formCategory}
-                    onChange={(e) => setFormCategory(e.target.value)}
-                    placeholder="Contoh: Jam Waktu Sholat"
+                    value={categories.includes(formCategory) ? formCategory : CUSTOM_CATEGORY_VALUE}
+                    onChange={(e) => {
+                      setFormCategory(e.target.value === CUSTOM_CATEGORY_VALUE ? "" : e.target.value);
+                    }}
                     className="mt-1 w-full rounded-lg border border-black/20 px-3.5 py-2 text-sm text-una-ink focus:border-una-teal focus:outline-none"
-                  />
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                    <option value={CUSTOM_CATEGORY_VALUE}>Kategori Baru</option>
+                  </select>
+                  {!categories.includes(formCategory) ? (
+                    <input
+                      type="text"
+                      required
+                      value={formCategory}
+                      onChange={(e) => setFormCategory(e.target.value)}
+                      placeholder="Contoh: Running Text Custom"
+                      className="mt-2 w-full rounded-lg border border-black/20 px-3.5 py-2 text-sm text-una-ink focus:border-una-teal focus:outline-none"
+                    />
+                  ) : null}
+                  {fieldErrors.category ? (
+                    <p className="mt-1 text-xs font-bold text-red-600">{fieldErrors.category}</p>
+                  ) : null}
                 </div>
 
                 <div>

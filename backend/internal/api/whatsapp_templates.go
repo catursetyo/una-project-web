@@ -59,6 +59,9 @@ func validateWhatsAppTemplateInput(in *whatsappTemplateInput) map[string]any {
 	if in.MessagePattern == "" {
 		errs["message_pattern"] = "required"
 	}
+	if !in.IsActive {
+		in.IsDefault = false
+	}
 
 	return errs
 }

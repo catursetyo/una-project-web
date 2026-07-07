@@ -34,8 +34,8 @@ async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
 export default async function AdminAnalyticsPage() {
   const summary = await getAnalyticsSummary();
   const conversion =
-    summary.product_views > 0
-      ? Math.round((summary.whatsapp_clicks / summary.product_views) * 1000) / 10
+    summary.website_views > 0
+      ? Math.round((summary.whatsapp_clicks / summary.website_views) * 1000) / 10
       : 0;
 
   return (
@@ -55,7 +55,7 @@ export default async function AdminAnalyticsPage() {
           ["Website views", summary.website_views],
           ["Product views", summary.product_views],
           ["WhatsApp clicks", summary.whatsapp_clicks],
-          ["Click/view", `${conversion}%`],
+          ["CTA click rate", `${conversion}%`],
         ].map(([label, value]) => (
           <article key={label} className="rounded-xl border border-black/8 bg-white p-5">
             <p className="text-xs font-black uppercase tracking-[0.12em] text-una-muted">

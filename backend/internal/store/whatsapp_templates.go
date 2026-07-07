@@ -126,6 +126,9 @@ func (p *Postgres) CreateWhatsAppTemplate(ctx context.Context, t *WhatsAppTempla
 		}
 		return err
 	}
+	if err := ensureWhatsAppCategoryDefault(ctx, tx, t.Category); err != nil {
+		return err
+	}
 
 	return tx.Commit(ctx)
 }
@@ -136,6 +139,15 @@ func (p *Postgres) UpdateWhatsAppTemplate(ctx context.Context, t *WhatsAppTempla
 		return err
 	}
 	defer tx.Rollback(ctx)
+
+	var oldCategory string
+	err = tx.QueryRow(ctx, "SELECT category FROM whatsapp_templates WHERE id::uuid = $1", t.ID).Scan(&oldCategory)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return ErrWhatsAppTemplateNotFound
+	}
+	if err != nil {
+		return err
+	}
 
 	if t.IsDefault {
 		if _, err := tx.Exec(ctx, "UPDATE whatsapp_templates SET is_default = false WHERE category = $1 AND id::uuid != $2", t.Category, t.ID); err != nil {
@@ -158,18 +170,73 @@ func (p *Postgres) UpdateWhatsAppTemplate(ctx context.Context, t *WhatsAppTempla
 	if tag.RowsAffected() == 0 {
 		return ErrWhatsAppTemplateNotFound
 	}
+	if err := ensureWhatsAppCategoryDefault(ctx, tx, oldCategory); err != nil {
+		return err
+	}
+	if err := ensureWhatsAppCategoryDefault(ctx, tx, t.Category); err != nil {
+		return err
+	}
 
 	return tx.Commit(ctx)
 }
 
 func (p *Postgres) DeleteWhatsAppTemplate(ctx context.Context, id string) error {
+	tx, err := p.pool.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+
+	var category string
+	err = tx.QueryRow(ctx, "SELECT category FROM whatsapp_templates WHERE id::uuid = $1", id).Scan(&category)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return ErrWhatsAppTemplateNotFound
+	}
+	if err != nil {
+		return err
+	}
+
 	query := `DELETE FROM whatsapp_templates WHERE id::uuid = $1`
-	tag, err := p.pool.Exec(ctx, query, id)
+	tag, err := tx.Exec(ctx, query, id)
 	if err != nil {
 		return err
 	}
 	if tag.RowsAffected() == 0 {
 		return ErrWhatsAppTemplateNotFound
 	}
-	return nil
+	if err := ensureWhatsAppCategoryDefault(ctx, tx, category); err != nil {
+		return err
+	}
+	return tx.Commit(ctx)
+}
+
+func ensureWhatsAppCategoryDefault(ctx context.Context, tx pgx.Tx, category string) error {
+	if category == "" {
+		return nil
+	}
+
+	var hasDefault bool
+	if err := tx.QueryRow(ctx, `
+		SELECT EXISTS (
+			SELECT 1 FROM whatsapp_templates
+			WHERE category = $1 AND is_active = true AND is_default = true
+		)
+	`, category).Scan(&hasDefault); err != nil {
+		return err
+	}
+	if hasDefault {
+		return nil
+	}
+
+	_, err := tx.Exec(ctx, `
+		UPDATE whatsapp_templates
+		SET is_default = true
+		WHERE id = (
+			SELECT id FROM whatsapp_templates
+			WHERE category = $1 AND is_active = true
+			ORDER BY created_at ASC
+			LIMIT 1
+		)
+	`, category)
+	return err
 }
