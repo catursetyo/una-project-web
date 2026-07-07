@@ -47,7 +47,7 @@ export function Footer() {
             </h2>
             <div className="mt-4 space-y-2.5 text-sm leading-6">
               <p>Temanggung, Jawa Tengah</p>
-              <p>+62 812-3456-7890</p>
+              <p>+62 812-1545-2519</p>
               <p>unaprojectofficial@gmail.com</p>
             </div>
           </div>

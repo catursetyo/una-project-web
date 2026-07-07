@@ -1,4 +1,4 @@
-const WHATSAPP_PHONE_NUMBER = "6281234567890";
+const WHATSAPP_PHONE_NUMBER = "6281215452519";
 
 type WhatsAppLinkInput =
   | string
