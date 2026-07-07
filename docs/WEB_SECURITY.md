@@ -43,6 +43,9 @@ PORT=8080
 DATABASE_URL=postgresql://...
 JWT_SECRET=...
 ALLOWED_ORIGINS=http://localhost:3000,http://admin.localhost:3000
+SUPABASE_URL=https://<project-ref>.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=...
+MEDIA_BUCKET=una-media
 ```
 
 Production frontend:
@@ -55,6 +58,7 @@ PUBLIC_SITE_URL=https://unaproject.my.id
 
 - `API_URL` tidak perlu `NEXT_PUBLIC_` karena request admin dilakukan server-side.
 - `DATABASE_URL` dan `JWT_SECRET` hanya berada di Secret Manager/backend.
+- `SUPABASE_SERVICE_ROLE_KEY` hanya berada di backend Cloud Run; jangan pernah menjadi `NEXT_PUBLIC_*`.
 - `.env*`, private key, service-account JSON, dump database, dan credential file tidak boleh di-commit.
 - Jika secret terekspos, hentikan penggunaan dan rotasi; menghapus dari commit terbaru saja tidak cukup.
 

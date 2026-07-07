@@ -81,6 +81,23 @@ export async function getPublicProducts(): Promise<Product[]> {
 }
 
 export async function getPublicProductBySlug(slug: string): Promise<Product | undefined> {
+  const apiUrl = publicApiUrl();
+  if (apiUrl) {
+    try {
+      const res = await fetch(`${apiUrl}/products/${slug}`, {
+        next: { revalidate: 60 },
+        signal: AbortSignal.timeout(5000),
+      });
+      if (res.status === 404) return undefined;
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) return transformApiProduct(json.data as ApiProduct);
+      }
+    } catch {
+      reportFailure("product detail");
+    }
+  }
+
   const products = await getPublicProducts();
   return products.find((p) => p.slug === slug);
 }

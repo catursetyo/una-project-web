@@ -52,6 +52,8 @@ type Store interface {
 	CreateWhatsAppTemplate(context.Context, *store.WhatsAppTemplate) error
 	UpdateWhatsAppTemplate(context.Context, *store.WhatsAppTemplate) error
 	DeleteWhatsAppTemplate(context.Context, string) error
+	TrackAnalyticsEvent(context.Context, store.AnalyticsEvent) error
+	AnalyticsSummary(context.Context, int) (store.AnalyticsSummary, error)
 }
 
 type Server struct {
@@ -60,12 +62,17 @@ type Server struct {
 	limiter   *auth.LoginLimiter
 	dummyHash []byte
 	logger    *slog.Logger
+	media     *MediaStorage
 }
 
-func NewServer(st Store, tokens *auth.Tokens, logger *slog.Logger) (*Server, error) {
+func NewServer(st Store, tokens *auth.Tokens, logger *slog.Logger, media ...*MediaStorage) (*Server, error) {
 	dummyHash, err := bcrypt.GenerateFromPassword([]byte("invalid-admin-password"), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, err
+	}
+	var mediaStorage *MediaStorage
+	if len(media) > 0 {
+		mediaStorage = media[0]
 	}
 
 	return &Server{
@@ -74,12 +81,14 @@ func NewServer(st Store, tokens *auth.Tokens, logger *slog.Logger) (*Server, err
 		limiter:   auth.NewLoginLimiter(10, time.Minute),
 		dummyHash: dummyHash,
 		logger:    logger,
+		media:     mediaStorage,
 	}, nil
 }
 
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /v1/healthz", s.health)
+	mux.HandleFunc("POST /v1/analytics/events", s.trackAnalyticsEvent)
 	mux.HandleFunc("POST /v1/auth/login", s.login)
 	mux.HandleFunc("GET /v1/auth/me", s.requireAdmin(s.me))
 
@@ -93,6 +102,8 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("POST /v1/admin/products", s.requireAdmin(s.createProduct))
 	mux.HandleFunc("PUT /v1/admin/products/{id}", s.requireAdmin(s.updateProduct))
 	mux.HandleFunc("DELETE /v1/admin/products/{id}", s.requireAdmin(s.deleteProduct))
+	mux.HandleFunc("POST /v1/admin/uploads", s.requireAdmin(s.uploadMedia))
+	mux.HandleFunc("GET /v1/admin/analytics/summary", s.requireAdmin(s.getAnalyticsSummary))
 
 	// Public testimonials
 	mux.HandleFunc("GET /v1/testimonials", s.listPublicTestimonials)

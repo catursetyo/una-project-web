@@ -72,7 +72,7 @@ func (f fakeStore) GetTestimonialByID(context.Context, string) (store.Testimonia
 }
 func (f fakeStore) CreateTestimonial(context.Context, *store.Testimonial) error { return nil }
 func (f fakeStore) UpdateTestimonial(context.Context, *store.Testimonial) error { return nil }
-func (f fakeStore) DeleteTestimonial(context.Context, string) error            { return nil }
+func (f fakeStore) DeleteTestimonial(context.Context, string) error             { return nil }
 
 // ponytail: stubs — auth tests don't touch tutorials
 func (f fakeStore) ListPublicTutorials(context.Context) ([]store.Tutorial, error) { return nil, nil }
@@ -119,6 +119,11 @@ func (f fakeStore) UpdateWhatsAppTemplate(context.Context, *store.WhatsAppTempla
 	return nil
 }
 func (f fakeStore) DeleteWhatsAppTemplate(context.Context, string) error { return nil }
+
+func (f fakeStore) TrackAnalyticsEvent(context.Context, store.AnalyticsEvent) error { return nil }
+func (f fakeStore) AnalyticsSummary(context.Context, int) (store.AnalyticsSummary, error) {
+	return store.AnalyticsSummary{}, nil
+}
 
 func TestLoginAndMe(t *testing.T) {
 	hash, err := bcrypt.GenerateFromPassword([]byte("valid-password-123"), bcrypt.MinCost)

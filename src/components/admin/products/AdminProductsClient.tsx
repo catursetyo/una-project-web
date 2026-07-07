@@ -9,6 +9,7 @@ import {
   deleteProductAction,
   type ProductInputData,
 } from "@/src/app/admin/(dashboard)/products/actions";
+import { uploadMediaAction } from "@/src/app/admin/(dashboard)/uploads/actions";
 
 type AdminProductsClientProps = {
   initialProducts: ApiProduct[];
@@ -42,9 +43,12 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
   const [formDesc, setFormDesc] = useState("");
   const [formDimensions, setFormDimensions] = useState("");
   const [formFeaturesText, setFormFeaturesText] = useState("");
+  const [formImageUrl, setFormImageUrl] = useState("");
+  const [formVideoUrl, setFormVideoUrl] = useState("");
   const [formIsFeatured, setFormIsFeatured] = useState(false);
   const [formIsActive, setFormIsActive] = useState(true);
   const [formVariants, setFormVariants] = useState<ApiProductVariant[]>([]);
+  const [isUploadingProductImage, setIsUploadingProductImage] = useState(false);
 
   // Unique categories for filter
   const categories = useMemo(() => {
@@ -75,6 +79,8 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
     setFormDesc("");
     setFormDimensions("68 x 20 x 5 cm");
     setFormFeaturesText("Jadwal sholat otomatis akurat\nKontrol via aplikasi Android / Wi-Fi\nDisplay LED super terang");
+    setFormImageUrl("");
+    setFormVideoUrl("");
     setFormIsFeatured(false);
     setFormIsActive(true);
     setFormVariants([
@@ -97,6 +103,8 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
     setFormDesc(prod.description);
     setFormDimensions(prod.dimensions || "");
     setFormFeaturesText((prod.features || []).join("\n"));
+    setFormImageUrl(prod.image_url || "");
+    setFormVideoUrl(prod.video_url || "");
     setFormIsFeatured(prod.is_featured);
     setFormIsActive(prod.is_active);
     setFormVariants(
@@ -148,6 +156,22 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
     });
   }
 
+  async function handleProductImageUpload(file?: File) {
+    if (!file) return;
+    setIsUploadingProductImage(true);
+    const formData = new FormData();
+    formData.append("kind", "products");
+    formData.append("file", file);
+    const res = await uploadMediaAction(formData);
+    setIsUploadingProductImage(false);
+    if (res.success && res.url) {
+      setFormImageUrl(res.url);
+      setFeedback({ type: "success", text: "Gambar produk berhasil diupload." });
+      return;
+    }
+    setFeedback({ type: "error", text: res.error || "Upload gambar gagal." });
+  }
+
   function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFeedback(null);
@@ -167,6 +191,8 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
       dimensions: formDimensions.trim() ? formDimensions.trim() : undefined,
       features: featuresList,
       price_start_from: Number(formPriceStart) || 0,
+      image_url: formImageUrl.trim() || undefined,
+      video_url: formVideoUrl.trim() || undefined,
       is_featured: formIsFeatured,
       is_active: formIsActive,
       order_index: Number(formOrderIndex) || 1,
@@ -613,6 +639,46 @@ export function AdminProductsClient({ initialProducts }: AdminProductsClientProp
                   placeholder="Jadwal sholat otomatis akurat&#10;Kontrol via aplikasi Android&#10;Buzzer tanda masuk waktu sholat"
                   className="mt-1 w-full rounded-lg border border-black/20 px-3.5 py-2 font-mono text-sm text-una-ink focus:border-una-teal focus:outline-none"
                 />
+              </div>
+
+              <div className="grid gap-4 rounded-xl border border-black/10 bg-una-soft/40 p-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-una-muted">
+                    Gambar Produk
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/gif"
+                    onChange={(e) => void handleProductImageUpload(e.target.files?.[0])}
+                    className="mt-1 w-full rounded-lg border border-black/20 bg-white px-3.5 py-2 text-sm text-una-ink file:mr-3 file:rounded-md file:border-0 file:bg-una-deep file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-white"
+                  />
+                  <input
+                    type="url"
+                    value={formImageUrl}
+                    onChange={(e) => setFormImageUrl(e.target.value)}
+                    placeholder="URL gambar akan terisi setelah upload"
+                    className="mt-2 w-full rounded-lg border border-black/20 bg-white px-3.5 py-2 text-sm text-una-ink focus:border-una-teal focus:outline-none"
+                  />
+                  {isUploadingProductImage ? (
+                    <p className="mt-1 text-xs font-bold text-una-teal">Mengupload gambar...</p>
+                  ) : null}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-una-muted">
+                    Video YouTube Produk
+                  </label>
+                  <input
+                    type="url"
+                    value={formVideoUrl}
+                    onChange={(e) => setFormVideoUrl(e.target.value)}
+                    placeholder="https://youtu.be/... atau https://youtube.com/watch?v=..."
+                    className="mt-1 w-full rounded-lg border border-black/20 bg-white px-3.5 py-2 text-sm text-una-ink focus:border-una-teal focus:outline-none"
+                  />
+                  <p className="mt-1 text-xs text-una-muted">
+                    Video akan tampil embed di detail produk jika URL YouTube valid.
+                  </p>
+                </div>
               </div>
 
               {/* Toggles */}

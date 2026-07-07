@@ -38,7 +38,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	app, err := api.NewServer(database, tokens, logger)
+	var media *api.MediaStorage
+	if cfg.SupabaseURL != "" || cfg.SupabaseServiceRoleKey != "" {
+		media = &api.MediaStorage{
+			SupabaseURL: cfg.SupabaseURL,
+			ServiceKey:  cfg.SupabaseServiceRoleKey,
+			Bucket:      cfg.MediaBucket,
+		}
+	}
+
+	app, err := api.NewServer(database, tokens, logger, media)
 	if err != nil {
 		logger.Error("server setup failed", "error", err)
 		os.Exit(1)

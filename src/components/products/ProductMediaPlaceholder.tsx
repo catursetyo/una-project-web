@@ -1,4 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import type { Product } from "@/src/types/product";
+import { toYouTubeEmbedUrl } from "@/src/lib/youtube";
 
 type ProductMediaPlaceholderProps = {
   product: Product;
@@ -9,6 +11,39 @@ export function ProductMediaPlaceholder({
   product,
   compact = false,
 }: ProductMediaPlaceholderProps) {
+  const embedUrl = toYouTubeEmbedUrl(product.videoUrl);
+
+  if (embedUrl) {
+    return (
+      <div
+        className={`overflow-hidden rounded-xl border border-primary/15 bg-una-deep ${
+          compact ? "mb-5 aspect-[16/10]" : "aspect-video"
+        }`}
+      >
+        <iframe
+          src={embedUrl}
+          title={`Video produk ${product.name}`}
+          className="h-full w-full"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+
+  if (product.image) {
+    return (
+      <div
+        className={`overflow-hidden rounded-xl border border-primary/15 bg-una-deep ${
+          compact ? "mb-5 aspect-[16/10]" : "aspect-video"
+        }`}
+      >
+        <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+      </div>
+    );
+  }
+
   return (
     <div
       className={`relative overflow-hidden rounded-xl border border-primary/15 bg-background ${
@@ -44,20 +79,9 @@ export function ProductMediaPlaceholder({
           >
             {product.name}
           </p>
-          {product.videoUrl ? (
-            <a
-              href={product.videoUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="motion-button mt-4 inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-xs font-black tracking-[0.08em] text-white shadow-lg shadow-primary/20 hover:bg-tertiary"
-            >
-              Tonton Video
-            </a>
-          ) : (
-            <span className="mt-4 inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-black tracking-[0.08em] text-zinc-500">
-              Video belum tersedia
-            </span>
-          )}
+          <span className="mt-4 inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-black tracking-[0.08em] text-zinc-500">
+            Media belum tersedia
+          </span>
         </div>
       </div>
     </div>

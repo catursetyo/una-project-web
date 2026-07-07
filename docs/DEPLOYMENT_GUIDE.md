@@ -38,6 +38,9 @@ DATABASE_URL=postgresql://...
 JWT_SECRET=...
 PORT=8080
 ALLOWED_ORIGINS=http://localhost:3000,http://admin.localhost:3000
+SUPABASE_URL=https://<project-ref>.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+MEDIA_BUCKET=una-media
 ```
 
 Gunakan secret manager/provider environment settings. Jangan commit file `.env` berisi nilai nyata.
@@ -82,6 +85,7 @@ Urutan migration untuk database baru:
 cd backend
 psql "$DATABASE_URL" -f migrations/001_init.sql
 psql "$DATABASE_URL" -f migrations/002_seed_frontend_content.sql
+psql "$DATABASE_URL" -f migrations/003_analytics_events.sql
 ```
 
 ## Smoke Test

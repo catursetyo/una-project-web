@@ -756,7 +756,7 @@ Revalidation produk mencakup homepage, `/product`, `/products`, dan seluruh `/pr
 Bug dashboard terpotong berasal dari shell yang mengandalkan `h-screen` tanpa overflow area yang konsisten. Perbaikannya:
 
 - shell memakai `min-h-dvh` dan `w-full`;
-- sidebar desktop memakai `h-dvh` dengan `overflow-y-auto`;
+- sidebar desktop tidak lagi dikunci `h-dvh`, sehingga background hijau ikut memanjang bersama konten admin;
 - kolom konten memakai `min-w-0`, `min-h-dvh`, dan `overflow-x-clip`;
 - tabel tetap memiliki `overflow-x-auto` sendiri;
 - seluruh modul memakai batas lebar konten yang konsisten;
@@ -810,3 +810,72 @@ Browser automation visual belum dapat dijalankan karena CLI browser tidak terpas
 ### Latihan Manual
 
 Ubah judul langkah ke-7 melalui `/admin/order-steps`, simpan, lalu bandingkan `/order` dan homepage. Hanya `/order` yang boleh berubah. Latihan ini menunjukkan boundary data, Server Action, revalidation, dan fallback.
+
+## 26. Analytics, Upload Media, dan Detail Produk
+
+Perubahan 7 Juli 2026 menambahkan modul baru tanpa dependency tambahan.
+
+### Analytics Admin
+
+Analytics memakai tabel `analytics_events` dari migration `003_analytics_events.sql`. Event yang dicatat hanya:
+
+- `website_view`;
+- `product_view`;
+- `whatsapp_cta_click`.
+
+Frontend publik mengirim event ke route same-origin `/api/analytics`. Route Next.js ini meneruskan data ke Golang API `/v1/analytics/events`, sehingga browser tetap tidak perlu memanggil Cloud Run langsung dan CORS tidak dibuka.
+
+Dashboard baru `/admin/analytics` membaca `/v1/admin/analytics/summary?days=30` dan menampilkan total view website, view produk, klik WhatsApp, rasio klik/view, serta ranking produk. Implementasi ini belum menghitung unique visitor karena belum memakai cookie/session analytics; itu sengaja ditunda agar privacy dan scope tetap sederhana.
+
+### Upload Media
+
+Upload gambar produk dan testimoni memakai endpoint admin `/v1/admin/uploads`. Backend memvalidasi:
+
+- ukuran maksimum 4 MB;
+- MIME hasil `http.DetectContentType`;
+- hanya `jpeg`, `png`, `webp`, dan `gif`;
+- kind hanya `products` atau `testimonials`.
+
+File disimpan ke Supabase Storage melalui REST API dengan service role key yang hanya berada di Cloud Run. Database tetap hanya menyimpan `image_url`; file binary tidak disimpan di PostgreSQL.
+
+Environment backend baru:
+
+```env
+SUPABASE_URL=https://<project-ref>.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+MEDIA_BUCKET=una-media
+```
+
+Bucket `una-media` perlu dibuat di Supabase Storage dengan public read agar URL gambar dapat tampil di website.
+
+### Detail Produk dan Video
+
+Detail produk sekarang mengambil `/v1/products/:slug`, bukan mencari dari list produk. Ini penting karena endpoint detail mengembalikan varian produk, sedangkan endpoint list hanya membawa ringkasan.
+
+Field admin produk yang dipakai untuk custom detail:
+
+- `description`;
+- `dimensions`;
+- `features`;
+- `variants`;
+- `image_url`;
+- `video_url`.
+
+Jika `video_url` berisi URL YouTube valid, halaman detail produk dan halaman tutorial menampilkan embed iframe. Jika tidak ada video tetapi ada gambar upload, media produk menampilkan gambar. Jika keduanya kosong, placeholder lama tetap digunakan.
+
+### UI Publik dan Admin
+
+Kartu produk publik sekarang seluruh frame-nya clickable menuju detail produk; ikon panah hanya menjadi indikator visual. Testimoni publik berubah menjadi carousel sederhana tanpa library, dengan kartu tengah besar, preview samping, tombol panah, dan dot navigation. Kontennya sengaja hanya gambar dan deskripsi singkat.
+
+Sidebar admin diperbaiki agar area hijau tidak terpotong saat konten tabel lebih panjang dari viewport.
+
+### Verifikasi
+
+```text
+GOCACHE=/tmp/go-build go test ./...   lulus
+GOCACHE=/tmp/go-build go vet ./...    lulus
+npm run lint                          lulus
+npm run build                         lulus, 31 halaman
+```
+
+`npm run build` lokal masih menampilkan fallback API ketika backend local tidak berjalan. Ini normal selama production `API_URL` mengarah ke Cloud Run yang aktif.
