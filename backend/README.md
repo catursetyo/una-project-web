@@ -64,7 +64,7 @@ go run ./cmd/api
 Endpoint:
 
 ```text
-GET  /healthz
+GET  /v1/healthz
 POST /v1/auth/login
 GET  /v1/auth/me
 GET  /v1/products

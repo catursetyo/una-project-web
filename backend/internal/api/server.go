@@ -79,7 +79,7 @@ func NewServer(st Store, tokens *auth.Tokens, logger *slog.Logger) (*Server, err
 
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /healthz", s.health)
+	mux.HandleFunc("GET /v1/healthz", s.health)
 	mux.HandleFunc("POST /v1/auth/login", s.login)
 	mux.HandleFunc("GET /v1/auth/me", s.requireAdmin(s.me))
 
