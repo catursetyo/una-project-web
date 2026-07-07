@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import type { ApiWhatsAppTemplate } from "@/src/types/whatsappTemplate";
 import {
   createWhatsAppTemplateAction,
@@ -13,7 +14,11 @@ type AdminWhatsAppTemplatesClientProps = {
   initialTemplates: ApiWhatsAppTemplate[];
 };
 
+const CUSTOM_CATEGORY_VALUE = "__custom_category__";
+const DEFAULT_TEMPLATE_CATEGORIES = ["Konsultasi", "Produk", "Katalog", "Dukungan"];
+
 export function AdminWhatsAppTemplatesClient({ initialTemplates }: AdminWhatsAppTemplatesClientProps) {
+  const router = useRouter();
   const templates = initialTemplates;
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("ALL");
@@ -39,11 +44,7 @@ export function AdminWhatsAppTemplatesClient({ initialTemplates }: AdminWhatsApp
 
   // Unique categories
   const categories = useMemo(() => {
-    const cats = new Set(templates.map((t) => t.category));
-    if (!cats.has("Konsultasi")) cats.add("Konsultasi");
-    if (!cats.has("Katalog")) cats.add("Katalog");
-    if (!cats.has("Produk")) cats.add("Produk");
-    if (!cats.has("Dukungan")) cats.add("Dukungan");
+    const cats = new Set([...DEFAULT_TEMPLATE_CATEGORIES, ...templates.map((t) => t.category)]);
     return Array.from(cats);
   }, [templates]);
 
@@ -122,6 +123,7 @@ export function AdminWhatsAppTemplatesClient({ initialTemplates }: AdminWhatsApp
       if (res.success) {
         setIsFormModalOpen(false);
         setFeedback({ type: "success", text: res.message || "Berhasil disimpan!" });
+        router.refresh();
       } else {
         setFeedback({ type: "error", text: res.error || "Gagal menyimpan data." });
         if (res.errors) {
@@ -138,6 +140,7 @@ export function AdminWhatsAppTemplatesClient({ initialTemplates }: AdminWhatsApp
       if (res.success) {
         setIsDeleteModalOpen(false);
         setFeedback({ type: "success", text: res.message || "Template WhatsApp berhasil dihapus!" });
+        router.refresh();
       } else {
         setFeedback({ type: "error", text: res.error || "Gagal menghapus template WhatsApp." });
       }
@@ -340,20 +343,38 @@ export function AdminWhatsAppTemplatesClient({ initialTemplates }: AdminWhatsApp
                   <label className="block text-xs font-bold uppercase tracking-wider text-una-deep">
                     Kategori <span className="text-rose-500">*</span>
                   </label>
-                  <input
-                    type="text"
+                  <select
                     required
-                    list="category-suggestions"
-                    value={formCategory}
-                    onChange={(e) => setFormCategory(e.target.value)}
+                    value={categories.includes(formCategory) ? formCategory : CUSTOM_CATEGORY_VALUE}
+                    onChange={(e) => {
+                      setFormCategory(e.target.value === CUSTOM_CATEGORY_VALUE ? "" : e.target.value);
+                    }}
                     className="mt-1.5 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-una-deep focus:border-una-gold focus:bg-white focus:outline-none"
-                  />
-                  <datalist id="category-suggestions">
-                    <option value="Konsultasi" />
-                    <option value="Katalog" />
-                    <option value="Produk" />
-                    <option value="Dukungan" />
-                  </datalist>
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                    <option value={CUSTOM_CATEGORY_VALUE}>Kategori Baru</option>
+                  </select>
+                  {!categories.includes(formCategory) ? (
+                    <input
+                      type="text"
+                      required
+                      maxLength={50}
+                      value={formCategory}
+                      onChange={(e) => setFormCategory(e.target.value)}
+                      placeholder="Contoh: Promo Ramadan"
+                      className="mt-2 w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm text-una-deep focus:border-una-gold focus:outline-none"
+                    />
+                  ) : null}
+                  <p className="mt-1 text-xs text-una-muted">
+                    CTA website saat ini memakai kategori Konsultasi dan Produk. Kategori baru tersimpan, tetapi baru dipakai jika ada CTA yang memanggil kategori itu.
+                  </p>
+                  {fieldErrors.category && (
+                    <p className="mt-1 text-xs font-semibold text-rose-500">{fieldErrors.category}</p>
+                  )}
                 </div>
               </div>
 
@@ -418,6 +439,9 @@ export function AdminWhatsAppTemplatesClient({ initialTemplates }: AdminWhatsApp
                     🌟 Jadikan template default untuk kategori &quot;{formCategory || "ini"}&quot;
                   </label>
                 </div>
+                <p className="text-xs leading-5 text-una-muted">
+                  Jika satu kategori punya beberapa template aktif, hanya template default yang dipakai CTA. Jika default terhapus/nonaktif, backend otomatis memilih template aktif tertua sebagai default agar CTA tidak kosong.
+                </p>
 
                 <div className="flex items-center gap-3 rounded-xl bg-stone-50 p-3 border border-stone-200/60">
                   <input

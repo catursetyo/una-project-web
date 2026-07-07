@@ -223,6 +223,12 @@ export async function getDynamicWhatsAppLink(options?: {
   if (!template) {
     template = templates.find((t) => t.category === cat);
   }
+  if (!template && cat !== "Konsultasi") {
+    template = templates.find((t) => t.category === "Konsultasi" && t.is_default);
+  }
+  if (!template && cat !== "Konsultasi") {
+    template = templates.find((t) => t.category === "Konsultasi");
+  }
   if (!template && templates.length > 0) {
     template = templates[0];
   }
