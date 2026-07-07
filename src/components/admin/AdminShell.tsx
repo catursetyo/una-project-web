@@ -14,7 +14,7 @@ export function AdminShell({ admin, children }: AdminShellProps) {
 
   return (
     <div className="min-h-dvh w-full flex-1 bg-[#f7f7f2] text-una-ink lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
-      <aside className="bg-una-deep px-4 py-4 text-white sm:px-6 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:px-5 lg:py-6">
+      <aside className="bg-una-deep px-4 py-4 text-white sm:px-6 lg:min-h-dvh lg:px-5 lg:py-6">
         <div className="flex items-center justify-between gap-4 lg:block">
           <Link
             href="/admin"

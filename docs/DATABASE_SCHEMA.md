@@ -56,6 +56,12 @@ erDiagram
     string template_name UK
     boolean is_active
   }
+  ANALYTICS_EVENTS {
+    uuid id PK
+    string event_type
+    string product_slug
+    timestamptz created_at
+  }
 ```
 
 ## Baseline SQL

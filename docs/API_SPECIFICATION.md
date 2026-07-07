@@ -62,6 +62,7 @@ Respons gagal:
 | GET | `/order-steps` | Tujuh langkah transaksi aktif untuk halaman `/order` |
 | GET | `/whatsapp-templates` | Seluruh template pesan aktif |
 | GET | `/whatsapp-templates/:name` | Template pesan aktif berdasarkan nama |
+| POST | `/analytics/events` | Event ringan untuk `website_view`, `product_view`, dan `whatsapp_cta_click` |
 
 Contoh produk:
 
@@ -181,6 +182,15 @@ Browser tidak memanggil endpoint auth/admin Golang secara langsung. Server Actio
 | POST | `/admin/whatsapp-templates` |
 | PUT | `/admin/whatsapp-templates/:id` |
 | DELETE | `/admin/whatsapp-templates/:id` |
+
+### Analytics dan Upload
+
+| Method | Path |
+| --- | --- |
+| GET | `/admin/analytics/summary?days=30` |
+| POST | `/admin/uploads` |
+
+`/admin/uploads` memakai `multipart/form-data` dengan field `kind=products|testimonials` dan `file`.
 
 Contoh payload produk:
 

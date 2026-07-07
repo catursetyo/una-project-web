@@ -8,6 +8,7 @@ import {
   deleteTestimonialAction,
   type TestimonialInputData,
 } from "@/src/app/admin/(dashboard)/testimonials/actions";
+import { uploadMediaAction } from "@/src/app/admin/(dashboard)/uploads/actions";
 
 type AdminTestimonialsClientProps = {
   initialTestimonials: ApiTestimonial[];
@@ -29,6 +30,7 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isPending, startTransition] = useTransition();
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   // Form state
   const [formTitle, setFormTitle] = useState("");
@@ -116,6 +118,22 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
         }
       }
     });
+  }
+
+  async function handleImageUpload(file?: File) {
+    if (!file) return;
+    setIsUploadingImage(true);
+    const formData = new FormData();
+    formData.append("kind", "testimonials");
+    formData.append("file", file);
+    const res = await uploadMediaAction(formData);
+    setIsUploadingImage(false);
+    if (res.success && res.url) {
+      setFormImageUrl(res.url);
+      setFeedback({ type: "success", text: "Gambar testimoni berhasil diupload." });
+      return;
+    }
+    setFeedback({ type: "error", text: res.error || "Upload gambar gagal." });
   }
 
   function handleDelete() {
@@ -335,15 +353,24 @@ export function AdminTestimonialsClient({ initialTestimonials }: AdminTestimonia
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-una-deep">
-                    URL Foto Pemasangan (Opsional)
+                    Foto Pemasangan
                   </label>
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/gif"
+                    onChange={(e) => void handleImageUpload(e.target.files?.[0])}
+                    className="mt-1.5 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-una-deep file:mr-3 file:rounded-md file:border-0 file:bg-una-deep file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-white"
+                  />
                   <input
                     type="url"
                     value={formImageUrl}
                     onChange={(e) => setFormImageUrl(e.target.value)}
-                    placeholder="https://contoh.com/foto-masjid.jpg"
-                    className="mt-1.5 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-una-deep focus:border-una-gold focus:bg-white focus:outline-none"
+                    placeholder="URL gambar akan terisi setelah upload"
+                    className="mt-2 w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-una-deep focus:border-una-gold focus:bg-white focus:outline-none"
                   />
+                  {isUploadingImage ? (
+                    <p className="mt-1 text-xs font-bold text-una-teal">Mengupload gambar...</p>
+                  ) : null}
                 </div>
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-una-deep">

@@ -6,6 +6,7 @@ export const adminNavigationItems: {
   { href: "/admin", label: "Ringkasan", shortLabel: "RI" },
   { href: "/admin/products", label: "Produk", shortLabel: "PR" },
   { href: "/admin/testimonials", label: "Testimoni", shortLabel: "TE" },
+  { href: "/admin/analytics", label: "Analytics", shortLabel: "AN" },
   { href: "/admin/tutorials", label: "Tutorial", shortLabel: "TU" },
   { href: "/admin/order-steps", label: "Alur Pemesanan", shortLabel: "AP" },
   {
@@ -27,6 +28,12 @@ export const adminModules = [
     label: "Testimoni",
     description:
       "Atur dokumentasi pemasangan, gambar, keterangan, dan urutan tampil.",
+  },
+  {
+    href: "/admin/analytics",
+    label: "Analytics",
+    description:
+      "Pantau view website, view detail produk, klik WhatsApp, dan rasio konversi sederhana.",
   },
   {
     href: "/admin/tutorials",

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { formatPrice } from "@/src/lib/formatPrice";
 import {
@@ -65,16 +66,31 @@ export function ProductCard({
   revealDelay,
 }: ProductCardProps) {
   return (
-    <article
+    <Link
+      href={`/products/${product.slug}`}
       data-scroll-reveal="scale"
       data-scroll-delay={revealDelay}
-      className={`scroll-reveal flex h-full flex-col overflow-hidden rounded-lg border border-black/10 bg-white transition-colors hover:bg-una-cream ${className}`}
+      aria-label={`Lihat detail ${product.name}`}
+      className={`scroll-reveal group flex h-full flex-col overflow-hidden rounded-lg border border-black/10 bg-white transition-colors hover:bg-una-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-una-gold ${className}`}
     >
-      <MiniLedPreview
-        kind={getPreviewKind(product)}
-        tag={product.category}
-        value={getPreviewValue(product)}
-      />
+      {product.image ? (
+        <div className="relative aspect-[16/9] overflow-hidden rounded-t-lg bg-una-deep">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.03]"
+          />
+          <span className="absolute left-3 top-3 rounded-full border border-una-gold/30 bg-una-deep/80 px-2.5 py-1 text-[0.58rem] font-black uppercase tracking-[0.1em] text-una-gold-light">
+            {product.category}
+          </span>
+        </div>
+      ) : (
+        <MiniLedPreview
+          kind={getPreviewKind(product)}
+          tag={product.category}
+          value={getPreviewValue(product)}
+        />
+      )}
 
       <div className="flex flex-1 flex-col p-5">
         <div className="mb-3 flex items-center justify-between gap-3">
@@ -108,15 +124,14 @@ export function ProductCard({
             ) : null}
           </div>
 
-          <Link
-            href={`/products/${product.slug}`}
-            aria-label={`Lihat detail ${product.name}`}
-            className="motion-button grid size-10 shrink-0 place-items-center rounded-full bg-una-deep text-white hover:bg-una-gold hover:text-una-gold-ink"
+          <span
+            aria-hidden="true"
+            className="motion-button grid size-10 shrink-0 place-items-center rounded-full bg-una-deep text-white group-hover:bg-una-gold group-hover:text-una-gold-ink"
           >
             <Icon name="arrow" className="size-4" />
-          </Link>
+          </span>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }

@@ -5,6 +5,7 @@ import { Footer } from "@/src/components/layout/Footer";
 import { Navbar } from "@/src/components/layout/Navbar";
 import { FloatingWhatsApp } from "@/src/components/ui/FloatingWhatsApp";
 import { ScrollReveal } from "@/src/components/ui/ScrollReveal";
+import { AnalyticsTracker } from "@/src/components/analytics/AnalyticsTracker";
 
 type SiteChromeProps = {
   children: React.ReactNode;
@@ -24,6 +25,7 @@ export function SiteChrome({ children }: SiteChromeProps) {
       <Footer />
       <FloatingWhatsApp />
       <ScrollReveal />
+      <AnalyticsTracker />
     </>
   );
 }

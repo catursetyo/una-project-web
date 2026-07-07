@@ -8,12 +8,15 @@ import (
 )
 
 type Config struct {
-	Port        string
-	DatabaseURL string
-	JWTSecret   string
-	JWTIssuer   string
-	JWTAudience string
-	JWTTTL      time.Duration
+	Port                   string
+	DatabaseURL            string
+	JWTSecret              string
+	JWTIssuer              string
+	JWTAudience            string
+	JWTTTL                 time.Duration
+	SupabaseURL            string
+	SupabaseServiceRoleKey string
+	MediaBucket            string
 }
 
 func Load() (Config, error) {
@@ -23,12 +26,15 @@ func Load() (Config, error) {
 	}
 
 	cfg := Config{
-		Port:        env("PORT", "8080"),
-		DatabaseURL: os.Getenv("DATABASE_URL"),
-		JWTSecret:   os.Getenv("JWT_SECRET"),
-		JWTIssuer:   env("JWT_ISSUER", "una-project-api"),
-		JWTAudience: env("JWT_AUDIENCE", "una-project-admin"),
-		JWTTTL:      ttl,
+		Port:                   env("PORT", "8080"),
+		DatabaseURL:            os.Getenv("DATABASE_URL"),
+		JWTSecret:              os.Getenv("JWT_SECRET"),
+		JWTIssuer:              env("JWT_ISSUER", "una-project-api"),
+		JWTAudience:            env("JWT_AUDIENCE", "una-project-admin"),
+		JWTTTL:                 ttl,
+		SupabaseURL:            os.Getenv("SUPABASE_URL"),
+		SupabaseServiceRoleKey: os.Getenv("SUPABASE_SERVICE_ROLE_KEY"),
+		MediaBucket:            env("MEDIA_BUCKET", "una-media"),
 	}
 
 	if cfg.DatabaseURL == "" {

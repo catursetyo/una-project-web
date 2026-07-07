@@ -41,6 +41,7 @@ Bagian ini tidak diperlukan untuk database Docker. Untuk Supabase, gunakan direc
 ```bash
 psql "$DATABASE_URL" -f migrations/001_init.sql
 psql "$DATABASE_URL" -f migrations/002_seed_frontend_content.sql
+psql "$DATABASE_URL" -f migrations/003_analytics_events.sql
 ```
 
 Jalankan kedua migration secara berurutan satu kali pada database Supabase baru. Migration kedua memindahkan konten awal frontend ke PostgreSQL. Jangan menjalankannya otomatis setiap container start.
@@ -72,6 +73,9 @@ GET  /v1/testimonials
 GET  /v1/tutorials
 GET  /v1/order-steps
 GET  /v1/whatsapp-templates
+POST /v1/analytics/events
+GET  /v1/admin/analytics/summary
+POST /v1/admin/uploads
 GET|POST|PUT|DELETE /v1/admin/*
 ```
 
