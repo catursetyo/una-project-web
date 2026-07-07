@@ -861,11 +861,11 @@ Field admin produk yang dipakai untuk custom detail:
 - `image_url`;
 - `video_url`.
 
-Jika `video_url` berisi URL YouTube valid, halaman detail menampilkan embed iframe. Jika tidak ada video tetapi ada gambar upload, media produk menampilkan gambar. Jika keduanya kosong, placeholder lama tetap digunakan.
+Jika `video_url` berisi URL YouTube valid, halaman detail produk dan halaman tutorial menampilkan embed iframe. Jika tidak ada video tetapi ada gambar upload, media produk menampilkan gambar. Jika keduanya kosong, placeholder lama tetap digunakan.
 
 ### UI Publik dan Admin
 
-Kartu produk publik sekarang seluruh frame-nya clickable menuju detail produk; ikon panah hanya menjadi indikator visual. Testimoni publik berubah menjadi carousel sederhana tanpa library, dengan tombol panah dan thumbnail yang dapat diklik.
+Kartu produk publik sekarang seluruh frame-nya clickable menuju detail produk; ikon panah hanya menjadi indikator visual. Testimoni publik berubah menjadi carousel sederhana tanpa library, dengan kartu tengah besar, preview samping, tombol panah, dan dot navigation. Kontennya sengaja hanya gambar dan deskripsi singkat.
 
 Sidebar admin diperbaiki agar area hijau tidak terpotong saat konten tabel lebih panjang dari viewport.
 
