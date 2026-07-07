@@ -28,6 +28,10 @@ export const metadata: Metadata = {
   },
   description:
     "Spesialis jam waktu sholat digital, running text LED, JWS RGB, Android TV, dan instalasi display untuk masjid serta mushola.",
+  icons: {
+    icon: [{ url: "/brand/logo.svg", type: "image/svg+xml" }],
+    shortcut: "/brand/logo.svg",
+  },
 };
 
 export default function RootLayout({
