@@ -227,7 +227,7 @@ Backend sekarang berada di `backend/` dan sengaja memakai library minimum:
 Endpoint yang tersedia:
 
 ```text
-GET  /healthz
+GET  /v1/healthz
 POST /v1/auth/login
 GET  /v1/auth/me
 ```
@@ -786,7 +786,7 @@ npm run build            lulus, 29 halaman
 go test ./...             lulus
 go vet ./...              lulus
 PostgreSQL migration      lulus
-GET /healthz              200
+GET /v1/healthz           route baru; cek ulang setelah redeploy backend
 GET /v1/order-steps       200, 7 langkah benar
 GET /v1/auth/me           200 dengan JWT admin lokal sementara
 GET /admin/*              200 untuk 6 route dashboard terautentikasi
